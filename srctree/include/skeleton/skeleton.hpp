@@ -41,9 +41,10 @@
 //*** COMP308 had its own math library. CGRA350 students are 
 //*** expected to use GLM for their mathematics.
 #include <glm/glm.hpp>
-
 #include <glm/gtc/matrix_transform.hpp> 
+#include <glm/gtx/transform.hpp>
 #include <glm/gtx/euler_angles.hpp> 
+
 #include "opengl.hpp"
 
 #include <cgra/mesh.hpp>

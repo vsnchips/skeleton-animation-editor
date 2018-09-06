@@ -122,6 +122,8 @@ void Skeleton::renderSkeleton( cgra::Mesh * placeholderbone) {
 //-------------------------------------------------------------
 void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * placeholderbone) {
 	// YOUR CODE GOES HERE
+	// old 
+ /*
 	mat4 rot = accumR * yawPitchRoll(b->basisRot.x,b->basisRot.y,b->basisRot.z);
         
 	mat4 t = accumT;
@@ -132,31 +134,56 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 	t = accumT * newtrans;
 		       	// not sure if normalisation precalc'ed
 	}
-	
+*/	
+	vec3 pos = b->length*b->boneDir;
+	//mat4 nextOrigin = accumT * animation * translate(vec4(1.0), pos);
+	mat4 nextOrigin = accumT * translate(vec4(1.0), pos);  //test without articulation
 
+	mat4 meshPoleRot(1.0):
+	float latr=acos(boneDir.y);
+	float lonr=atan(boneDir.x/boneDir.z); //Pole tips towards high noon
+
+ 	 //tip calls for the pole
+	 mat4 tip = rotate(pi<float>()/latr, vec3(1,0,0));
+	 mat4 spin = rotate(two_pi<float>()/lonr, vec3(0,1,0));
+	meshPoleRot = spin*tip;
+
+ 	//now draw the bone
+	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
+				0.8, 0.8, 0.8);
+	m_program->setModelMatrix(accumT*meshPoleRot);
+	placeholderbone->draw();
+
+
+	//The bone might have a child at the its end node.
+	//Draw the end node's Basis.
+	//
+
+        mat4 precalcthis = 
+	rotate(basisRot.z,vec3(0,0,1)) *     //z third
+	rotate(basisRot.y,vec3(0,1,0)) *     //y second
+	rotate(basisRot.x,vec3(1,0,0));      //x first
+	mat4 jointRot = accumR * precalcthis;
+ 	mat4 nextBasis = nextOrigin*jointRot;
+	
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				1 , 0, 0);
-	mat4 basis = accumT*rot;
 	mat4 axt = scale(mat4(1),vec3(1,0.1,0.1));
-	m_program->setModelMatrix(basis*axt);
+	m_program->setModelMatrix(nextBasis*rotate(pi , vec3(0,0,1)) ;
 	placeholderbone->draw();
 
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				0 , 1, 0);
 	mat4 ayt = scale(mat4(1),vec3(0.1,1,0.1));
-	m_program->setModelMatrix(basis*ayt);
+	m_program->setModelMatrix(nextBasis);
 	placeholderbone->draw();
 
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				0 , 0, 1);
 	mat4 azt = scale(mat4(1),vec3(0.1,0.1,1));
-	m_program->setModelMatrix(basis*azt);
+	m_program->setModelMatrix(nextBasis*rotate(pi , vec3(1,0,0)) ;
 	placeholderbone->draw();
 
-	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
-				0.8, 0.8, 0.8);
-	m_program->setModelMatrix(accumT*rot);
-	placeholderbone->draw();
 
 
 	for (bone * child : b->children) renderBone(t, accumR, child, placeholderbone);	
