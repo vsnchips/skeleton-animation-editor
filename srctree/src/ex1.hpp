@@ -10,6 +10,8 @@
 class Application {
 public:
 
+    void loadSkeleton();
+
 // actors in the play:	
     Skeleton * showskel;
    cgra::Mesh m_mesh;
@@ -47,7 +49,6 @@ public:
         m_mouseButtonDown[2] = false;
     }
 
-    void loadSkeleton();
 
 //admin
     void setWindowSize(int width, int height) {

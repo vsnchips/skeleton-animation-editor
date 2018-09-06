@@ -25,10 +25,12 @@ void Application::loadSkeleton(){
      nfdchar_t * skelFile;
      NFD_OpenDialog( "*", "", &skelFile);
      showskel = (Skeleton *) malloc(sizeof(Skeleton));
+     showskel->defaultBoneMesh(&m_mesh);
+     showskel->m_program=&m_program;
 
 }
 void Application::init() {
-    // Load the shader program
+    // Load the shader rogram
     // The use of CGRA_SRCDIR "/path/to/shader" is so you don't
     // have to run the program from a specific folder.
     m_program = cgra::Program::load_program(
@@ -146,41 +148,10 @@ void Application::loadObj(const char *filename) {
 void Application::drawScene() {
     float aspectRatio = m_viewportSize.x / m_viewportSize.y;
     glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
-    m_program.setProjectionMatrix(projectionMatrix);
+    showskel->m_program->setProjectionMatrix(projectionMatrix);
 
-    /************************************************************
-     * 3. Manual Transforms                                     *
-     *                                                          *
-     * Use `m_translation`, `m_scale`, and `m_rotationMatrix`   *
-     * to create the  `modelTransform` matrix.                  *
-     * The following glm functions will be useful:              *
-     *    `glm::translate`                                      *
-     *    `glm::scale`                                          *
-     ************************************************************/
+    showskel->renderSkeleton();
 
-   // Iterate through the skeleton drawing stuff
-
-
-    if(showSkel){
-	    for (bone b : showskel->m_bones){
-		 glm::mat4 modelTransform(1.0f);
-		 modelTransform *= glm::translate(glm::mat4(
-		 showSkel->m_bones( showSkel->findBone("root")).translation
-		 );
-		
-	    }
-    }
-
-    glm::mat4 modelTransform(1.0f);
-
-    modelTransform *= glm::scale(modelTransform,glm::vec3(m_scale));
-    m_rotationMatrix = glm::mat4(glm::vec4(xax,0),glm::vec4(yax,0),glm::vec4(zax,0),glm::vec4(0.f,0.f,0.f,1.f));
-    modelTransform *= m_rotationMatrix;
-
-    m_program.setModelMatrix(modelTransform);
-
-    // Draw the mesh
-    m_mesh.draw();
 
 }
 

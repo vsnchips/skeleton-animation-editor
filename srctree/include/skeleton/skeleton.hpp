@@ -41,8 +41,13 @@
 //*** COMP308 had its own math library. CGRA350 students are 
 //*** expected to use GLM for their mathematics.
 #include <glm/glm.hpp>
+
+#include <glm/gtc/matrix_transform.hpp> 
+#include <glm/gtx/euler_angles.hpp> 
 #include "opengl.hpp"
 
+#include <cgra/mesh.hpp>
+#include <cgra/shader.hpp>
 
 // Needed for Completion/Challenge
 // We use bitmasking to work out the Degrees of Freedom
@@ -73,10 +78,11 @@ enum dof {
 
 // Type to represent a bone
 struct bone {
+	cgra::Mesh * boneMesh;
 	std::string name;
 	float length = 0;             // Length of the bone
-	glm::vec3 boneDir;           // Direction of the bone
-	glm::vec3 basisRot;          // Euler angle rotations for the bone basis
+	glm::vec3 boneDir;            // Direction of the bone
+	glm::vec3 basisRot;           // Euler angle rotations for the bone basis
 	dof_set freedom = dof_none;   // Degrees of freedom for the joint rotation
 	std::vector<bone *> children; // Pointers to bone children
 
@@ -103,13 +109,15 @@ private:
 	void readBone(std::ifstream&);
 	void readHierarchy(std::ifstream&);
 
-	void renderBone(bone *);
+	void renderBone(glm::mat4, glm::mat4,bone *);
 
 public:
 	Skeleton(std::string);
+	cgra::Program * m_program;
 	void renderSkeleton();
 	void readAMC(std::string);
 
+	void defaultBoneMesh(cgra::Mesh *);
 	// YOUR CODE GOES HERE
 	// ...
 	std::vector<bone> m_bones;

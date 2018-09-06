@@ -56,6 +56,7 @@
 #include <glm/glm.hpp>
 
 using namespace std;
+using namespace glm;
 
 Skeleton::Skeleton(string filename) {
 	bone b = bone();
@@ -68,12 +69,16 @@ Skeleton::Skeleton(string filename) {
 	readASF(filename);
 }
 
+void Skeleton::defaultBoneMesh(cgra::Mesh * d){
+	for (bone b : m_bones ){ b.boneMesh=d;}
+}
 //-------------------------------------------------------------
 // [Assignment 2] :
 // You may need to revise this function for Completion/Challenge
 //-------------------------------------------------------------
 void Skeleton::renderSkeleton() {
 
+	m_program->use();
 	//*** glMatrixMode is a deprecated function that should
 	//*** not be used in modern OpenGL - you need to manage
 	//*** your matrices yourself
@@ -85,7 +90,7 @@ void Skeleton::renderSkeleton() {
 	glPushMatrix();
 
 	//Actually draw the skeleton
-	renderBone(&m_bones[0]);
+	renderBone(mat4(1.0),mat4(1.0),&m_bones[0]);
 
 	// Clean up
 	//*** glPopMatrix is a deprecated function that is the
@@ -105,9 +110,14 @@ void Skeleton::renderSkeleton() {
 // Should not draw the root bone (because it has zero length)
 // but should go on to draw it's children
 //-------------------------------------------------------------
-void Skeleton::renderBone(bone *b) {
+void Skeleton::renderBone(mat4 accumT, mat4 accumR, bone *b) {
 	// YOUR CODE GOES HERE
-	// ...
+	mat4 rot = accumR * yawPitchRoll(b->basisRot.x,b->basisRot.y,b->basisRot.z);
+	mat4 t = accumT * accumR*translate(scale(mat4(),normalize(b->boneDir)),vec3(b->length));
+		       	// not sure if noralisation precalc'ed
+	m_program->setModelMatrix(accumT*rot);
+	b->boneMesh->draw();
+	for (bone * child : b->children) renderBone(t, accumR, child);	
 	
 }
 
@@ -286,6 +296,7 @@ void Skeleton::readBone(ifstream &file) {
 			// End of the data for this bone
 			// Push the bone into the vector
 			m_bones.push_back(b);
+
 			return;
 		}
 		else {
