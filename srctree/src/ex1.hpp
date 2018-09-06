@@ -14,6 +14,7 @@ public:
 
 // actors in the play:	
     Skeleton * showskel;
+    bool skelload =  false;
    cgra::Mesh m_mesh;
 
 // glm view stuff:

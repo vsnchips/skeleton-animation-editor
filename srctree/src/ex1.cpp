@@ -27,6 +27,7 @@ void Application::loadSkeleton(){
      showskel = (Skeleton *) malloc(sizeof(Skeleton));
      showskel->defaultBoneMesh(&m_mesh);
      showskel->m_program=&m_program;
+     skelload = true;
 
 }
 void Application::init() {
@@ -150,7 +151,8 @@ void Application::drawScene() {
     glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
     showskel->m_program->setProjectionMatrix(projectionMatrix);
 
-    showskel->renderSkeleton();
+    m_mesh.draw();
+    if( skelload) showskel->renderSkeleton();
 
 
 }
