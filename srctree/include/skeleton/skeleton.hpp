@@ -81,8 +81,8 @@ struct bone {
 	cgra::Mesh * boneMesh;
 	std::string name;
 	float length = 0;             // Length of the bone
-	glm::vec3 boneDir;            // Direction of the bone
-	glm::vec3 basisRot;           // Euler angle rotations for the bone basis
+	glm::vec3 boneDir = glm::vec3(0);            // Direction of the bone
+	glm::vec3 basisRot = glm::vec3(0);           // Euler angle rotations for the bone basis
 	dof_set freedom = dof_none;   // Degrees of freedom for the joint rotation
 	std::vector<bone *> children; // Pointers to bone children
 
@@ -102,19 +102,20 @@ private:
 
 	// Helper method
 	int findBone(std::string);
-	
+
 	// Reading code
 	void readASF(std::string);
 	void readHeading(std::string, std::ifstream&);
 	void readBone(std::ifstream&);
 	void readHierarchy(std::ifstream&);
 
-	void renderBone(glm::mat4, glm::mat4,bone *);
+	void renderBone(glm::mat4, glm::mat4,bone *, cgra::Mesh * placeholderbone);
 
 public:
 	Skeleton(std::string);
 	cgra::Program * m_program;
-	void renderSkeleton();
+	void setProgram(cgra::Program &);	
+	void renderSkeleton(cgra::Mesh * placeholderbone);
 	void readAMC(std::string);
 
 	void defaultBoneMesh(cgra::Mesh *);

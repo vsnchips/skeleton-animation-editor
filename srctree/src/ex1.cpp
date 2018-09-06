@@ -23,10 +23,16 @@
 
 void Application::loadSkeleton(){
      nfdchar_t * skelFile;
+
      NFD_OpenDialog( "*", "", &skelFile);
-     showskel = (Skeleton *) malloc(sizeof(Skeleton));
+     printf("\nloading %s\n",skelFile);
+     //showskel = (Skeleton *) malloc(sizeof(Skeleton));
+     //Skeleton newskel = Skeleton(skelFile);
+     showskel = new Skeleton(skelFile);
+//     showskel = &newskel;
      showskel->defaultBoneMesh(&m_mesh);
-     showskel->m_program=&m_program;
+     //showskel->m_program = &m_program;
+     showskel->setProgram(m_program);
      skelload = true;
 
 }
@@ -149,11 +155,14 @@ void Application::loadObj(const char *filename) {
 void Application::drawScene() {
     float aspectRatio = m_viewportSize.x / m_viewportSize.y;
     glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
+
+    //m_mesh.draw();
+    
+    if( skelload && showskel -> m_bones.size() > 0){
     showskel->m_program->setProjectionMatrix(projectionMatrix);
-
-    m_mesh.draw();
-    if( skelload) showskel->renderSkeleton();
-
+	printf("there are %d bones\n", showskel->m_bones.size());
+	    showskel->renderSkeleton( & m_mesh );
+    }
 
 }
 

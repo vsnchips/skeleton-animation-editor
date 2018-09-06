@@ -69,33 +69,40 @@ Skeleton::Skeleton(string filename) {
 	readASF(filename);
 }
 
+void Skeleton::setProgram(cgra::Program & prog){
+	m_program = & prog;
+}
+
 void Skeleton::defaultBoneMesh(cgra::Mesh * d){
-	for (bone b : m_bones ){ b.boneMesh=d;}
+	//for (bone b : m_bones ){ b.boneMesh=d;}
+	for (int i=0; i<m_bones.size(); i++){
+		//m_bones.at(i).boneMesh=d;
+	}
 }
 //-------------------------------------------------------------
 // [Assignment 2] :
 // You may need to revise this function for Completion/Challenge
 //-------------------------------------------------------------
-void Skeleton::renderSkeleton() {
+void Skeleton::renderSkeleton( cgra::Mesh * placeholderbone) {
 
 	m_program->use();
 	//*** glMatrixMode is a deprecated function that should
 	//*** not be used in modern OpenGL - you need to manage
 	//*** your matrices yourself
-	glMatrixMode(GL_MODELVIEW);
+	//glMatrixMode(GL_MODELVIEW);
 
 	//*** glPushMatrix is a deprecated function that you will
 	//*** not use in modern OpenGL because modern OpenGL expects
 	//*** you to manage the matrices yourself
-	glPushMatrix();
+	//glPushMatrix();
 
 	//Actually draw the skeleton
-	renderBone(mat4(1.0),mat4(1.0),&m_bones[0]);
+	renderBone(mat4(1.0),mat4(1.0),&m_bones[0], placeholderbone);
 
 	// Clean up
 	//*** glPopMatrix is a deprecated function that is the
 	//*** partner of glPushMatrix (see above)
-	glPopMatrix();
+	//glPopMatrix();
 }
 
 
@@ -110,14 +117,16 @@ void Skeleton::renderSkeleton() {
 // Should not draw the root bone (because it has zero length)
 // but should go on to draw it's children
 //-------------------------------------------------------------
-void Skeleton::renderBone(mat4 accumT, mat4 accumR, bone *b) {
+void Skeleton::renderBone(mat4 accumT, mat4 accumR, bone *b,cgra::Mesh * placeholderbone) {
 	// YOUR CODE GOES HERE
 	mat4 rot = accumR * yawPitchRoll(b->basisRot.x,b->basisRot.y,b->basisRot.z);
 	mat4 t = accumT * accumR*translate(scale(mat4(),normalize(b->boneDir)),vec3(b->length));
 		       	// not sure if noralisation precalc'ed
 	m_program->setModelMatrix(accumT*rot);
-	b->boneMesh->draw();
-	for (bone * child : b->children) renderBone(t, accumR, child);	
+//	b->boneMesh->draw();
+	placeholderbone->draw();
+
+	for (bone * child : b->children) renderBone(t, accumR, child, placeholderbone);	
 	
 }
 
@@ -281,6 +290,7 @@ void Skeleton::readHeading(string headerline, ifstream &file) {
 		// Would normally error here, but becuase we don't parse
 		// every header entirely we will leave this blank.
 	}
+
 }
 
 
@@ -289,6 +299,7 @@ void Skeleton::readHeading(string headerline, ifstream &file) {
 void Skeleton::readBone(ifstream &file) {
 	// Create the bone to add the data to
 	bone b;
+	printf("bone!\n");
 
 	string line = nextLineTrimmed(file);
 	while (file.good()) {
