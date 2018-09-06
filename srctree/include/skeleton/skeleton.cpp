@@ -121,27 +121,19 @@ void Skeleton::renderSkeleton( cgra::Mesh * placeholderbone) {
 // but should go on to draw it's children
 //-------------------------------------------------------------
 void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * placeholderbone) {
-	// YOUR CODE GOES HERE
-	// old 
- /*
-	mat4 rot = accumR * yawPitchRoll(b->basisRot.x,b->basisRot.y,b->basisRot.z);
-        
-	mat4 t = accumT;
-	if (length(b->boneDir)>0){
-	//mat4 t = accumT * accumR*translate(scale(mat4(1.0),normalize(b->boneDir)),vec3(b->length));
-        mat4 newtrans = accumT * accumR*translate(mat4(1),normalize(b->boneDir)*(b->length));
-//	mat4 newtrans = translate(mat4(),1.0f*b->boneDir);
-	t = accumT * newtrans;
-		       	// not sure if normalisation precalc'ed
-	}
-*/	
+
+
+	//accumR = accumR * bone
+	// Damn, joints are nastily conceptually mashed with bones
+	//
+
 	vec3 pos = b->length*b->boneDir;
 	//mat4 nextOrigin = accumT * animation * translate(vec4(1.0), pos);
-	mat4 nextOrigin = accumT * translate(vec4(1.0), pos);  //test without articulation
+	mat4 nextOrigin = accumT * translate(mat4(1.0), pos);  //test without articulation
 
-	mat4 meshPoleRot(1.0):
-	float latr=acos(boneDir.y);
-	float lonr=atan(boneDir.x/boneDir.z); //Pole tips towards high noon
+	mat4 meshPoleRot(1.0);
+	float latr=acos(b->boneDir.y);
+	float lonr=atan(b->boneDir.x/b->boneDir.z); //Pole tips towards high noon
 
  	 //tip calls for the pole
 	 mat4 tip = rotate(pi<float>()/latr, vec3(1,0,0));
@@ -155,38 +147,38 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 	placeholderbone->draw();
 
 
-	//The bone might have a child at the its end node.
-	//Draw the end node's Basis.
+	//Draw the bone's Tait-Bryan basis.
 	//
 
         mat4 precalcthis = 
-	rotate(basisRot.z,vec3(0,0,1)) *     //z third
-	rotate(basisRot.y,vec3(0,1,0)) *     //y second
-	rotate(basisRot.x,vec3(1,0,0));      //x first
+	rotate(b->basisRot.z,vec3(0,0,1)) *     //z third
+	rotate(b->basisRot.y,vec3(0,1,0)) *     //y second
+	rotate(b->basisRot.x,vec3(1,0,0));      //x first
 	mat4 jointRot = accumR * precalcthis;
- 	mat4 nextBasis = nextOrigin*jointRot;
+ 	//mat4 nextBasis = nextOrigin*jointRot;
+ 	mat4 myBasis = accumT*jointRot;			//Draw the axes back at the joint
 	
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				1 , 0, 0);
 	mat4 axt = scale(mat4(1),vec3(1,0.1,0.1));
-	m_program->setModelMatrix(nextBasis*rotate(pi , vec3(0,0,1)) ;
+	m_program->setModelMatrix(myBasis*rotate(pi<float>() , vec3(0,0,1))) ;
 	placeholderbone->draw();
 
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				0 , 1, 0);
 	mat4 ayt = scale(mat4(1),vec3(0.1,1,0.1));
-	m_program->setModelMatrix(nextBasis);
+	m_program->setModelMatrix(myBasis);
 	placeholderbone->draw();
 
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				0 , 0, 1);
 	mat4 azt = scale(mat4(1),vec3(0.1,0.1,1));
-	m_program->setModelMatrix(nextBasis*rotate(pi , vec3(1,0,0)) ;
+	m_program->setModelMatrix(myBasis*rotate(pi<float>() , vec3(1,0,0))) ;
 	placeholderbone->draw();
 
 
 
-	for (bone * child : b->children) renderBone(t, accumR, child, placeholderbone);	
+	for (bone * child : b->children) renderBone(nextOrigin, accumR, child, placeholderbone);	
 	
 
 }
