@@ -109,7 +109,7 @@ private:
 	void readBone(std::ifstream&);
 	void readHierarchy(std::ifstream&);
 
-	void renderBone(glm::mat4, glm::mat4,bone *, cgra::Mesh * placeholderbone);
+	void renderBone(glm::mat4 &, glm::mat4 &,bone *, cgra::Mesh * placeholderbone);
 
 public:
 	Skeleton(std::string);

@@ -8,13 +8,13 @@ namespace cgra {
 
     class Program {
         // The OpenGL object representing the program
-        GLuint m_program;
 
         Program(GLuint prog) : m_program(prog) { }
     public:
         Program() : m_program(0) { }
 
         // Load the program from two files, a vertex shader and
+        GLuint m_program;
         // a fragment shader.
         static Program load_program(const char *vertex_shader_file,
                                     const char *fragment_shader_file);

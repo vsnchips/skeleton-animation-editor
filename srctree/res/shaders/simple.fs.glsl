@@ -13,6 +13,8 @@ const vec3 specColor    = vec3(0.2, 0.1, 0.1);
 
 const float shininess = 16.0;
 
+uniform vec3 ucol;
+
 void main() {
     vec3 normal = normalize(fragNormal);
     vec3 lightDir = normalize(-lightDir);
@@ -29,7 +31,7 @@ void main() {
         specular = pow(specAngle, shininess);
     }
 
-    vec3 fragColor = ambientColor +
+    vec3 fragColor = ucol + ambientColor +
         lambertian * diffuseColor +
         specular * specColor;
 

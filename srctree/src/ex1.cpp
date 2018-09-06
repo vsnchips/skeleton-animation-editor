@@ -61,6 +61,8 @@ void Application::init() {
     printf("\nzax: %f,%f,%f",zax.x,zax.y,zax.z);
     // Create the cube mesh
     createCube();
+
+    loadSkeleton();
 }
 
 void Application::createCube() {
@@ -155,6 +157,18 @@ void Application::loadObj(const char *filename) {
 void Application::drawScene() {
     float aspectRatio = m_viewportSize.x / m_viewportSize.y;
     glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
+
+    // Create a view matrix that positions the camera
+    // 10 units behind the object
+    glm::mat4 viewMatrix(1);
+    viewMatrix[3] = glm::vec4(0, 0, -10, 1);//translate the view
+
+    viewMatrix *= glm::scale(viewMatrix,glm::vec3(m_scale));//zoom rel origin
+    m_rotationMatrix = glm::mat4(glm::vec4(xax,0),glm::vec4(yax,0),glm::vec4(zax,0),glm::vec4(0.f,0.f,0.f,1.f));
+     viewMatrix *= m_rotationMatrix;
+
+    viewMatrix *= glm::translate(glm::mat4(),m_translation);
+    m_program.setViewMatrix(viewMatrix);
 
     //m_mesh.draw();
     
