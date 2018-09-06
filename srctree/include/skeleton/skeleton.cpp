@@ -144,7 +144,7 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				0.8, 0.8, 0.8);
 	m_program->setModelMatrix(accumT*meshPoleRot);
-	placeholderbone->draw();
+	//placeholderbone->draw();
 
 
 	//Draw the bone's Tait-Bryan basis.
@@ -156,24 +156,21 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 	rotate(b->basisRot.x,vec3(1,0,0));      //x first
 	mat4 jointRot = accumR * precalcthis;
  	//mat4 nextBasis = nextOrigin*jointRot;
- 	mat4 myBasis = accumT*jointRot;			//Draw the axes back at the joint
+ 	mat4 myBasis = accumT*jointRot * scale(mat4(),vec3(0.1,0.1,0.1));			//Draw the axes back at the joint
 	
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				1 , 0, 0);
-	mat4 axt = scale(mat4(1),vec3(0.3,0.05,0.05));
-	m_program->setModelMatrix(myBasis*rotate(pi<float>() , vec3(0,0,1))) ;
+	m_program->setModelMatrix(myBasis*rotate(0.5f* pi<float>() , vec3(0,0,1))) ;
 	placeholderbone->draw();
 
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				0 , 1, 0);
-	mat4 ayt = scale(mat4(1),vec3(0.05,0.3,0.05));
 	m_program->setModelMatrix(myBasis);
 	placeholderbone->draw();
 
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				0 , 0, 1);
-	mat4 azt = scale(mat4(1),vec3(0.05,0.05,0.3));
-	m_program->setModelMatrix(myBasis*rotate(pi<float>() , vec3(1,0,0))) ;
+	m_program->setModelMatrix(myBasis*rotate(0.5f* pi<float>() , vec3(1,0,0))) ;
 	placeholderbone->draw();
 
 

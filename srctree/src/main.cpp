@@ -167,7 +167,7 @@ int main(int argc, const char** argv) {
                 // makes it visible.
                                 // Next frame we draw to the other buffer
                 glfwSwapBuffers(window);
-		std::this_thread::sleep_for(1ms);
+		std::this_thread::sleep_for(5ms);
             }
         } catch (std::exception e) {
             // Catch any exceptions that bubble up to here and print out

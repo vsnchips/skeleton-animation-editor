@@ -263,7 +263,7 @@ void Application::doGUI() {
 
     // MESH LOADING:
 
-    static char dragon[] = "res/models/dragon.obj";
+    static char dragon[] = "../srctree/res/models/zpole.obj";
 
     static char path[256];
 
