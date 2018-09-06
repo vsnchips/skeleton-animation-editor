@@ -122,14 +122,14 @@ void Skeleton::renderSkeleton( cgra::Mesh * placeholderbone) {
 //-------------------------------------------------------------
 void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * placeholderbone) {
 
+	//animation first. The bone's own animation affects the bones orientation,
+	//and the translation toward the next.
+	
+	//myR = accumR * [some bone animation structure]
 
-	//accumR = accumR * bone
-	// Damn, joints are nastily conceptually mashed with bones
-	//
-
-	vec3 pos = b->length*b->boneDir;
-	//mat4 nextOrigin = accumT * animation * translate(vec4(1.0), pos);
-	mat4 nextOrigin = accumT * translate(mat4(1.0), pos);  //test without articulation
+	vec3 cpos = b->length*b->boneDir;
+	//mat4 nextOrigin = accumT * myR * translate(vec4(1.0), pos);
+	mat4 nextOrigin = accumT * translate(mat4(1.0), cpos);  //test without articulation
 
 	mat4 meshPoleRot(1.0);
 	float latr=acos(b->boneDir.y);
@@ -138,7 +138,7 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
  	 //tip calls for the pole
 	 mat4 tip = rotate(pi<float>()/latr, vec3(1,0,0));
 	 mat4 spin = rotate(two_pi<float>()/lonr, vec3(0,1,0));
-	meshPoleRot = spin*tip;
+	meshPoleRot = spin*tip * scale(mat4(),vec3(0.1,b->length,0.1));
 
  	//now draw the bone
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
@@ -160,19 +160,19 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 	
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				1 , 0, 0);
-	mat4 axt = scale(mat4(1),vec3(1,0.1,0.1));
+	mat4 axt = scale(mat4(1),vec3(0.3,0.05,0.05));
 	m_program->setModelMatrix(myBasis*rotate(pi<float>() , vec3(0,0,1))) ;
 	placeholderbone->draw();
 
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				0 , 1, 0);
-	mat4 ayt = scale(mat4(1),vec3(0.1,1,0.1));
+	mat4 ayt = scale(mat4(1),vec3(0.05,0.3,0.05));
 	m_program->setModelMatrix(myBasis);
 	placeholderbone->draw();
 
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				0 , 0, 1);
-	mat4 azt = scale(mat4(1),vec3(0.1,0.1,1));
+	mat4 azt = scale(mat4(1),vec3(0.05,0.05,0.3));
 	m_program->setModelMatrix(myBasis*rotate(pi<float>() , vec3(1,0,0))) ;
 	placeholderbone->draw();
 
