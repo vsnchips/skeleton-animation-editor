@@ -136,24 +136,28 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 	float lonr=atan(b->boneDir.x/b->boneDir.z); //Pole tips towards high noon
 
  	 //tip calls for the pole
-	 mat4 tip = rotate(pi<float>()/latr, vec3(1,0,0));
-	 mat4 spin = rotate(two_pi<float>()/lonr, vec3(0,1,0));
+	 mat4 tip = rotate(latr, vec3(1,0,0));
+	 mat4 spin = rotate(lonr, vec3(0,1,0));
 	meshPoleRot = spin*tip * scale(mat4(),vec3(0.1,b->length,0.1));
 
  	//now draw the bone
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				0.8, 0.8, 0.8);
 	m_program->setModelMatrix(accumT*meshPoleRot);
-	//placeholderbone->draw();
+//	m_program->setModelMatrix(accumT);
+	placeholderbone->draw();
 
 
 	//Draw the bone's Tait-Bryan basis.
 	//
 
+	const float DEGMUL = pi<float>()/180;
+
+	//extrinsic:
         mat4 precalcthis = 
-	rotate(b->basisRot.z,vec3(0,0,1)) *     //z third
-	rotate(b->basisRot.y,vec3(0,1,0)) *     //y second
-	rotate(b->basisRot.x,vec3(1,0,0));      //x first
+	rotate(DEGMUL*b->basisRot.z,vec3(0,0,1)) *     //z third
+	rotate(DEGMUL*b->basisRot.y,vec3(0,1,0)) *     //y second
+	rotate(DEGMUL*b->basisRot.x,vec3(1,0,0));      //x first
 	mat4 jointRot = accumR * precalcthis;
  	//mat4 nextBasis = nextOrigin*jointRot;
  	mat4 myBasis = accumT*jointRot * scale(mat4(),vec3(0.1,0.1,0.1));			//Draw the axes back at the joint
