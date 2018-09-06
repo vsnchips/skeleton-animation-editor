@@ -127,7 +127,7 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 	mat4 t = accumT;
 	if (length(b->boneDir)>0){
 	//mat4 t = accumT * accumR*translate(scale(mat4(1.0),normalize(b->boneDir)),vec3(b->length));
-mat4 newtrans = accumT * accumR*translate(mat4(0.1),normalize(b->boneDir)*(b->length));
+        mat4 newtrans = accumT * accumR*translate(mat4(1),normalize(b->boneDir)*(b->length));
 //	mat4 newtrans = translate(mat4(),1.0f*b->boneDir);
 	t = accumT * newtrans;
 		       	// not sure if normalisation precalc'ed
@@ -137,29 +137,31 @@ mat4 newtrans = accumT * accumR*translate(mat4(0.1),normalize(b->boneDir)*(b->le
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				1 , 0, 0);
 	mat4 basis = accumT*rot;
-	mat4 axt = scale(mat4(1),vec3(1,0.01,0.01));
+	mat4 axt = scale(mat4(1),vec3(1,0.1,0.1));
 	m_program->setModelMatrix(basis*axt);
 	placeholderbone->draw();
 
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				0 , 1, 0);
-	mat4 ayt = scale(mat4(1),vec3(0.01,1,0.01));
+	mat4 ayt = scale(mat4(1),vec3(0.1,1,0.1));
 	m_program->setModelMatrix(basis*ayt);
 	placeholderbone->draw();
 
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				0 , 0, 1);
-	mat4 azt = scale(mat4(1),vec3(0.01,0.01,1));
+	mat4 azt = scale(mat4(1),vec3(0.1,0.1,1));
 	m_program->setModelMatrix(basis*azt);
 	placeholderbone->draw();
-	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
-				0 , 0, 0);
-	
 
+	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
+				0.8, 0.8, 0.8);
+	m_program->setModelMatrix(accumT*rot);
+	placeholderbone->draw();
 
 
 	for (bone * child : b->children) renderBone(t, accumR, child, placeholderbone);	
 	
+
 }
 
 
