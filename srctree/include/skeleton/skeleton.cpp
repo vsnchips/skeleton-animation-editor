@@ -516,31 +516,8 @@ void Skeleton::readAMC(string filename) {
 	// ...
 
 }
-
-void Skeleton::applyFrame(std::vector<frame> & clip, float pos){
-
-	//breakpoint here	
-	printf("frame two:");
 	
-	for (auto const& x : clip[0]) {
-		std::cout << x.first;  // string (key)
-
-		std::cout << "Xrotation " << bonemap[x.first] << std::endl;
-		//	<< ':' 
-		//	<< x.second // string's value 
-		//	<< std::endl ;
-	}	
-
-	unsigned int maxFrame = clip.size() - 1;
-
-	unsigned int getFrame = glm::min( (unsigned int)(clip.size()-1), (unsigned int)(clip.size()*pos));
-
-	printf ("getting frame %d:\n" ,getFrame);
-
-	frame *k = &clip[getFrame];
-	
-	
-	{
+void Skeleton::applyPose(frame * k){
 		for (auto const & e : *k){
 			printf("getting bone %s \n" , e.first);
 			
@@ -572,6 +549,31 @@ void Skeleton::applyFrame(std::vector<frame> & clip, float pos){
 			}
 		}
 	}
+
+void Skeleton::applyFrame(std::vector<frame> & clip, float pos){
+
+	//breakpoint here	
+	printf("frame two:");
+	
+	for (auto const& x : clip[0]) {
+		std::cout << x.first;  // string (key)
+
+		std::cout << "Xrotation " << bonemap[x.first] << std::endl;
+		//	<< ':' 
+		//	<< x.second // string's value 
+		//	<< std::endl ;
+	}	
+
+	unsigned int maxFrame = clip.size() - 1;
+
+	unsigned int getFrame = glm::min( (unsigned int)(clip.size()-1), (unsigned int)(clip.size()*pos));
+
+	printf ("getting frame %d:\n" ,getFrame);
+
+	frame *k = &clip[getFrame];
+
+	applyPose(k);
+	
 }
 // YOUR CODE GOES HERE
 // ...

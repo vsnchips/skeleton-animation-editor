@@ -10,6 +10,10 @@
 class Application {
 public:
 
+//declare poses
+    frame sittingPose; 
+    frame guitarPose;
+    frame walkingPose;
     void switchPose();
     void loadAnimation();
     void loadSkeleton();

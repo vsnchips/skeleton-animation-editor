@@ -159,6 +159,7 @@ public:
 	std::map<std::string, bone * > bonemap;
 
 	void applyFrame(std::vector<frame> & clip, float pos);
+	void applyPose(frame *);
 	
 	float axisSize = 0.1;
 

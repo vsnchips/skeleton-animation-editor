@@ -27,14 +27,20 @@
 using namespace std;
 
 
-void parseClip(){
-
-}
-
-
 void Application::switchPose(){
 
 	if (skelload){
+	static vector<frame> poses; poses.clear();
+        poses.push_back(sittingPose);
+       	poses.push_back(guitarPose);
+       	poses.push_back(walkingPose);
+
+	static int f = 0;
+	f ++;
+	f = f % 3;
+
+	showskel -> applyPose(&(poses[f]));
+
 		//showkel -> cylcePose();		
 	
 	}else{printf("no skeleton!a\n");}
@@ -175,6 +181,39 @@ void Application::init() {
     createCube();
 
     loadSkeleton();
+
+    sittingPose["lfemur"] = {-90,30,-10};
+    sittingPose["rfemur"] = {-90,-30,10};
+    sittingPose["ltibia"] = {100,10,-0};
+    sittingPose["rtibia"] = {100,-10,0};
+    sittingPose["lhumerus"] = {30,0,30};
+    sittingPose["rhumerus"] = {-30,0,-30};
+    sittingPose["lradius"] = {0,0.0};
+    sittingPose["rradius"] = {0,0.0};
+
+    guitarPose["lfemur"] = {-90,45,-10};
+    guitarPose["rfemur"] = {-90,-45,10};
+    guitarPose["ltibia"] = {160,10,-0};
+    guitarPose["rtibia"] = {160,-10,0};
+    guitarPose["lhumerus"] = {-20,0,30};
+    guitarPose["rhumerus"] = {30,30,6};
+    guitarPose["lradius"] = {90,0,0};
+    guitarPose["rradius"] = {0,0.-0};
+    guitarPose["rwrist"] = {40,0,0};
+    guitarPose["lwrist"] = {-10,0,90};
+
+    walkingPose["lfemur"] = {10,30,-10};
+    walkingPose["rfemur"] = {-20,-30,10};
+    walkingPose["ltibia"] = {20,10,-0};
+    walkingPose["rtibia"] = {15,-10,0};
+    walkingPose["lfoot"] = {0,0,-20};
+    walkingPose["rfoot"] = {0,0,20};
+    walkingPose["lhumerus"] = {30,-50,10};
+    walkingPose["rhumerus"] = {-60,-30,-0};
+    walkingPose["lradius"] = {50,45,45};
+    walkingPose["rradius"] = {45,30,-45};
+
+
 }
 
 void Application::createCube() {
@@ -313,12 +352,19 @@ void Application::doGUI() {
 	    loadAnimation();
     }
 
-    if(ImGui::Button("play")){
+    if(ImGui::Button("Play ")){
 	    play();
     }
  
-   if(ImGui::Button("pause")){
+   if(ImGui::Button("Pause")){
 	    pause();
+    } 
+
+    if(ImGui::Button("Rewind")){
+	    m_play_pos=0;
+    }
+    if(ImGui::Button(" Next Pose ")){
+	   switchPose() ;
     }
  
 
