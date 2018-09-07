@@ -65,7 +65,6 @@ Skeleton::Skeleton(string filename) {
 	b.freedom |= dof_ry;
 	b.freedom |= dof_rz;
 	b.freedom |= dof_root;
-	b.freedom == 0;
 	m_bones.push_back(b);
 	bonemap[b.name] = &b;
 	readASF(filename);
@@ -179,7 +178,7 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 	//Draw the bone's Tait-Bryan basis.
 	//
 
- 	mat4 myBasis = accumT*eulerBasis * scale(mat4(),vec3(0.1,0.1,0.1));			//Draw the axes back at the joint
+ 	mat4 myBasis = accumT*eulerBasis * scale(mat4(),vec3(axisSize));			//Draw the axes back at the joint
 	
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				1 , 0, 0);

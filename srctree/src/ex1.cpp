@@ -269,8 +269,8 @@ void Application::loadObj(const char *filename) {
 void Application::drawScene() {
 
     //showskel -> updateJoints();
-
-    float aspectRatio = m_viewportSize.x / m_viewportSize.y;
+if (skelload && m_playing){  m_play_pos += m_speed; applyFrame( theClip, m_play_pos);} 
+	float aspectRatio = m_viewportSize.x / m_viewportSize.y;
     glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
 
     // Create a view matrix that positions the camera
@@ -331,8 +331,10 @@ void Application::doGUI() {
     ImGui::Begin("Shapes");
 
    //Camera 
-    ImGui::SliderFloat3("Translate",&m_translation[0],-20.0f,20.0f, "%.5f",1.5f);
-    ImGui::SliderFloat("Scale",&m_scale,0,5.0f, "%.5f", 2.5f);
+    ImGui::SliderFloat3("Translate",&m_translation[0],-2.0f,2.0f, "%.5f",1.5f);
+    if(ImGui::SliderFloat("Scale",&m_scale,0,100.0f, "%.5f", 5.f)){
+    	if (skelload) showskel->axisSize = 1/m_scale;
+    }
     if(ImGui::SliderFloat3("Rotate",&polarrotation[0],-M_PI,M_PI, "%.5f", 1.0f)){
         // User's spun the globe
         // Find the resulting matrix!

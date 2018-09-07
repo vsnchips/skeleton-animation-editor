@@ -94,6 +94,7 @@ struct bone {
 	glm::vec3 translation;       // Translation (Only for the Root)
 	glm::vec3 rotation_max;      // Maximum value for rotation for this joint (degrees)
 	glm::vec3 rotation_min;      // Minimum value for rotation for this joint (degrees)
+
 };
 
 
@@ -158,4 +159,6 @@ public:
 	std::map<std::string, bone * > bonemap;
 
 	void applyFrame(std::vector<frame> & clip, float pos);
+	
+	float axisSize = 0.1;
 };
