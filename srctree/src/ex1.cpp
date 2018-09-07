@@ -4,7 +4,6 @@
 #include <stdexcept>
 #include <cstring>
 
-
 #include "opengl.hpp"
 #include "imgui.h"
 
@@ -21,7 +20,29 @@
 #include "math.h"
 #include "../include/nfd.h"
 
+#include <map>
+#include <string>
+
+
+using namespace std;
+
+
+void parseClip(){
+
+}
+
+
+void Application::switchPose(){
+
+	if (skelload){
+		//showkel -> cylcePose();		
+	
+	}else{printf("no skeleton!a\n");}
+}
+
+
 void Application::loadSkeleton(){
+
      nfdchar_t * skelFile;
 
      NFD_OpenDialog( "*", "", &skelFile);
@@ -35,7 +56,98 @@ void Application::loadSkeleton(){
      showskel->setProgram(m_program);
      skelload = true;
 
+
+
 }
+
+// Helper method for retreiving and trimming the next line in a file.
+// You should not need to modify this method.
+namespace {
+	string nextLineTrimmed(istream &file) {
+		// Pull out line from file
+		string line;
+		getline(file, line);
+		// Remove leading and trailing whitespace and comments
+		size_t i = line.find_first_not_of(" \t\r\n");
+		if (i != string::npos) {
+			if (line[i] != '#') {
+				return line.substr(i, line.find_last_not_of(" \t\r\n") - i + 1);
+			}
+		}
+		return "";
+	}
+}
+
+
+void Application::loadAnimation(){
+
+     nfdchar_t * aniFile;
+
+     NFD_OpenDialog( "*", "", &aniFile);
+     printf("\nloading %s\n",aniFile);
+
+    ifstream amcStream(aniFile); 
+    if (!amcStream.is_open()) {
+    	printf("Cant open amc!\n");
+    } else{
+
+	//construct a clip
+	theClip.clear();
+	int cfnum = 0;
+
+    while (amcStream.good()){
+        string line = nextLineTrimmed(amcStream);
+	if (line.empty() || line[0] == '#')
+		continue;
+	else if (line[0] == ':') {
+	  //something something fully specified
+	  //something something degrees
+	}
+   	else if (isdigit(line[0])){
+		cfnum = atoi(&line[0]);
+		if (theClip.size()<cfnum) {
+		frame newframe; newframe.clear();
+		theClip.push_back(newframe);
+		}
+	}
+	else{
+	//read the rotation in
+		string thebone;
+		istringstream lstream(line);
+		lstream >> thebone;
+		// float vec
+		vector<float> rots;
+		rots.clear();
+		string num = "";
+	 	while (lstream >> num){
+			rots.push_back(stof(num));
+			num="";
+		}//got vector now
+		theClip[cfnum-1][ thebone ] = rots; //copy the vector to the frame
+	//breakpoint here	
+	printf("frame one:");
+	
+	for (auto const& x : theClip[0])
+	{
+		std::cout << x.first  // string (key)
+			<< ':' 
+		//	<< x.second // string's value 
+			<< std::endl ;
+	}	
+	}
+    }     
+    }
+
+
+}
+
+void Application::play(){
+	m_play = true;
+}
+void Application::pause(){
+	m_play = false;
+}
+
 void Application::init() {
     // Load the shader rogram
     // The use of CGRA_SRCDIR "/path/to/shader" is so you don't
@@ -155,6 +267,9 @@ void Application::loadObj(const char *filename) {
 }
 
 void Application::drawScene() {
+
+    //showskel -> updateJoints();
+
     float aspectRatio = m_viewportSize.x / m_viewportSize.y;
     glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
 
@@ -174,7 +289,7 @@ void Application::drawScene() {
     
     if( skelload && showskel -> m_bones.size() > 0){
     showskel->m_program->setProjectionMatrix(projectionMatrix);
-	printf("there are %d bones\n", showskel->m_bones.size());
+//	printf("there are %d bones\n", showskel->m_bones.size());
 	    showskel->renderSkeleton( & m_mesh );
     }
 
@@ -186,31 +301,36 @@ void renderBone(bone b){
 
 
 void Application::doGUI() {
+   
+    // --- Clip Controls
+    ImGui::SetNextWindowSize(ImVec2(500, 50), ImGuiSetCond_FirstUseEver);
+    ImGui::Begin("Shapes");
+    if(ImGui::SliderFloat("Position", &m_play_pos, 0.f, 1.f, "%.5f", 1.0f)){
+    	showskel->applyFrame(theClip,m_play_pos);
+    }
+    
+    if(ImGui::Button("Load A Clip")){
+	    loadAnimation();
+    }
+
+    if(ImGui::Button("play")){
+	    play();
+    }
+ 
+   if(ImGui::Button("pause")){
+	    pause();
+    }
+
+    ImGui::SliderFloat("Speed",&m_speed, -5.f,5.f,"%.5f",1.0f);
+
+    ImGui::End();
+    // ---
+
+    // --- Camera Controls
     ImGui::SetNextWindowSize(ImVec2(250, 250), ImGuiSetCond_FirstUseEver);
     ImGui::Begin("Shapes");
 
-    /************************************************************
-     *                                                          *
-     * 2. Load an .obj file                                     *
-     *                                                          *
-     * Add an input for a filename.                             *
-     *                                                          *
-     ************************************************************
-     *                                                          *
-     * 3. Manual Transforms                                     *
-     *                                                          *
-     * Create inputs for controlling translation, scale and     *
-     * rotation.                                                *
-     *
-     ************************************************************
-     */
-		
-
-    if(ImGui::Button("Load A Skeleton")){
-	    loadSkeleton();
-    }
-
-
+   //Camera 
     ImGui::SliderFloat3("Translate",&m_translation[0],-20.0f,20.0f, "%.5f",1.5f);
     ImGui::SliderFloat("Scale",&m_scale,0,5.0f, "%.5f", 2.5f);
     if(ImGui::SliderFloat3("Rotate",&polarrotation[0],-M_PI,M_PI, "%.5f", 1.0f)){
@@ -256,6 +376,12 @@ void Application::doGUI() {
      *  mode.                                                   *
      ************************************************************/
 
+    // Mesh / Geometry / Skeleton / Character / Assets
+    // controls
+    if(ImGui::Button("Load A Skeleton")){
+	    loadSkeleton();
+    }
+ 
     static bool wireframe;
     if(ImGui::Checkbox("Draw Wireframe",&wireframe)) {
         m_mesh.setDrawWireframe(wireframe);
@@ -525,6 +651,12 @@ void Application::onKey(int key, int scancode, int action, int mods) {
     (void)scancode;
     (void)action;
     (void)mods;
+
+    if (key == GLFW_KEY_P && action == GLFW_PRESS ){
+    
+	    switchPose();
+    
+    }
 }
 
 void Application::onScroll(double xoffset, double yoffset) {

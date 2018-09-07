@@ -10,9 +10,19 @@
 class Application {
 public:
 
+    void switchPose();
+    void loadAnimation();
     void loadSkeleton();
+    void play();
+    void pause();
 
-// actors in the play:	
+    bool m_play = false;
+    float m_play_pos;
+    float m_speed;
+	
+    std::vector<frame> theClip;
+    
+ // actors in the play:	
     Skeleton * showskel;
     bool skelload =  false;
    cgra::Mesh m_mesh;

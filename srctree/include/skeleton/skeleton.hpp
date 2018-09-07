@@ -97,6 +97,38 @@ struct bone {
 };
 
 
+struct Pose{
+	glm::vec3 lsh;
+        glm::vec3 rsh;
+
+	glm::vec3 lelb;
+        glm::vec3 relb;
+
+	glm::vec3 lhand;
+        glm::vec3 rhand;
+
+	glm::vec3 lhip;
+        glm::vec3 rhip;
+
+	glm::vec3 lknee;
+        glm::vec3 rknee;
+
+	glm::vec3 lankle;
+        glm::vec3 rankle;
+/*
+	glm::vec3 lhip;
+        glm::vec3 rhip;
+
+	glm::vec3 lhip;
+        glm::vec3 rhip;
+	*/
+
+};
+
+#include <map>
+typedef std::map<std::string, std::vector<float>> frame; 
+
+
 class Skeleton {
 
 private:
@@ -123,4 +155,7 @@ public:
 	// YOUR CODE GOES HERE
 	// ...
 	std::vector<bone> m_bones;
+	std::map<std::string, bone * > bonemap;
+
+	void applyFrame(std::vector<frame> & clip, float pos);
 };
