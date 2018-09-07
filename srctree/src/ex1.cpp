@@ -138,7 +138,7 @@ void Application::loadAnimation(){
     }     
     }
 
-
+	m_play=true;
 }
 
 void Application::play(){
@@ -166,7 +166,7 @@ void Application::init() {
     yax = glm::vec3(0.,1.,0.);
     zax = glm::vec3(0.,0.,1.);
 
-    m_translation.z=-2.0f;
+    m_translation.z=-0.0f;
 
     printf("\nxax: %f,%f,%f",xax.x,xax.y,xax.z);
     printf("\nyax: %f,%f,%f",yax.x,yax.y,yax.z);
@@ -269,7 +269,7 @@ void Application::loadObj(const char *filename) {
 void Application::drawScene() {
 
     //showskel -> updateJoints();
-if (skelload && m_playing){  m_play_pos += m_speed; applyFrame( theClip, m_play_pos);} 
+if (skelload && m_play){  m_play_pos += m_speed * 0.0002; showskel-> applyFrame( theClip, m_play_pos);} 
 	float aspectRatio = m_viewportSize.x / m_viewportSize.y;
     glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
 
@@ -290,7 +290,7 @@ if (skelload && m_playing){  m_play_pos += m_speed; applyFrame( theClip, m_play_
     if( skelload && showskel -> m_bones.size() > 0){
     showskel->m_program->setProjectionMatrix(projectionMatrix);
 //	printf("there are %d bones\n", showskel->m_bones.size());
-	    showskel->renderSkeleton( & m_mesh );
+	    showskel->renderSkeleton( & m_mesh , tether);
     }
 
 }
@@ -320,6 +320,9 @@ void Application::doGUI() {
    if(ImGui::Button("pause")){
 	    pause();
     }
+ 
+
+   ImGui::Checkbox("Tethered Root",&tether);
 
     ImGui::SliderFloat("Speed",&m_speed, -5.f,5.f,"%.5f",1.0f);
 
@@ -331,11 +334,12 @@ void Application::doGUI() {
     ImGui::Begin("Shapes");
 
    //Camera 
-    ImGui::SliderFloat3("Translate",&m_translation[0],-2.0f,2.0f, "%.5f",1.5f);
+    ImGui::SliderFloat3("Translate",&m_translation[0],-20.0f,20.0f, "%.5f",1.5f);
     if(ImGui::SliderFloat("Scale",&m_scale,0,100.0f, "%.5f", 5.f)){
     	if (skelload) showskel->axisSize = 1/m_scale;
     }
-    if(ImGui::SliderFloat3("Rotate",&polarrotation[0],-M_PI,M_PI, "%.5f", 1.0f)){
+    
+     if(ImGui::SliderFloat3("Rotate",&polarrotation[0],-M_PI,M_PI, "%.5f", 1.0f)){
         // User's spun the globe
         // Find the resulting matrix!
 

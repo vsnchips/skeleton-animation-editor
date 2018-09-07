@@ -84,8 +84,9 @@ void Skeleton::defaultBoneMesh(cgra::Mesh * d){
 // [Assignment 2] :
 // You may need to revise this function for Completion/Challenge
 //-------------------------------------------------------------
-void Skeleton::renderSkeleton( cgra::Mesh * placeholderbone) {
+void Skeleton::renderSkeleton( cgra::Mesh * placeholderbone, bool tet) {
 
+	tether = tet;
 	m_program->use();
 	//*** glMatrixMode is a deprecated function that should
 	//*** not be used in modern OpenGL - you need to manage
@@ -133,13 +134,12 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 	rotate(DEGMUL*b->basisRot.z,vec3(0,0,1)) *     //z third
 	rotate(DEGMUL*b->basisRot.y,vec3(0,1,0)) *     //y second
 	rotate(DEGMUL*b->basisRot.x,vec3(1,0,0));      //x first
-	mat4 eulerBasis = accumR * precalcthis;
 
 	// Include animation
 	vec4 tz,ty,tx;
 	tz = precalcthis * vec4(0,0,1,1);
 	ty = precalcthis * vec4(0,1,0,1);
-	tz = precalcthis * vec4(1,0,0,1);
+	tx = precalcthis * vec4(1,0,0,1);
 	vec3 tz3, ty3, tx3;
 	tz3 = vec3(tz.x,tz.y,tz.z);
 	ty3 = vec3(ty.x,ty.y,ty.z);
@@ -149,14 +149,18 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 
 	rotate(DEGMUL*b->rotation.z,tz3) *     //z third
 	rotate(DEGMUL*b->rotation.y,ty3) *     //y second
-	rotate(DEGMUL*b->rotation.x,tz3) * mat4(1);      //x first
+	rotate(DEGMUL*b->rotation.x,tx3) * mat4(1);      //x first
 
-	mat4 myR = accumR * tweak;
+	//mat4 myR = accumR * tweak;
+	mat4 myR = tweak;
+	//mat4 eulerBasis = accumR * precalcthis;
+	mat4 eulerBasis = precalcthis;
 	eulerBasis = tweak * eulerBasis;
 
 	vec3 cpos = b->length*b->boneDir;
 	mat4 nextOrigin = accumT * myR * translate(mat4(1.0), cpos);
 	//mat4 nextOrigin = accumT * translate(mat4(1.0), cpos);  //test without articulation
+
 
 	mat4 meshPoleRot(1.0);
 	float latr=acos(b->boneDir.y);
@@ -182,7 +186,7 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 	
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				1 , 0, 0);
-	m_program->setModelMatrix(myBasis*rotate(0.5f* pi<float>() , vec3(0,0,1))) ;
+	m_program->setModelMatrix(myBasis*rotate(-0.5f* pi<float>() , vec3(0,0,1))) ;
 	placeholderbone->draw();
 
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
@@ -196,7 +200,8 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 	placeholderbone->draw();
 
 
-
+	//and Move the root
+	if (!tether) nextOrigin = translate(mat4(1.0), b->translation) * nextOrigin;
 	for (bone * child : b->children) renderBone(nextOrigin, myR, child, placeholderbone);	
 	
 
@@ -540,12 +545,15 @@ void Skeleton::applyFrame(std::vector<frame> & clip, float pos){
 			printf("getting bone %s \n" , e.first);
 			
 			//bone * fb = bonemap[e.first];
+			if (e.first != "root"){
+			
 			bone * fb = &m_bones[findBone(e.first)];
+
 			int fdm = fb -> freedom;
 			//do some dof logic
 			//fb->rotation = k.second;
 			unsigned int nox=1, noy =1;
-		 	if (fb->freedom > 3){
+			if (fb->freedom % 2 > 0){
 			fb->rotation.x=e.second[0];    
 				nox=0;
 			}
@@ -553,10 +561,15 @@ void Skeleton::applyFrame(std::vector<frame> & clip, float pos){
 			fb->rotation.y=e.second[1-nox];
 				noy=0;
 			}
-			if (fb->freedom % 2 > 0){
+		 	if (fb->freedom > 3){
 			fb->rotation.z=e.second[2-nox-noy];
 			}
-				
+			} else {
+			
+			bone * root = &m_bones[0];
+			root -> rotation = vec3(e.second[3], e.second[4], e.second[5]);
+			root -> translation = vec3(e.second[0], e.second[1], e.second[2]);
+			}
 		}
 	}
 }

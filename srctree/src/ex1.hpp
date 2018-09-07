@@ -18,6 +18,7 @@ public:
 
     bool m_play = false;
     float m_play_pos;
+    bool tether = true;
     float m_speed;
 	
     std::vector<frame> theClip;

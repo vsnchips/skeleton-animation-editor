@@ -91,7 +91,7 @@ struct bone {
 	glm::vec3 rotation;          // Rotation of joint in the basis (degrees)
 
 	// Challenge
-	glm::vec3 translation;       // Translation (Only for the Root)
+	glm::vec3 translation = glm::vec3(0);       // Translation (Only for the Root)
 	glm::vec3 rotation_max;      // Maximum value for rotation for this joint (degrees)
 	glm::vec3 rotation_min;      // Minimum value for rotation for this joint (degrees)
 
@@ -149,7 +149,7 @@ public:
 	Skeleton(std::string);
 	cgra::Program * m_program;
 	void setProgram(cgra::Program &);	
-	void renderSkeleton(cgra::Mesh * placeholderbone);
+	void renderSkeleton(cgra::Mesh * placeholderbone, bool tether);
 	void readAMC(std::string);
 
 	void defaultBoneMesh(cgra::Mesh *);
@@ -161,4 +161,6 @@ public:
 	void applyFrame(std::vector<frame> & clip, float pos);
 	
 	float axisSize = 0.1;
+
+	bool tether = true;
 };
