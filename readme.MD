@@ -1,20 +1,33 @@
-# CGRA 350 Assignment 2
+# CGRA 350 Assignment 3
 ## Dan Aston
 
 #### 300406690
 
-I have loaded a skeleton, created three poses,
-
-Sitting in a spa pool, Walking, and couching while pointing into the distance.
+This project extends upon my submission for assignment two.
 
 I have included a range of asf/amc files from carnegie mellon for testing of the video mode.
 
 Speed / rewind  is controlled by a slider.
 
-![](/home/shelly/local/CGRA350/a2-local/priman.jpeg.png)
+To do:
 
-![](/home/shelly/local/CGRA350/a2-local/walking.jpeg.png)
+* Implement a keyframe system
+* Implement keyframe animation
 
-![](/home/shelly/local/CGRA350/a2-local/sitting-in-spa-pool.jpeg.png)
+* Implement interactive control of skeletal joints
+* Implement an offscreen selection buffer
+* Implement keyboard shortcuts
+* Implement selection state
+> * Axis selection, x cycles the axes.
+> * Joint highlighting
+> * Status bar
 
-![](/home/shelly/local/CGRA350/a2-local/point.jpeg.png)
+* Pose saving (<keyframe#>pos<#>.pos)
+* .acm saving
+* Keyframe script ("config file")
+
+*Player controls
+> * "a" for play/pause.
+> * "n,p" for jump to next,previous keyframe.
+
+
