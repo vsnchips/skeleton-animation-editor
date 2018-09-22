@@ -279,6 +279,33 @@ a3_dogui.cpp.s:
 	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3_dogui.cpp.s
 .PHONY : a3_dogui.cpp.s
 
+a3_kfwin.o: a3_kfwin.cpp.o
+
+.PHONY : a3_kfwin.o
+
+# target to build an object file
+a3_kfwin.cpp.o:
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3_kfwin.cpp.o
+.PHONY : a3_kfwin.cpp.o
+
+a3_kfwin.i: a3_kfwin.cpp.i
+
+.PHONY : a3_kfwin.i
+
+# target to preprocess a source file
+a3_kfwin.cpp.i:
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3_kfwin.cpp.i
+.PHONY : a3_kfwin.cpp.i
+
+a3_kfwin.s: a3_kfwin.cpp.s
+
+.PHONY : a3_kfwin.s
+
+# target to generate assembly for a file
+a3_kfwin.cpp.s:
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3_kfwin.cpp.s
+.PHONY : a3_kfwin.cpp.s
+
 app_renderer.o: app_renderer.cpp.o
 
 .PHONY : app_renderer.o
@@ -493,6 +520,9 @@ help:
 	@echo "... a3_dogui.o"
 	@echo "... a3_dogui.i"
 	@echo "... a3_dogui.s"
+	@echo "... a3_kfwin.o"
+	@echo "... a3_kfwin.i"
+	@echo "... a3_kfwin.s"
 	@echo "... app_renderer.o"
 	@echo "... app_renderer.i"
 	@echo "... app_renderer.s"

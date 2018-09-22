@@ -34,15 +34,20 @@ void app_renderer::passUniforms(cgra::Program * p, uniforms * unfms){
 }
 
 
+void app_renderer::pickDraw(std::vector<drawStyle> & t){
+
+  pickProg.use(); 
+    for(drawStyle d: t){
+      passUniforms(&pickProg,&d.unfms);
+      if (d.m_mesh && d.tag == "joint") d.m_mesh->draw();
+    }
+
+}
 void app_renderer::execute(std::vector<drawStyle> & target){
 
   // Pick Preview
   if (previewPick){
-    pickProg.use(); 
-    for(drawStyle d: target){
-      passUniforms(&pickProg,&d.unfms);
-      if (d.m_mesh) d.m_mesh->draw();
-    }
+    pickDraw(target);
   }
 
   //The default overriden case
@@ -63,5 +68,44 @@ void app_renderer::execute(std::vector<drawStyle> & target){
       }
     }
   }
+
+}
+
+int app_renderer::pickTest( std::vector<drawStyle> target, glm::vec2 &  m_mousePosition){
+
+int pickedID = -1;
+// Clear the back buffer
+glClearColor(255, 255, 255, 1);
+glClearDepth(1);
+glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+pickDraw(target);
+
+// Reading in after drawing
+unsigned char pixel[4];
+glReadPixels(m_mousePosition.x,
+m_viewportSize.y - m_mousePosition.y, 1, 1,   GL_RGBA,   GL_UNSIGNED_BYTE,   &pixel);
+
+float pickDepth; //might need the depth to find things;
+
+glReadPixels(m_mousePosition.x,
+m_viewportSize.y - m_mousePosition.y, 1, 1,   GL_DEPTH_BUFFER_BIT,   GL_FLOAT,   &pickDepth);
+
+if (!(pixel[0]==255) || !(pixel[1]==255) || !(pixel[2]==255) ){
+
+    pickedID = pixel[0] + pixel[1]*256 + pixel[2]*256*256;
+
+    printf("RED %i\n", pixel[0]);
+    printf("GREEN %i\n", pixel[1]);
+    printf("BLUE %i\n", pixel[2]);
+
+}
+
+//m_program.use();
+
+//glfwSwapBuffers(m_window);
+printf("Picked id %d\n", pickedID );
+printf("Picked pickDepth %f\n", pickDepth );
+return pickedID;
 
 }

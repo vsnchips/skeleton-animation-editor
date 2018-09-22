@@ -15,4 +15,7 @@
 #include "glm/gtx/euler_angles.hpp"
 #include "glm/gtx/rotate_vector.hpp"
 
+#include "imgui.h"
+#include "cgra/imgui_impl_glfw_gl3.h"
+  
 #include "opengl.hpp"

@@ -23,11 +23,16 @@ public:
     float pickDepth=1;
     GLint triangleMode;
 
+    int pickState = -1;
+
     asfApp * theAsfApp;
     app_renderer a3Renderer;
     /////////////////////////////////////////// Part 1 Vars
     // The window object managed by GLFW
     GLFWwindow *m_window;
+
+    GLFWwindow *  keyframe_window;
+
     // The shader program used for drawing
     cgra::Program m_program;
     // The mesh data
@@ -67,6 +72,9 @@ public:
     void setWindowSize(int width, int height) {
         m_viewportSize.x = float(width);
         m_viewportSize.y = float(height);
+
+        a3Renderer.m_viewportSize = m_viewportSize;
+
     }
 
     void init();
@@ -89,8 +97,6 @@ public:
 
     void onScroll(double xoffset, double yoffset);
 
-    int pickTest(float mX, float mY);
-    int pickTest();
 
     //File saving methods
 
@@ -99,4 +105,15 @@ public:
     void a3_writeAMC();
 
     void a3_saveKeyFrames();
+
+    // Keyframe window methods
+   
+    typedef const std::vector<glm::vec3> a3curve;
+    void makeCurve();
+    void drawCurve();
+    void kfwin_oncursor(double xpos, double ypos);
+    void kfwin_onMouse(int button, int action, int mods);
+    void kfwin_onkey(int key, int scancode, int action, int mods);
+    void kfwin_onscroll(double xoffset, double yoffset);
+
 };

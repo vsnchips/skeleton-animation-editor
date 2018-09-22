@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/a2-loader.dir/a3_kfwin.cpp.o"
   "CMakeFiles/a2-loader.dir/asf.cpp.o"
   "CMakeFiles/a2-loader.dir/a3.cpp.o"
   "CMakeFiles/a2-loader.dir/a3-filesave.cpp.o"

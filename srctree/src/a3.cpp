@@ -164,6 +164,21 @@ void a3_Application::loadObj(const char *filename,cgra::Mesh &targetMesh) {
 
 void a3_Application::drawScene() {
 
+  glfwMakeContextCurrent(m_window);
+
+      ImGui_ImplGlfwGL3_NewFrame();
+      int width, height;
+      glfwGetFramebufferSize(m_window, &width, &height);
+      glViewport(0, 0, width, height);
+      setWindowSize(width, height);
+      glClearColor(0, 0, 0.1, 1); // Clears the color to a dark blue
+      glClearDepth(1); // Clears the depth buffer to it's maximum value
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+      // Create the GUI.
+      // Note: this does not draw the GUI
+      doGUI();
+
   //Draw the skeleton
 
   theAsfApp -> updateScene();//  Draw The Skeleton
@@ -198,29 +213,36 @@ void a3_Application::drawScene() {
     glm::mat4 viewMatrix(1);
     viewMatrix[3] = glm::vec4(0, 0, -1, 1);
 
-    //Draw the Lattice
-    // todo: see theLattice class for line drawing code
-    //
-    // theLattice.latProgram.use();
-    //use this space for drawing wireframes
-    //
-    // Draw the mesh
+    // Draw the box
     m_program.use();
-    GLuint nowprog = m_program.m_program;
 
-    GLfloat idColor[4];   //WHITE
-    idColor[0] = 255;
-    idColor[1] = 255;
-    idColor[2] = 255;
-    idColor[3] = 1.0;
-   /* GLuint loc = glGetUniformLocation(
-    m_program.m_program, "gColor");
-    glUniform4fv(loc, 1, idColor);
-*/
     m_program.setViewMatrix(viewMatrix);
     m_program.setProjectionMatrix(projectionMatrix);
     m_program.setModelMatrix(m_modelTransform);
     m_mesh.draw(GL_TRIANGLES);
+
+   // Make sure that we're drawing with the correct
+   // polygon mode
+   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+   // Now we draw the GUI over the top of everything else
+   ImGui::Render();
+   // Finally, swap the front and back buffers.
+   // We've been drawing to the back buffer so far, so this
+   // makes it visible.
+                   // Next frame we draw to the other buffer
+   glfwSwapBuffers(m_window);
+	
+    
+                
+                
+                
+                
+                
+                
+                // Keyframe Curve Window
+    //
+    glfwMakeContextCurrent( keyframe_window);
+    //draw some beziers.
 
 
 }
@@ -233,7 +255,7 @@ void a3_Application::onMouseButton(int button, int action, int) {
         // Set the 'down' state for the appropriate mouse button
         if (button ==0){
             if( action == GLFW_PRESS) {
-                pickID = pickTest();
+                pickID = a3Renderer.pickTest(theAsfApp->stylePack, m_mousePosition);
                 clickon = pickID > 0;
                 printf("clickon %s\n" , clickon ? "true" : "false");
             }
@@ -422,48 +444,4 @@ void a3_Application::onScroll(double xoffset, double yoffset) {
     // `(void)foo` suppresses unused variable warnings
     (void)xoffset;
     (void)yoffset;
-}
-
-
-int a3_Application::pickTest(){
-
-int pickedID = -1;
-// Clear the back buffer
-glClearColor(255, 255, 255, 1);
-glClearDepth(1);
-glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-//Draw the pickable elements
-/*theLattice.drawForPick(theLattice.latProgram,
-                                        m_modelTransform,
-                                        m_rotationMatrix,
-                                        glm::translate(glm::mat4(),m_translation),
-                                        m_scale);
-*/
-
-// Reading in after drawing
-unsigned char pixel[4];
-glReadPixels(m_mousePosition.x,
-m_viewportSize.y - m_mousePosition.y, 1, 1,   GL_RGBA,   GL_UNSIGNED_BYTE,   &pixel);
-glReadPixels(m_mousePosition.x,
-m_viewportSize.y - m_mousePosition.y, 1, 1,   GL_DEPTH_BUFFER_BIT,   GL_FLOAT,   &pickDepth);
-
-if (!(pixel[0]==255) || !(pixel[1]==255) || !(pixel[2]==255) ){
-
-    pickedID = pixel[0] + pixel[1]*256 + pixel[2]*256*256;
-
-
-    printf("RED %i\n", pixel[0]);
-    printf("GREEN %i\n", pixel[1]);
-    printf("BLUE %i\n", pixel[2]);
-
-}
-
-m_program.use();
-
-//glfwSwapBuffers(m_window);
-printf("Picked id %d\n", pickedID );
-printf("Picked pickDepth %f\n", pickDepth );
-return pickedID;
-
 }

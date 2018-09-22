@@ -69,6 +69,12 @@ void a3_Application::doGUI() {
 
     ImGui::End();
 
+    ImGui::Begin("Keyframe Controls");
+    if(ImGui::Button("Toggle Keyframe Editor")){
+      keyframe_window = glfwCreateWindow(1920,300, "Curve Editor", NULL, NULL) ;
+    }
+    ImGui::End();
+
     ImGui::Begin("Shader Controls");
     if(ImGui::Button("Toggle Picker Test")){
       a3Renderer.previewPick = !a3Renderer.previewPick;

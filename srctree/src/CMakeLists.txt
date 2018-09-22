@@ -3,6 +3,7 @@
 #
 # If you add any new files, remember to add them here
 SET(sources
+  a3_kfwin.cpp
   asf.hpp
   asf.cpp
   a3.hpp

@@ -14,6 +14,11 @@ class app_renderer{
 
   cgra::Program pickProg;
 
+
+  // window stuff
+  glm::vec2 m_viewportSize;
+
+
   //rendering options
   bool previewPick = false;
 
@@ -23,5 +28,13 @@ class app_renderer{
 
   //dev
   void loadPickShader();
+
+  void pickDraw(std::vector<drawStyle> & t);
+  int pickTest( std::vector<drawStyle> target, glm::vec2 & m_mousePosition);
+
+
+
+
+
 
 };
