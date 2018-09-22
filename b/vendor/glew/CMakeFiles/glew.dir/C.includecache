@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glew/include/GL/glew.h
+/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glew/include/GL/glew.h
 stddef.h
 -
 inttypes.h
@@ -20,7 +20,7 @@ OpenGL/glu.h
 GL/glu.h
 -
 
-/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glew/include/GL/glxew.h
+/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glew/include/GL/glxew.h
 X11/Xlib.h
 -
 X11/Xutil.h
@@ -30,11 +30,11 @@ X11/Xmd.h
 GL/glew.h
 -
 
-/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glew/include/GL/wglew.h
+/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glew/include/GL/wglew.h
 windows.h
 -
 
-/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glew/src/glew.c
+/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glew/src/glew.c
 GL/glew.h
 -
 GL/wglew.h

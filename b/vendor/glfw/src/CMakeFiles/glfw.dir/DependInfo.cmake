@@ -4,19 +4,19 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glfw/src/context.c" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/glfw/src/CMakeFiles/glfw.dir/context.c.o"
-  "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glfw/src/glx_context.c" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/glfw/src/CMakeFiles/glfw.dir/glx_context.c.o"
-  "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glfw/src/init.c" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/glfw/src/CMakeFiles/glfw.dir/init.c.o"
-  "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glfw/src/input.c" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/glfw/src/CMakeFiles/glfw.dir/input.c.o"
-  "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glfw/src/linux_joystick.c" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/glfw/src/CMakeFiles/glfw.dir/linux_joystick.c.o"
-  "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glfw/src/monitor.c" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/glfw/src/CMakeFiles/glfw.dir/monitor.c.o"
-  "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glfw/src/posix_time.c" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/glfw/src/CMakeFiles/glfw.dir/posix_time.c.o"
-  "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glfw/src/posix_tls.c" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/glfw/src/CMakeFiles/glfw.dir/posix_tls.c.o"
-  "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glfw/src/window.c" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/glfw/src/CMakeFiles/glfw.dir/window.c.o"
-  "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glfw/src/x11_init.c" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/glfw/src/CMakeFiles/glfw.dir/x11_init.c.o"
-  "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glfw/src/x11_monitor.c" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/glfw/src/CMakeFiles/glfw.dir/x11_monitor.c.o"
-  "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glfw/src/x11_window.c" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/glfw/src/CMakeFiles/glfw.dir/x11_window.c.o"
-  "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glfw/src/xkb_unicode.c" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/glfw/src/CMakeFiles/glfw.dir/xkb_unicode.c.o"
+  "/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glfw/src/context.c" "/home/shelly/local/CGRA350/assignment3/a3local/b/vendor/glfw/src/CMakeFiles/glfw.dir/context.c.o"
+  "/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glfw/src/glx_context.c" "/home/shelly/local/CGRA350/assignment3/a3local/b/vendor/glfw/src/CMakeFiles/glfw.dir/glx_context.c.o"
+  "/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glfw/src/init.c" "/home/shelly/local/CGRA350/assignment3/a3local/b/vendor/glfw/src/CMakeFiles/glfw.dir/init.c.o"
+  "/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glfw/src/input.c" "/home/shelly/local/CGRA350/assignment3/a3local/b/vendor/glfw/src/CMakeFiles/glfw.dir/input.c.o"
+  "/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glfw/src/linux_joystick.c" "/home/shelly/local/CGRA350/assignment3/a3local/b/vendor/glfw/src/CMakeFiles/glfw.dir/linux_joystick.c.o"
+  "/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glfw/src/monitor.c" "/home/shelly/local/CGRA350/assignment3/a3local/b/vendor/glfw/src/CMakeFiles/glfw.dir/monitor.c.o"
+  "/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glfw/src/posix_time.c" "/home/shelly/local/CGRA350/assignment3/a3local/b/vendor/glfw/src/CMakeFiles/glfw.dir/posix_time.c.o"
+  "/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glfw/src/posix_tls.c" "/home/shelly/local/CGRA350/assignment3/a3local/b/vendor/glfw/src/CMakeFiles/glfw.dir/posix_tls.c.o"
+  "/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glfw/src/window.c" "/home/shelly/local/CGRA350/assignment3/a3local/b/vendor/glfw/src/CMakeFiles/glfw.dir/window.c.o"
+  "/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glfw/src/x11_init.c" "/home/shelly/local/CGRA350/assignment3/a3local/b/vendor/glfw/src/CMakeFiles/glfw.dir/x11_init.c.o"
+  "/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glfw/src/x11_monitor.c" "/home/shelly/local/CGRA350/assignment3/a3local/b/vendor/glfw/src/CMakeFiles/glfw.dir/x11_monitor.c.o"
+  "/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glfw/src/x11_window.c" "/home/shelly/local/CGRA350/assignment3/a3local/b/vendor/glfw/src/CMakeFiles/glfw.dir/x11_window.c.o"
+  "/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glfw/src/xkb_unicode.c" "/home/shelly/local/CGRA350/assignment3/a3local/b/vendor/glfw/src/CMakeFiles/glfw.dir/xkb_unicode.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
@@ -27,9 +27,9 @@ set(CMAKE_TARGET_DEFINITIONS_C
 
 # The include file search paths:
 set(CMAKE_C_TARGET_INCLUDE_PATH
-  "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glfw/include"
-  "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree"
-  "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glfw/src"
+  "/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glfw/include"
+  "/home/shelly/local/CGRA350/assignment3/a3local/srctree"
+  "/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glfw/src"
   "vendor/glfw/src"
   )
 

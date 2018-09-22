@@ -11,10 +11,12 @@ class asfApp {
 public:
 
 //declare poses
-    frame sittingPose; 
+    frame sittingPose;
     frame guitarPose;
     frame walkingPose;
     void switchPose(int dir);
+    void prevPose();
+    void nextPose();
     void loadAnimation();
     void loadSkeleton();
     void play();
@@ -24,10 +26,10 @@ public:
     float m_play_pos;
     bool tether = true;
     float m_speed;
-	
+
     std::vector<frame> theClip;
-    
- // actors in the play:	
+
+ // actors in the play:
     Skeleton * showskel;
     bool skelload =  false;
    cgra::Mesh m_mesh;
@@ -48,11 +50,11 @@ public:
 
     // Whether or not the left, middle or right buttons are down.
     bool m_mouseButtonDown[3];
-   
-    
-    //admin: 
+
+
+    //admin:
     GLFWwindow *m_window;
-    
+
     cgra::Program m_program;
      //
      //

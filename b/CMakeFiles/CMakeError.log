@@ -68,3 +68,73 @@ make[1]: Leaving directory '/home/shelly/local/CGRA350/assignment3/ass3-local/b/
 make: *** [Makefile:121: cmTC_ccc24/fast] Error 2
 
 
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_8576e/fast"
+/usr/bin/make -f CMakeFiles/cmTC_8576e.dir/build.make CMakeFiles/cmTC_8576e.dir/build
+make[1]: Entering directory '/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_8576e.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -w    -o CMakeFiles/cmTC_8576e.dir/CheckSymbolExists.c.o   -c /home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_8576e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8576e.dir/link.txt --verbose=1
+/usr/bin/cc  -w     -rdynamic CMakeFiles/cmTC_8576e.dir/CheckSymbolExists.c.o  -o cmTC_8576e 
+/usr/bin/ld: CMakeFiles/cmTC_8576e.dir/CheckSymbolExists.c.o: in function `main':
+CheckSymbolExists.c:(.text+0x1b): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_8576e.dir/build.make:87: cmTC_8576e] Error 1
+make[1]: Leaving directory '/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_8576e/fast] Error 2
+
+File /home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_d1e0e/fast"
+/usr/bin/make -f CMakeFiles/cmTC_d1e0e.dir/build.make CMakeFiles/cmTC_d1e0e.dir/build
+make[1]: Entering directory '/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d1e0e.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -w -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_d1e0e.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.12/Modules/CheckFunctionExists.c
+Linking C executable cmTC_d1e0e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d1e0e.dir/link.txt --verbose=1
+/usr/bin/cc  -w -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_d1e0e.dir/CheckFunctionExists.c.o  -o cmTC_d1e0e -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_d1e0e.dir/build.make:87: cmTC_d1e0e] Error 1
+make[1]: Leaving directory '/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_d1e0e/fast] Error 2
+
+
+Determining if the function glXGetProcAddressEXT exists failed with the following output:
+Change Dir: /home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_a52ec/fast"
+/usr/bin/make -f CMakeFiles/cmTC_a52ec.dir/build.make CMakeFiles/cmTC_a52ec.dir/build
+make[1]: Entering directory '/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_a52ec.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -w -DCHECK_FUNCTION_EXISTS=glXGetProcAddressEXT   -o CMakeFiles/cmTC_a52ec.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.12/Modules/CheckFunctionExists.c
+Linking C executable cmTC_a52ec
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a52ec.dir/link.txt --verbose=1
+/usr/bin/cc  -w -DCHECK_FUNCTION_EXISTS=glXGetProcAddressEXT    -rdynamic CMakeFiles/cmTC_a52ec.dir/CheckFunctionExists.c.o  -o cmTC_a52ec /usr/lib/libGL.so 
+/usr/bin/ld: CMakeFiles/cmTC_a52ec.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `glXGetProcAddressEXT'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_a52ec.dir/build.make:88: cmTC_a52ec] Error 1
+make[1]: Leaving directory '/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_a52ec/fast] Error 2
+
+

@@ -44,8 +44,8 @@ void asfApp::switchPose(int dir){
 
 	showskel -> applyPose(&(poses[f]));
 
-		//showkel -> cylcePose();		
-	
+		//showkel -> cylcePose();
+
 	}else{printf("no skeleton!a\n");}
 }
 
@@ -92,7 +92,7 @@ void asfApp::loadAnimation(){
      NFD_OpenDialog( "*", "", &aniFile);
      printf("\nloading %s\n",aniFile);
 
-    ifstream amcStream(aniFile); 
+    ifstream amcStream(aniFile);
     if (!amcStream.is_open()) {
     	printf("Cant open amc!\n");
     } else{
@@ -130,18 +130,18 @@ void asfApp::loadAnimation(){
 			num="";
 		}//got vector now
 		theClip[cfnum-1][ thebone ] = rots; //copy the vector to the frame
-	//breakpoint here	
+	//breakpoint here
 	printf("frame one:");
-	
+
 	for (auto const& x : theClip[0])
 	{
 		std::cout << x.first  // string (key)
-			<< ':' 
-		//	<< x.second // string's value 
+			<< ':'
+		//	<< x.second // string's value
 			<< std::endl ;
-	}	
 	}
-    }     
+	}
+    }
     }
 
 	m_play=true;
@@ -308,7 +308,7 @@ void asfApp::loadObj(const char *filename) {
 void asfApp::drawScene() {
 
     //showskel -> updateJoints();
-if (skelload && m_play){  m_play_pos += m_speed * 0.0002; showskel-> applyFrame( theClip, m_play_pos);} 
+if (skelload && m_play){  m_play_pos += m_speed * 0.0002; showskel-> applyFrame( theClip, m_play_pos);}
 	float aspectRatio = m_viewportSize.x / m_viewportSize.y;
     glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
 
@@ -325,7 +325,7 @@ if (skelload && m_play){  m_play_pos += m_speed * 0.0002; showskel-> applyFrame(
     m_program.setViewMatrix(viewMatrix);
 
     //m_mesh.draw();
-    
+
     if( skelload && showskel -> m_bones.size() > 0){
     showskel->m_program->setProjectionMatrix(projectionMatrix);
 //	printf("there are %d bones\n", showskel->m_bones.size());
@@ -335,19 +335,19 @@ if (skelload && m_play){  m_play_pos += m_speed * 0.0002; showskel-> applyFrame(
 }
 
 void renderBone(bone b){
-    
+
 }
 
 
 void asfApp::doGUI() {
-   
+
     // --- Clip Controls
     ImGui::SetNextWindowSize(ImVec2(500, 50), ImGuiSetCond_FirstUseEver);
     ImGui::Begin("Shapes");
     if(ImGui::SliderFloat("Position", &m_play_pos, 0.f, 1.f, "%.5f", 1.0f)){
     	showskel->applyFrame(theClip,m_play_pos);
     }
-    
+
     if(ImGui::Button("Load A Clip")){
 	    loadAnimation();
     }
@@ -355,10 +355,10 @@ void asfApp::doGUI() {
     if(ImGui::Button("Play ")){
 	    play();
     }
- 
+
    if(ImGui::Button("Pause")){
 	    pause();
-    } 
+    }
 
     if(ImGui::Button("Rewind")){
 	    m_play_pos=0;
@@ -366,7 +366,7 @@ void asfApp::doGUI() {
     if(ImGui::Button(" Next Pose ")){
 	   switchPose(1) ;
     }
- 
+
 
    ImGui::Checkbox("Tethered Root",&tether);
 
@@ -379,12 +379,12 @@ void asfApp::doGUI() {
     ImGui::SetNextWindowSize(ImVec2(250, 250), ImGuiSetCond_FirstUseEver);
     ImGui::Begin("Shapes");
 
-   //Camera 
+   //Camera
     ImGui::SliderFloat3("Translate",&m_translation[0],-20.0f,20.0f, "%.5f",1.5f);
     if(ImGui::SliderFloat("Scale",&m_scale,0,100.0f, "%.5f", 5.f)){
     	if (skelload) showskel->axisSize = 1/m_scale;
     }
-    
+
      if(ImGui::SliderFloat3("Rotate",&polarrotation[0],-M_PI,M_PI, "%.5f", 1.0f)){
         // User's spun the globe
         // Find the resulting matrix!
@@ -433,7 +433,7 @@ void asfApp::doGUI() {
     if(ImGui::Button("Load A Skeleton")){
 	    loadSkeleton();
     }
- 
+
     static bool wireframe;
     if(ImGui::Checkbox("Draw Wireframe",&wireframe)) {
         m_mesh.setDrawWireframe(wireframe);
@@ -494,9 +494,10 @@ void asfApp::onKey(int key, int scancode, int action, int mods) {
     (void)mods;
 
     if (key == GLFW_KEY_P && action == GLFW_PRESS ){
-    
-	    switchPose();
-    
+	    prevPose();
+}
+    if (key == GLFW_KEY_N && action == GLFW_PRESS ){
+	    nextPose();
     }
 }
 
@@ -506,8 +507,3 @@ void asfApp::onScroll(double xoffset, double yoffset) {
     (void)yoffset;
 
 }
-
-
-
-
-

@@ -309,7 +309,7 @@ void a3_Application::doGUI() {
     //    ImGui::SliderFloat("Handle Size", &theSkeleton.jointSize, 0, 1);
     //
     ImGui::End();
-    
+
 
 
     /*
@@ -467,20 +467,20 @@ void a3_Application::onCursorPos(double xpos, double ypos) {
             }  else {
 /* picking code
                 if(pickID>=0 && pickID < theLattice.getFullSize()){
-                    theLattice.getByID(pickID).move(glm::vec2(mousePositionDelta.x/height,mousePositionDelta.y/height),m_rotationMatrix,m_scale,pickDepth); 
+                    theLattice.getByID(pickID).move(glm::vec2(mousePositionDelta.x/height,mousePositionDelta.y/height),m_rotationMatrix,m_scale,pickDepth);
                     theLattice.vao.setRow(pickID,{  theLattice.getByID(pickID).p.x  ,
                                                 theLattice.getByID(pickID).p.y  ,
-                                                theLattice.getByID(pickID).p.z }); 
+                                                theLattice.getByID(pickID).p.z });
                     theLattice.setMesh();
                     theLattice.VSArraytoUniform(m_program);
                     if(!theLattice.GPUwarp)theLattice.makeWarpMesh(m_mesh);
                     */
                 }
-            } 
+            }
 
         }
 
-        
+
 
      if (m_mouseButtonDown[GLFW_MOUSE_BUTTON_MIDDLE]) {
          static int width, height;
@@ -501,25 +501,25 @@ void a3_Application::onCursorPos(double xpos, double ypos) {
 
 void a3_Application::onKey(int key, int scancode, int action, int mods) {
     // `(void)foo` suppresses unused variable warnings
-    if(key == "x" && action == GLFW_PRESS) //cycle axes
+    if(key == GLFW_KEY_X && action == GLFW_PRESS) //cycle axes
     {
     }
 
-    if(key == "a" && action == GLFW_PRESS) //cycle axes
+    if(key == GLFW_KEY_A && action == GLFW_PRESS) //cycle axes
     {
-      theAsfApp.play = !theAsfApp.m_play;
-    }
-    
-     if(key == "n" && action == GLFW_PRESS) //cycle axes
-    {
-      theAsfApp.nextPose();
+      theAsfApp->m_play = !theAsfApp->m_play;
     }
 
-     if(key == "p" && action == GLFW_PRESS) //cycle axes
+     if(key == GLFW_KEY_N && action == GLFW_PRESS) //cycle axes
     {
-      theAsfApp.prevPose();
+      theAsfApp->nextPose();
     }
-    
+
+     if(key == GLFW_KEY_P && action == GLFW_PRESS) //cycle axes
+    {
+      theAsfApp->prevPose();
+    }
+
     (void)key;
     (void)scancode;
     (void)action;
@@ -560,7 +560,7 @@ if (!(pixel[0]==255) || !(pixel[1]==255) || !(pixel[2]==255) ){
 
     pickedID = pixel[0] + pixel[1]*256 + pixel[2]*256*256;
 
-    
+
     printf("RED %i\n", pixel[0]);
     printf("GREEN %i\n", pixel[1]);
     printf("BLUE %i\n", pixel[2]);

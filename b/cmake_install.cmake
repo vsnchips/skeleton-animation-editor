@@ -1,4 +1,4 @@
-# Install script for directory: /home/shelly/local/CGRA350/assignment3/ass3-local/srctree
+# Install script for directory: /home/shelly/local/CGRA350/assignment3/a3local/srctree
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -12,7 +12,7 @@ if(NOT DEFINED CMAKE_INSTALL_CONFIG_NAME)
     string(REGEX REPLACE "^[^A-Za-z0-9_]+" ""
            CMAKE_INSTALL_CONFIG_NAME "${BUILD_TYPE}")
   else()
-    set(CMAKE_INSTALL_CONFIG_NAME "Debug")
+    set(CMAKE_INSTALL_CONFIG_NAME "")
   endif()
   message(STATUS "Install configuration: \"${CMAKE_INSTALL_CONFIG_NAME}\"")
 endif()
@@ -39,12 +39,12 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/glew/cmake_install.cmake")
-  include("/home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/glfw/cmake_install.cmake")
-  include("/home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/glm/cmake_install.cmake")
-  include("/home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/imgui/cmake_install.cmake")
-  include("/home/shelly/local/CGRA350/assignment3/ass3-local/b/src/cmake_install.cmake")
-  include("/home/shelly/local/CGRA350/assignment3/ass3-local/b/res/cmake_install.cmake")
+  include("/home/shelly/local/CGRA350/assignment3/a3local/b/vendor/glew/cmake_install.cmake")
+  include("/home/shelly/local/CGRA350/assignment3/a3local/b/vendor/glfw/cmake_install.cmake")
+  include("/home/shelly/local/CGRA350/assignment3/a3local/b/vendor/glm/cmake_install.cmake")
+  include("/home/shelly/local/CGRA350/assignment3/a3local/b/vendor/imgui/cmake_install.cmake")
+  include("/home/shelly/local/CGRA350/assignment3/a3local/b/src/cmake_install.cmake")
+  include("/home/shelly/local/CGRA350/assignment3/a3local/b/res/cmake_install.cmake")
 
 endif()
 
@@ -56,5 +56,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/shelly/local/CGRA350/assignment3/ass3-local/b/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/shelly/local/CGRA350/assignment3/a3local/b/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

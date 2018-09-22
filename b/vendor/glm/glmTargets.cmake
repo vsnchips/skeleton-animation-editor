@@ -49,7 +49,7 @@ unset(_expectedTargets)
 add_library(glm INTERFACE IMPORTED)
 
 set_target_properties(glm PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/glm"
+  INTERFACE_INCLUDE_DIRECTORIES "/home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/glm"
 )
 
 # This file does not depend on other imported targets which have

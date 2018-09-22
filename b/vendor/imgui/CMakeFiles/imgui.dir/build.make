@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/shelly/local/CGRA350/assignment3/ass3-local/srctree
+CMAKE_SOURCE_DIR = /home/shelly/local/CGRA350/assignment3/a3local/srctree
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/shelly/local/CGRA350/assignment3/ass3-local/b
+CMAKE_BINARY_DIR = /home/shelly/local/CGRA350/assignment3/a3local/b
 
 # Include any dependencies generated for this target.
 include vendor/imgui/CMakeFiles/imgui.dir/depend.make
@@ -58,30 +58,30 @@ include vendor/imgui/CMakeFiles/imgui.dir/progress.make
 include vendor/imgui/CMakeFiles/imgui.dir/flags.make
 
 vendor/imgui/CMakeFiles/imgui.dir/imgui.cpp.o: vendor/imgui/CMakeFiles/imgui.dir/flags.make
-vendor/imgui/CMakeFiles/imgui.dir/imgui.cpp.o: /home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/imgui/imgui.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/ass3-local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object vendor/imgui/CMakeFiles/imgui.dir/imgui.cpp.o"
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/imgui && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/imgui.dir/imgui.cpp.o -c /home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/imgui/imgui.cpp
+vendor/imgui/CMakeFiles/imgui.dir/imgui.cpp.o: /home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/imgui/imgui.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object vendor/imgui/CMakeFiles/imgui.dir/imgui.cpp.o"
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b/vendor/imgui && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/imgui.dir/imgui.cpp.o -c /home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/imgui/imgui.cpp
 
 vendor/imgui/CMakeFiles/imgui.dir/imgui.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/imgui.dir/imgui.cpp.i"
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/imgui && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/imgui/imgui.cpp > CMakeFiles/imgui.dir/imgui.cpp.i
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b/vendor/imgui && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/imgui/imgui.cpp > CMakeFiles/imgui.dir/imgui.cpp.i
 
 vendor/imgui/CMakeFiles/imgui.dir/imgui.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/imgui.dir/imgui.cpp.s"
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/imgui && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/imgui/imgui.cpp -o CMakeFiles/imgui.dir/imgui.cpp.s
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b/vendor/imgui && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/imgui/imgui.cpp -o CMakeFiles/imgui.dir/imgui.cpp.s
 
 vendor/imgui/CMakeFiles/imgui.dir/imgui_draw.cpp.o: vendor/imgui/CMakeFiles/imgui.dir/flags.make
-vendor/imgui/CMakeFiles/imgui.dir/imgui_draw.cpp.o: /home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/imgui/imgui_draw.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/ass3-local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object vendor/imgui/CMakeFiles/imgui.dir/imgui_draw.cpp.o"
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/imgui && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/imgui.dir/imgui_draw.cpp.o -c /home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/imgui/imgui_draw.cpp
+vendor/imgui/CMakeFiles/imgui.dir/imgui_draw.cpp.o: /home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/imgui/imgui_draw.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object vendor/imgui/CMakeFiles/imgui.dir/imgui_draw.cpp.o"
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b/vendor/imgui && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/imgui.dir/imgui_draw.cpp.o -c /home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/imgui/imgui_draw.cpp
 
 vendor/imgui/CMakeFiles/imgui.dir/imgui_draw.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/imgui.dir/imgui_draw.cpp.i"
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/imgui && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/imgui/imgui_draw.cpp > CMakeFiles/imgui.dir/imgui_draw.cpp.i
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b/vendor/imgui && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/imgui/imgui_draw.cpp > CMakeFiles/imgui.dir/imgui_draw.cpp.i
 
 vendor/imgui/CMakeFiles/imgui.dir/imgui_draw.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/imgui.dir/imgui_draw.cpp.s"
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/imgui && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/imgui/imgui_draw.cpp -o CMakeFiles/imgui.dir/imgui_draw.cpp.s
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b/vendor/imgui && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/imgui/imgui_draw.cpp -o CMakeFiles/imgui.dir/imgui_draw.cpp.s
 
 # Object files for target imgui
 imgui_OBJECTS = \
@@ -95,9 +95,9 @@ bin/libimgui.a: vendor/imgui/CMakeFiles/imgui.dir/imgui.cpp.o
 bin/libimgui.a: vendor/imgui/CMakeFiles/imgui.dir/imgui_draw.cpp.o
 bin/libimgui.a: vendor/imgui/CMakeFiles/imgui.dir/build.make
 bin/libimgui.a: vendor/imgui/CMakeFiles/imgui.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/shelly/local/CGRA350/assignment3/ass3-local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX static library ../../bin/libimgui.a"
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/imgui && $(CMAKE_COMMAND) -P CMakeFiles/imgui.dir/cmake_clean_target.cmake
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/imgui && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/imgui.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX static library ../../bin/libimgui.a"
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b/vendor/imgui && $(CMAKE_COMMAND) -P CMakeFiles/imgui.dir/cmake_clean_target.cmake
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b/vendor/imgui && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/imgui.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 vendor/imgui/CMakeFiles/imgui.dir/build: bin/libimgui.a
@@ -105,10 +105,10 @@ vendor/imgui/CMakeFiles/imgui.dir/build: bin/libimgui.a
 .PHONY : vendor/imgui/CMakeFiles/imgui.dir/build
 
 vendor/imgui/CMakeFiles/imgui.dir/clean:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/imgui && $(CMAKE_COMMAND) -P CMakeFiles/imgui.dir/cmake_clean.cmake
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b/vendor/imgui && $(CMAKE_COMMAND) -P CMakeFiles/imgui.dir/cmake_clean.cmake
 .PHONY : vendor/imgui/CMakeFiles/imgui.dir/clean
 
 vendor/imgui/CMakeFiles/imgui.dir/depend:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/shelly/local/CGRA350/assignment3/ass3-local/srctree /home/shelly/local/CGRA350/assignment3/ass3-local/srctree/vendor/imgui /home/shelly/local/CGRA350/assignment3/ass3-local/b /home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/imgui /home/shelly/local/CGRA350/assignment3/ass3-local/b/vendor/imgui/CMakeFiles/imgui.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/shelly/local/CGRA350/assignment3/a3local/srctree /home/shelly/local/CGRA350/assignment3/a3local/srctree/vendor/imgui /home/shelly/local/CGRA350/assignment3/a3local/b /home/shelly/local/CGRA350/assignment3/a3local/b/vendor/imgui /home/shelly/local/CGRA350/assignment3/a3local/b/vendor/imgui/CMakeFiles/imgui.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : vendor/imgui/CMakeFiles/imgui.dir/depend
 

@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/shelly/local/CGRA350/assignment3/ass3-local/srctree
+CMAKE_SOURCE_DIR = /home/shelly/local/CGRA350/assignment3/a3local/srctree
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/shelly/local/CGRA350/assignment3/ass3-local/b
+CMAKE_BINARY_DIR = /home/shelly/local/CGRA350/assignment3/a3local/b
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -126,14 +126,14 @@ install/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(CMAKE_COMMAND) -E cmake_progress_start /home/shelly/local/CGRA350/assignment3/ass3-local/b/CMakeFiles /home/shelly/local/CGRA350/assignment3/ass3-local/b/src/CMakeFiles/progress.marks
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f CMakeFiles/Makefile2 src/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/shelly/local/CGRA350/assignment3/ass3-local/b/CMakeFiles 0
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(CMAKE_COMMAND) -E cmake_progress_start /home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles /home/shelly/local/CGRA350/assignment3/a3local/b/src/CMakeFiles/progress.marks
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f CMakeFiles/Makefile2 src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f CMakeFiles/Makefile2 src/clean
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -143,22 +143,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 src/CMakeFiles/a2-loader.dir/rule:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/a2-loader.dir/rule
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/a2-loader.dir/rule
 .PHONY : src/CMakeFiles/a2-loader.dir/rule
 
 # Convenience name for target.
@@ -168,7 +168,7 @@ a2-loader: src/CMakeFiles/a2-loader.dir/rule
 
 # fast build rule for target.
 a2-loader/fast:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/build
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/build
 .PHONY : a2-loader/fast
 
 __/include/skeleton/skeleton.o: __/include/skeleton/skeleton.cpp.o
@@ -177,7 +177,7 @@ __/include/skeleton/skeleton.o: __/include/skeleton/skeleton.cpp.o
 
 # target to build an object file
 __/include/skeleton/skeleton.cpp.o:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.o
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.o
 .PHONY : __/include/skeleton/skeleton.cpp.o
 
 __/include/skeleton/skeleton.i: __/include/skeleton/skeleton.cpp.i
@@ -186,7 +186,7 @@ __/include/skeleton/skeleton.i: __/include/skeleton/skeleton.cpp.i
 
 # target to preprocess a source file
 __/include/skeleton/skeleton.cpp.i:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.i
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.i
 .PHONY : __/include/skeleton/skeleton.cpp.i
 
 __/include/skeleton/skeleton.s: __/include/skeleton/skeleton.cpp.s
@@ -195,7 +195,7 @@ __/include/skeleton/skeleton.s: __/include/skeleton/skeleton.cpp.s
 
 # target to generate assembly for a file
 __/include/skeleton/skeleton.cpp.s:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.s
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.s
 .PHONY : __/include/skeleton/skeleton.cpp.s
 
 a3.o: a3.cpp.o
@@ -204,7 +204,7 @@ a3.o: a3.cpp.o
 
 # target to build an object file
 a3.cpp.o:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3.cpp.o
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3.cpp.o
 .PHONY : a3.cpp.o
 
 a3.i: a3.cpp.i
@@ -213,7 +213,7 @@ a3.i: a3.cpp.i
 
 # target to preprocess a source file
 a3.cpp.i:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3.cpp.i
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3.cpp.i
 .PHONY : a3.cpp.i
 
 a3.s: a3.cpp.s
@@ -222,8 +222,35 @@ a3.s: a3.cpp.s
 
 # target to generate assembly for a file
 a3.cpp.s:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3.cpp.s
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3.cpp.s
 .PHONY : a3.cpp.s
+
+app_renderer.o: app_renderer.cpp.o
+
+.PHONY : app_renderer.o
+
+# target to build an object file
+app_renderer.cpp.o:
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/app_renderer.cpp.o
+.PHONY : app_renderer.cpp.o
+
+app_renderer.i: app_renderer.cpp.i
+
+.PHONY : app_renderer.i
+
+# target to preprocess a source file
+app_renderer.cpp.i:
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/app_renderer.cpp.i
+.PHONY : app_renderer.cpp.i
+
+app_renderer.s: app_renderer.cpp.s
+
+.PHONY : app_renderer.s
+
+# target to generate assembly for a file
+app_renderer.cpp.s:
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/app_renderer.cpp.s
+.PHONY : app_renderer.cpp.s
 
 asf.o: asf.cpp.o
 
@@ -231,7 +258,7 @@ asf.o: asf.cpp.o
 
 # target to build an object file
 asf.cpp.o:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/asf.cpp.o
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/asf.cpp.o
 .PHONY : asf.cpp.o
 
 asf.i: asf.cpp.i
@@ -240,7 +267,7 @@ asf.i: asf.cpp.i
 
 # target to preprocess a source file
 asf.cpp.i:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/asf.cpp.i
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/asf.cpp.i
 .PHONY : asf.cpp.i
 
 asf.s: asf.cpp.s
@@ -249,7 +276,7 @@ asf.s: asf.cpp.s
 
 # target to generate assembly for a file
 asf.cpp.s:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/asf.cpp.s
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/asf.cpp.s
 .PHONY : asf.cpp.s
 
 cgra/imgui_impl_glfw_gl3.o: cgra/imgui_impl_glfw_gl3.cpp.o
@@ -258,7 +285,7 @@ cgra/imgui_impl_glfw_gl3.o: cgra/imgui_impl_glfw_gl3.cpp.o
 
 # target to build an object file
 cgra/imgui_impl_glfw_gl3.cpp.o:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/imgui_impl_glfw_gl3.cpp.o
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/imgui_impl_glfw_gl3.cpp.o
 .PHONY : cgra/imgui_impl_glfw_gl3.cpp.o
 
 cgra/imgui_impl_glfw_gl3.i: cgra/imgui_impl_glfw_gl3.cpp.i
@@ -267,7 +294,7 @@ cgra/imgui_impl_glfw_gl3.i: cgra/imgui_impl_glfw_gl3.cpp.i
 
 # target to preprocess a source file
 cgra/imgui_impl_glfw_gl3.cpp.i:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/imgui_impl_glfw_gl3.cpp.i
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/imgui_impl_glfw_gl3.cpp.i
 .PHONY : cgra/imgui_impl_glfw_gl3.cpp.i
 
 cgra/imgui_impl_glfw_gl3.s: cgra/imgui_impl_glfw_gl3.cpp.s
@@ -276,7 +303,7 @@ cgra/imgui_impl_glfw_gl3.s: cgra/imgui_impl_glfw_gl3.cpp.s
 
 # target to generate assembly for a file
 cgra/imgui_impl_glfw_gl3.cpp.s:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/imgui_impl_glfw_gl3.cpp.s
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/imgui_impl_glfw_gl3.cpp.s
 .PHONY : cgra/imgui_impl_glfw_gl3.cpp.s
 
 cgra/mesh.o: cgra/mesh.cpp.o
@@ -285,7 +312,7 @@ cgra/mesh.o: cgra/mesh.cpp.o
 
 # target to build an object file
 cgra/mesh.cpp.o:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/mesh.cpp.o
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/mesh.cpp.o
 .PHONY : cgra/mesh.cpp.o
 
 cgra/mesh.i: cgra/mesh.cpp.i
@@ -294,7 +321,7 @@ cgra/mesh.i: cgra/mesh.cpp.i
 
 # target to preprocess a source file
 cgra/mesh.cpp.i:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/mesh.cpp.i
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/mesh.cpp.i
 .PHONY : cgra/mesh.cpp.i
 
 cgra/mesh.s: cgra/mesh.cpp.s
@@ -303,7 +330,7 @@ cgra/mesh.s: cgra/mesh.cpp.s
 
 # target to generate assembly for a file
 cgra/mesh.cpp.s:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/mesh.cpp.s
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/mesh.cpp.s
 .PHONY : cgra/mesh.cpp.s
 
 cgra/shader.o: cgra/shader.cpp.o
@@ -312,7 +339,7 @@ cgra/shader.o: cgra/shader.cpp.o
 
 # target to build an object file
 cgra/shader.cpp.o:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/shader.cpp.o
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/shader.cpp.o
 .PHONY : cgra/shader.cpp.o
 
 cgra/shader.i: cgra/shader.cpp.i
@@ -321,7 +348,7 @@ cgra/shader.i: cgra/shader.cpp.i
 
 # target to preprocess a source file
 cgra/shader.cpp.i:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/shader.cpp.i
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/shader.cpp.i
 .PHONY : cgra/shader.cpp.i
 
 cgra/shader.s: cgra/shader.cpp.s
@@ -330,7 +357,7 @@ cgra/shader.s: cgra/shader.cpp.s
 
 # target to generate assembly for a file
 cgra/shader.cpp.s:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/shader.cpp.s
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/shader.cpp.s
 .PHONY : cgra/shader.cpp.s
 
 cgra/wavefront.o: cgra/wavefront.cpp.o
@@ -339,7 +366,7 @@ cgra/wavefront.o: cgra/wavefront.cpp.o
 
 # target to build an object file
 cgra/wavefront.cpp.o:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/wavefront.cpp.o
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/wavefront.cpp.o
 .PHONY : cgra/wavefront.cpp.o
 
 cgra/wavefront.i: cgra/wavefront.cpp.i
@@ -348,7 +375,7 @@ cgra/wavefront.i: cgra/wavefront.cpp.i
 
 # target to preprocess a source file
 cgra/wavefront.cpp.i:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/wavefront.cpp.i
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/wavefront.cpp.i
 .PHONY : cgra/wavefront.cpp.i
 
 cgra/wavefront.s: cgra/wavefront.cpp.s
@@ -357,7 +384,7 @@ cgra/wavefront.s: cgra/wavefront.cpp.s
 
 # target to generate assembly for a file
 cgra/wavefront.cpp.s:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/wavefront.cpp.s
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/cgra/wavefront.cpp.s
 .PHONY : cgra/wavefront.cpp.s
 
 main.o: main.cpp.o
@@ -366,7 +393,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/main.cpp.o
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -375,7 +402,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/main.cpp.i
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -384,7 +411,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/main.cpp.s
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 # Help Target
@@ -406,6 +433,9 @@ help:
 	@echo "... a3.o"
 	@echo "... a3.i"
 	@echo "... a3.s"
+	@echo "... app_renderer.o"
+	@echo "... app_renderer.i"
+	@echo "... app_renderer.s"
 	@echo "... asf.o"
 	@echo "... asf.i"
 	@echo "... asf.s"
@@ -435,6 +465,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
