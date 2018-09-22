@@ -198,6 +198,33 @@ __/include/skeleton/skeleton.cpp.s:
 	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.s
 .PHONY : __/include/skeleton/skeleton.cpp.s
 
+a3-filesave.o: a3-filesave.cpp.o
+
+.PHONY : a3-filesave.o
+
+# target to build an object file
+a3-filesave.cpp.o:
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3-filesave.cpp.o
+.PHONY : a3-filesave.cpp.o
+
+a3-filesave.i: a3-filesave.cpp.i
+
+.PHONY : a3-filesave.i
+
+# target to preprocess a source file
+a3-filesave.cpp.i:
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3-filesave.cpp.i
+.PHONY : a3-filesave.cpp.i
+
+a3-filesave.s: a3-filesave.cpp.s
+
+.PHONY : a3-filesave.s
+
+# target to generate assembly for a file
+a3-filesave.cpp.s:
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3-filesave.cpp.s
+.PHONY : a3-filesave.cpp.s
+
 a3.o: a3.cpp.o
 
 .PHONY : a3.o
@@ -224,6 +251,33 @@ a3.s: a3.cpp.s
 a3.cpp.s:
 	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3.cpp.s
 .PHONY : a3.cpp.s
+
+a3_dogui.o: a3_dogui.cpp.o
+
+.PHONY : a3_dogui.o
+
+# target to build an object file
+a3_dogui.cpp.o:
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3_dogui.cpp.o
+.PHONY : a3_dogui.cpp.o
+
+a3_dogui.i: a3_dogui.cpp.i
+
+.PHONY : a3_dogui.i
+
+# target to preprocess a source file
+a3_dogui.cpp.i:
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3_dogui.cpp.i
+.PHONY : a3_dogui.cpp.i
+
+a3_dogui.s: a3_dogui.cpp.s
+
+.PHONY : a3_dogui.s
+
+# target to generate assembly for a file
+a3_dogui.cpp.s:
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3_dogui.cpp.s
+.PHONY : a3_dogui.cpp.s
 
 app_renderer.o: app_renderer.cpp.o
 
@@ -430,9 +484,15 @@ help:
 	@echo "... __/include/skeleton/skeleton.o"
 	@echo "... __/include/skeleton/skeleton.i"
 	@echo "... __/include/skeleton/skeleton.s"
+	@echo "... a3-filesave.o"
+	@echo "... a3-filesave.i"
+	@echo "... a3-filesave.s"
 	@echo "... a3.o"
 	@echo "... a3.i"
 	@echo "... a3.s"
+	@echo "... a3_dogui.o"
+	@echo "... a3_dogui.i"
+	@echo "... a3_dogui.s"
 	@echo "... app_renderer.o"
 	@echo "... app_renderer.i"
 	@echo "... app_renderer.s"

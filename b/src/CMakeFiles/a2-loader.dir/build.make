@@ -83,9 +83,35 @@ src/CMakeFiles/a2-loader.dir/a3.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/a2-loader.dir/a3.cpp.s"
 	cd /home/shelly/local/CGRA350/assignment3/a3local/b/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/a3.cpp -o CMakeFiles/a2-loader.dir/a3.cpp.s
 
+src/CMakeFiles/a2-loader.dir/a3-filesave.cpp.o: src/CMakeFiles/a2-loader.dir/flags.make
+src/CMakeFiles/a2-loader.dir/a3-filesave.cpp.o: /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/a3-filesave.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/a2-loader.dir/a3-filesave.cpp.o"
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/a2-loader.dir/a3-filesave.cpp.o -c /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/a3-filesave.cpp
+
+src/CMakeFiles/a2-loader.dir/a3-filesave.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/a2-loader.dir/a3-filesave.cpp.i"
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/a3-filesave.cpp > CMakeFiles/a2-loader.dir/a3-filesave.cpp.i
+
+src/CMakeFiles/a2-loader.dir/a3-filesave.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/a2-loader.dir/a3-filesave.cpp.s"
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/a3-filesave.cpp -o CMakeFiles/a2-loader.dir/a3-filesave.cpp.s
+
+src/CMakeFiles/a2-loader.dir/a3_dogui.cpp.o: src/CMakeFiles/a2-loader.dir/flags.make
+src/CMakeFiles/a2-loader.dir/a3_dogui.cpp.o: /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/a3_dogui.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/a2-loader.dir/a3_dogui.cpp.o"
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/a2-loader.dir/a3_dogui.cpp.o -c /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/a3_dogui.cpp
+
+src/CMakeFiles/a2-loader.dir/a3_dogui.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/a2-loader.dir/a3_dogui.cpp.i"
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/a3_dogui.cpp > CMakeFiles/a2-loader.dir/a3_dogui.cpp.i
+
+src/CMakeFiles/a2-loader.dir/a3_dogui.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/a2-loader.dir/a3_dogui.cpp.s"
+	cd /home/shelly/local/CGRA350/assignment3/a3local/b/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/a3_dogui.cpp -o CMakeFiles/a2-loader.dir/a3_dogui.cpp.s
+
 src/CMakeFiles/a2-loader.dir/app_renderer.cpp.o: src/CMakeFiles/a2-loader.dir/flags.make
 src/CMakeFiles/a2-loader.dir/app_renderer.cpp.o: /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/app_renderer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/a2-loader.dir/app_renderer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/a2-loader.dir/app_renderer.cpp.o"
 	cd /home/shelly/local/CGRA350/assignment3/a3local/b/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/a2-loader.dir/app_renderer.cpp.o -c /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/app_renderer.cpp
 
 src/CMakeFiles/a2-loader.dir/app_renderer.cpp.i: cmake_force
@@ -98,7 +124,7 @@ src/CMakeFiles/a2-loader.dir/app_renderer.cpp.s: cmake_force
 
 src/CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.o: src/CMakeFiles/a2-loader.dir/flags.make
 src/CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.o: /home/shelly/local/CGRA350/assignment3/a3local/srctree/include/skeleton/skeleton.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.o"
 	cd /home/shelly/local/CGRA350/assignment3/a3local/b/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.o -c /home/shelly/local/CGRA350/assignment3/a3local/srctree/include/skeleton/skeleton.cpp
 
 src/CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.i: cmake_force
@@ -111,7 +137,7 @@ src/CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.s: cmake_force
 
 src/CMakeFiles/a2-loader.dir/main.cpp.o: src/CMakeFiles/a2-loader.dir/flags.make
 src/CMakeFiles/a2-loader.dir/main.cpp.o: /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/a2-loader.dir/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object src/CMakeFiles/a2-loader.dir/main.cpp.o"
 	cd /home/shelly/local/CGRA350/assignment3/a3local/b/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/a2-loader.dir/main.cpp.o -c /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/main.cpp
 
 src/CMakeFiles/a2-loader.dir/main.cpp.i: cmake_force
@@ -124,7 +150,7 @@ src/CMakeFiles/a2-loader.dir/main.cpp.s: cmake_force
 
 src/CMakeFiles/a2-loader.dir/cgra/mesh.cpp.o: src/CMakeFiles/a2-loader.dir/flags.make
 src/CMakeFiles/a2-loader.dir/cgra/mesh.cpp.o: /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/cgra/mesh.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/CMakeFiles/a2-loader.dir/cgra/mesh.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object src/CMakeFiles/a2-loader.dir/cgra/mesh.cpp.o"
 	cd /home/shelly/local/CGRA350/assignment3/a3local/b/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/a2-loader.dir/cgra/mesh.cpp.o -c /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/cgra/mesh.cpp
 
 src/CMakeFiles/a2-loader.dir/cgra/mesh.cpp.i: cmake_force
@@ -137,7 +163,7 @@ src/CMakeFiles/a2-loader.dir/cgra/mesh.cpp.s: cmake_force
 
 src/CMakeFiles/a2-loader.dir/cgra/shader.cpp.o: src/CMakeFiles/a2-loader.dir/flags.make
 src/CMakeFiles/a2-loader.dir/cgra/shader.cpp.o: /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/cgra/shader.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object src/CMakeFiles/a2-loader.dir/cgra/shader.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object src/CMakeFiles/a2-loader.dir/cgra/shader.cpp.o"
 	cd /home/shelly/local/CGRA350/assignment3/a3local/b/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/a2-loader.dir/cgra/shader.cpp.o -c /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/cgra/shader.cpp
 
 src/CMakeFiles/a2-loader.dir/cgra/shader.cpp.i: cmake_force
@@ -150,7 +176,7 @@ src/CMakeFiles/a2-loader.dir/cgra/shader.cpp.s: cmake_force
 
 src/CMakeFiles/a2-loader.dir/cgra/wavefront.cpp.o: src/CMakeFiles/a2-loader.dir/flags.make
 src/CMakeFiles/a2-loader.dir/cgra/wavefront.cpp.o: /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/cgra/wavefront.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object src/CMakeFiles/a2-loader.dir/cgra/wavefront.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object src/CMakeFiles/a2-loader.dir/cgra/wavefront.cpp.o"
 	cd /home/shelly/local/CGRA350/assignment3/a3local/b/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/a2-loader.dir/cgra/wavefront.cpp.o -c /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/cgra/wavefront.cpp
 
 src/CMakeFiles/a2-loader.dir/cgra/wavefront.cpp.i: cmake_force
@@ -163,7 +189,7 @@ src/CMakeFiles/a2-loader.dir/cgra/wavefront.cpp.s: cmake_force
 
 src/CMakeFiles/a2-loader.dir/cgra/imgui_impl_glfw_gl3.cpp.o: src/CMakeFiles/a2-loader.dir/flags.make
 src/CMakeFiles/a2-loader.dir/cgra/imgui_impl_glfw_gl3.cpp.o: /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/cgra/imgui_impl_glfw_gl3.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object src/CMakeFiles/a2-loader.dir/cgra/imgui_impl_glfw_gl3.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object src/CMakeFiles/a2-loader.dir/cgra/imgui_impl_glfw_gl3.cpp.o"
 	cd /home/shelly/local/CGRA350/assignment3/a3local/b/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/a2-loader.dir/cgra/imgui_impl_glfw_gl3.cpp.o -c /home/shelly/local/CGRA350/assignment3/a3local/srctree/src/cgra/imgui_impl_glfw_gl3.cpp
 
 src/CMakeFiles/a2-loader.dir/cgra/imgui_impl_glfw_gl3.cpp.i: cmake_force
@@ -178,6 +204,8 @@ src/CMakeFiles/a2-loader.dir/cgra/imgui_impl_glfw_gl3.cpp.s: cmake_force
 a2__loader_OBJECTS = \
 "CMakeFiles/a2-loader.dir/asf.cpp.o" \
 "CMakeFiles/a2-loader.dir/a3.cpp.o" \
+"CMakeFiles/a2-loader.dir/a3-filesave.cpp.o" \
+"CMakeFiles/a2-loader.dir/a3_dogui.cpp.o" \
 "CMakeFiles/a2-loader.dir/app_renderer.cpp.o" \
 "CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.o" \
 "CMakeFiles/a2-loader.dir/main.cpp.o" \
@@ -191,6 +219,8 @@ a2__loader_EXTERNAL_OBJECTS =
 
 bin/a2-loader: src/CMakeFiles/a2-loader.dir/asf.cpp.o
 bin/a2-loader: src/CMakeFiles/a2-loader.dir/a3.cpp.o
+bin/a2-loader: src/CMakeFiles/a2-loader.dir/a3-filesave.cpp.o
+bin/a2-loader: src/CMakeFiles/a2-loader.dir/a3_dogui.cpp.o
 bin/a2-loader: src/CMakeFiles/a2-loader.dir/app_renderer.cpp.o
 bin/a2-loader: src/CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.o
 bin/a2-loader: src/CMakeFiles/a2-loader.dir/main.cpp.o
@@ -217,7 +247,7 @@ bin/a2-loader: /home/shelly/local/CGRA350/assignment3/a3local/srctree/nfd/libnfd
 bin/a2-loader: /usr/lib/libGL.so
 bin/a2-loader: /usr/lib/libGLU.so
 bin/a2-loader: src/CMakeFiles/a2-loader.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable ../bin/a2-loader"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/shelly/local/CGRA350/assignment3/a3local/b/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable ../bin/a2-loader"
 	cd /home/shelly/local/CGRA350/assignment3/a3local/b/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/a2-loader.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

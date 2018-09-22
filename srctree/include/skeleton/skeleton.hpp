@@ -2,8 +2,8 @@
 //***
 //*** This is an annotated version of a file from the COMP308 assignment on
 //*** which we based the 2018 CGRA350 assignment 2.
-//*** 
-//*** 
+//***
+//***
 //*** This file contains an example of the data structure that could be
 //*** used for bones and skeleton.
 //***
@@ -20,7 +20,7 @@
 // Copyright (c) 2016 Taehyun Rhee, Joshua Scott, Ben Allen
 //
 // This software is provided 'as-is' for assignment of COMP308 in ECS,
-// Victoria University of Wellington, without any express or implied warranty. 
+// Victoria University of Wellington, without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from
 // the use of this software.
 //
@@ -38,12 +38,12 @@
 #include <string>
 #include <vector>
 
-//*** COMP308 had its own math library. CGRA350 students are 
+//*** COMP308 had its own math library. CGRA350 students are
 //*** expected to use GLM for their mathematics.
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp> 
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
-#include <glm/gtx/euler_angles.hpp> 
+#include <glm/gtx/euler_angles.hpp>
 
 #include "opengl.hpp"
 
@@ -130,7 +130,7 @@ struct Pose{
 };
 
 #include <map>
-typedef std::map<std::string, std::vector<float>> frame; 
+typedef std::map<std::string, std::vector<float>> frame;
 
 
 class Skeleton {
@@ -154,8 +154,8 @@ public:
 
   std::vector<drawStyle> stylePack;
 
-	void setProgram(cgra::Program &);	
-	void renderSkeleton(cgra::Mesh * placeholderbone, bool tether);
+	void setProgram(cgra::Program &);
+	std::vector<drawStyle> * renderSkeleton(cgra::Mesh * placeholderbone, bool tether);
 	void readAMC(std::string);
 
 	void defaultBoneMesh(cgra::Mesh *);
@@ -166,7 +166,7 @@ public:
 
 	void applyFrame(std::vector<frame> & clip, float pos);
 	void applyPose(frame *);
-	
+
 	float axisSize = 0.1;
 
 	bool tether = true;

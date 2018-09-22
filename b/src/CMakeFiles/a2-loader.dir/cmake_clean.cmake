@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/a2-loader.dir/asf.cpp.o"
   "CMakeFiles/a2-loader.dir/a3.cpp.o"
+  "CMakeFiles/a2-loader.dir/a3-filesave.cpp.o"
+  "CMakeFiles/a2-loader.dir/a3_dogui.cpp.o"
   "CMakeFiles/a2-loader.dir/app_renderer.cpp.o"
   "CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.o"
   "CMakeFiles/a2-loader.dir/main.cpp.o"

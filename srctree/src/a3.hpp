@@ -5,6 +5,7 @@
 
 #include "glm/glm.hpp"
 #include "asf.hpp"
+#include "app_renderer.hpp"
 
 typedef struct shareGlobals{
 //fill this later
@@ -23,6 +24,7 @@ public:
     GLint triangleMode;
 
     asfApp * theAsfApp;
+    app_renderer a3Renderer;
     /////////////////////////////////////////// Part 1 Vars
     // The window object managed by GLFW
     GLFWwindow *m_window;
@@ -87,4 +89,11 @@ public:
     int pickTest(float mX, float mY);
     int pickTest();
 
+    //File saving methods
+
+    void a3_poseToFile(frame & somePose);
+
+    void a3_writeAMC();
+
+    void a3_saveKeyFrames();
 };

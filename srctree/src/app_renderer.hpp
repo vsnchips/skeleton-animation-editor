@@ -10,10 +10,9 @@ class app_renderer{
 
   cgra::Program * c_prog; //current program
 
-  void Render(std::vector<drawStyle> target);
+  void execute(std::vector<drawStyle> & target);
 
-  void setUniforms(cgra::Program * p, uniforms * unfms);
+  void passUniforms(cgra::Program * p, uniforms * unfms);
 
-  void setMats(glm::mat4 &pv, glm::mat4 &wm);
 
 };

@@ -305,39 +305,35 @@ void asfApp::loadObj(const char *filename) {
     m_mesh.setData(vertices, triangles);
 }
 
-void asfApp::drawScene() {
+void asfApp::updateScene() {
 
-    //showskel -> updateJoints();
-if (skelload && m_play){  m_play_pos += m_speed * 0.0002; showskel-> applyFrame( theClip, m_play_pos);}
+stylePack.clear();
+
+//updates
+if (skelload && m_play){
+	  m_play_pos += m_speed * 0.0002; showskel-> applyFrame( theClip, m_play_pos);
+	}
+
+//Deprecated draw stuff
 	float aspectRatio = m_viewportSize.x / m_viewportSize.y;
     glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
-
     // Create a view matrix that positions the camera
     // 10 units behind the object
     glm::mat4 viewMatrix(1);
     viewMatrix[3] = glm::vec4(0, 0, -10, 1);//translate the view
-
     viewMatrix *= glm::scale(viewMatrix,glm::vec3(m_scale));//zoom rel origin
     m_rotationMatrix = glm::mat4(glm::vec4(xax,0),glm::vec4(yax,0),glm::vec4(zax,0),glm::vec4(0.f,0.f,0.f,1.f));
      viewMatrix *= m_rotationMatrix;
-
     viewMatrix *= glm::translate(glm::mat4(),m_translation);
     m_program.setViewMatrix(viewMatrix);
-
-    //m_mesh.draw();
 
     if( skelload && showskel -> m_bones.size() > 0){
     showskel->m_program->setProjectionMatrix(projectionMatrix);
 //	printf("there are %d bones\n", showskel->m_bones.size());
-	    showskel->renderSkeleton( & m_mesh , tether);
+	   stylePack = *showskel->renderSkeleton( & m_mesh , tether);
     }
 
 }
-
-void renderBone(bone b){
-
-}
-
 
 void asfApp::doGUI() {
 
@@ -426,7 +422,8 @@ void asfApp::doGUI() {
      *                                                          *
      * 5. Add a checkbox for rendering the object in wireframe  *
      *  mode.                                                   *
-     ************************************************************/
+     *************************************************:516
+		 ***********/
 
     // Mesh / Geometry / Skeleton / Character / Assets
     // controls
@@ -434,12 +431,13 @@ void asfApp::doGUI() {
 	    loadSkeleton();
     }
 
+
     static bool wireframe;
     if(ImGui::Checkbox("Draw Wireframe",&wireframe)) {
         m_mesh.setDrawWireframe(wireframe);
     }
 
-    // MESH LOADING:
+    // MESH LOADING:/
 
     static char pole[] = "../srctree/res/models/zpole.obj";
 
@@ -506,4 +504,10 @@ void asfApp::onScroll(double xoffset, double yoffset) {
     (void)xoffset;
     (void)yoffset;
 
+}
+
+frame asfApp::getPose(){
+
+frame saveFrame; saveFrame.clear();
+return saveFrame;
 }

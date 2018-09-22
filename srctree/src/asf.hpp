@@ -2,7 +2,7 @@
 
 #include "cgra/mesh.hpp"
 #include "cgra/shader.hpp"
-
+#include "drawStyle.hpp"
 #include <glm/glm.hpp>
 
 #include <skeleton.hpp>
@@ -14,6 +14,7 @@ public:
     frame sittingPose;
     frame guitarPose;
     frame walkingPose;
+    frame currentFrame;
     void switchPose(int dir);
     void prevPose();
     void nextPose();
@@ -79,7 +80,8 @@ public:
     void createCube();
     void loadObj(const char *filename);
 
-    void drawScene();
+    std::vector<drawStyle> stylePack;
+    void updateScene();
     void doGUI();
 
     void onKey(int key, int scancode, int action, int mods);
@@ -89,4 +91,6 @@ public:
     void onCursorPos(double xpos, double ypos);
 
     void onScroll(double xoffset, double yoffset);
+
+    frame getPose();
 };

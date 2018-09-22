@@ -7,7 +7,10 @@ SET(sources
   asf.cpp
   a3.hpp
   a3.cpp
+  a3-filesave.cpp
+  a3_dogui.cpp
   drawStyle.hpp
+  #drawStyle.cpp
   app_renderer.hpp
   app_renderer.cpp
   ../include/skeleton/skeleton.cpp
