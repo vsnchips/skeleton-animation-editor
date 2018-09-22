@@ -3,8 +3,13 @@
 #
 # If you add any new files, remember to add them here
 SET(sources
-  ex1.hpp
-  ex1.cpp
+  asf.hpp
+  asf.cpp
+  a3.hpp
+  a3.cpp
+  drawStyle.hpp
+  app_renderer.hpp
+  app_renderer.cpp
   ../include/skeleton/skeleton.cpp
   opengl.hpp
   main.cpp

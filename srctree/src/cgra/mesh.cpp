@@ -80,7 +80,11 @@ namespace cgra {
         }
     }
 
-    void Mesh::draw() {
+    void Mesh::draw(){
+      draw(GL_TRIANGLES);
+    }
+
+    void Mesh::draw(GLenum mode) {
         // Check to see if we have all the GPU objects we need to draw the
         // mesh.
         if (m_vbo == 0 || m_ibo == 0 || m_vao == 0) {
@@ -144,7 +148,7 @@ namespace cgra {
         // We're using all of the indices, starting at the beginning.
         // GL_UNSIGNED_INT tells OpenGL that the index buffer is storing unsigned
         // ints.
-        glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
+        glDrawElements(mode, m_indices.size(), GL_UNSIGNED_INT, 0);
     }
 
     void Mesh::deleteMesh() {

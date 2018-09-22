@@ -8,7 +8,7 @@
 #include "imgui.h"
 #include "cgra/imgui_impl_glfw_gl3.h"
 
-#include "ex1.hpp"
+#include "a3.hpp"
 
 #include <chrono>
 #include <thread>
@@ -117,7 +117,7 @@ int main(int argc, const char** argv) {
 
     {
         // Create the application object
-        Application app(window);
+        a3_Application app(window);
 
         // Tell GLFW to pass along a pointer to `app` in callbacks
         glfwSetWindowUserPointer(window, reinterpret_cast<void *>(&app));
@@ -198,7 +198,7 @@ static const char *getStringForSource(GLenum source) {
     case GL_DEBUG_SOURCE_THIRD_PARTY:
         return("Third Party");
     case GL_DEBUG_SOURCE_APPLICATION:
-        return("Application");
+        return("a3_Application");
     case GL_DEBUG_SOURCE_OTHER:
         return("Other");
     default:
@@ -275,7 +275,7 @@ extern "C" {
     }
 
     static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-        Application *app = (Application *)glfwGetWindowUserPointer(window);
+        a3_Application *app = (a3_Application *)glfwGetWindowUserPointer(window);
         if (app == nullptr) return;
 
         ImGui_ImplGlfwGL3_KeyCallback(window, key, scancode, action, mods);
@@ -287,7 +287,7 @@ extern "C" {
     }
 
     static void mouse_button_callback(GLFWwindow *window, int button, int action, int mods) {
-        Application *app = (Application *)glfwGetWindowUserPointer(window);
+        a3_Application *app = (a3_Application *)glfwGetWindowUserPointer(window);
         if (app == nullptr) return;
 
         ImGui_ImplGlfwGL3_MouseButtonCallback(window, button, action, mods);
@@ -299,7 +299,7 @@ extern "C" {
     }
 
     static void cursor_pos_callback(GLFWwindow *window, double xpos, double ypos) {
-        Application *app = (Application *)glfwGetWindowUserPointer(window);
+        a3_Application *app = (a3_Application *)glfwGetWindowUserPointer(window);
         if (app == nullptr) return;
 
         ImGuiIO& io = ImGui::GetIO();
@@ -309,7 +309,7 @@ extern "C" {
     }
 
     static void scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
-        Application *app = (Application *)glfwGetWindowUserPointer(window);
+        a3_Application *app = (a3_Application *)glfwGetWindowUserPointer(window);
         if (app == nullptr) return;
 
         ImGui_ImplGlfwGL3_ScrollCallback(window, xoffset, yoffset);
@@ -321,7 +321,7 @@ extern "C" {
     }
 
     static void char_callback(GLFWwindow *window, unsigned int codepoint) {
-        Application *app = (Application *)glfwGetWindowUserPointer(window);
+        a3_Application *app = (a3_Application *)glfwGetWindowUserPointer(window);
         if (app == nullptr) return;
 
         ImGui_ImplGlfwGL3_CharCallback(window, codepoint);

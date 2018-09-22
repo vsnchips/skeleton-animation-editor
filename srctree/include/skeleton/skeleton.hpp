@@ -47,6 +47,7 @@
 
 #include "opengl.hpp"
 
+#include "drawStyle.hpp"
 #include <cgra/mesh.hpp>
 #include <cgra/shader.hpp>
 
@@ -80,6 +81,8 @@ enum dof {
 // Type to represent a bone
 struct bone {
 	cgra::Mesh * boneMesh;
+  cgra::Mesh * jointMesh;
+
 	std::string name;
 	float length = 0;             // Length of the bone
 	glm::vec3 boneDir = glm::vec3(0);            // Direction of the bone
@@ -148,6 +151,9 @@ private:
 public:
 	Skeleton(std::string);
 	cgra::Program * m_program;
+
+  std::vector<drawStyle> stylePack;
+
 	void setProgram(cgra::Program &);	
 	void renderSkeleton(cgra::Mesh * placeholderbone, bool tether);
 	void readAMC(std::string);

@@ -53,12 +53,8 @@ void Application::loadSkeleton(){
 
      NFD_OpenDialog( "*", "", &skelFile);
      printf("\nloading %s\n",skelFile);
-     //showskel = (Skeleton *) malloc(sizeof(Skeleton));
-     //Skeleton newskel = Skeleton(skelFile);
-     showskel = new Skeleton(skelFile);
-//     showskel = &newskel;
+     showskel = new Skeleton(skelFile); //hmmmm.. malloc perhaps?
      showskel->defaultBoneMesh(&m_mesh);
-     //showskel->m_program = &m_program;
      showskel->setProgram(m_program);
      skelload = true;
 
@@ -66,6 +62,7 @@ void Application::loadSkeleton(){
 
 }
 
+// TODO: put this in a lib or something. git it outa here!
 // Helper method for retreiving and trimming the next line in a file.
 // You should not need to modify this method.
 namespace {
@@ -460,90 +457,6 @@ void Application::doGUI() {
 
             loadObj(path);
 
-            // The CGRA wavefront loader wasnt working for me
-
-            // So I wrote this one:
-            /*
-            std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
-            std::vector< double > temp_vertices;
-            std::vector< double > temp_uvs;
-            std::vector< double > temp_normals;
-
-            float farvert=0; //get the furtherest vertex
-
-            while( 1 ){
-
-                char lineHeader[128];
-                // read the first word of the line
-                int res = fscanf(file, "%s", lineHeader);
-                if (res == EOF)
-                    break;
-
-            if ( strcmp( lineHeader, "v" ) == 0 ){
-                float vertexx;
-                float vertexy;
-                float vertexz;
-                fscanf(file, "%f %f %f\n", &vertexx, &vertexy, &vertexz );
-                temp_vertices.push_back(vertexx);
-                temp_vertices.push_back(vertexy);
-                temp_vertices.push_back(vertexz);
-
-                float len = glm::length(glm::vec3(vertexx,vertexy,vertexz));
-                farvert = len>farvert? len : farvert;
-
-            }else if ( strcmp( lineHeader, "vt" ) == 0 ){
-                float uvx;
-                float uvy;
-                fscanf(file, "%f %f\n", &uvx, &uvy );
-                temp_uvs.push_back(uvx);
-                temp_uvs.push_back(uvy);
-            }else if ( strcmp( lineHeader, "vn" ) == 0 ){
-                float normalx;
-                float normaly;
-                float normalz;
-                fscanf(file, "%f %f %f\n", &normalx, &normaly, &normalz );
-                temp_normals.push_back(normalx);
-                temp_normals.push_back(normaly);
-                temp_normals.push_back(normalz);
-
-            }else if ( strcmp( lineHeader, "f" ) == 0 ){
-                std::string vertex1, vertex2, vertex3;
-                unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-                //int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
-                int matches = fscanf(file, "%u %u %u\n", &vertexIndex[0], &vertexIndex[1], &vertexIndex[2]);
-                if (matches != 3){
-                    printf("Cant read this .obj");
-                   // return false;
-                }
-                vertexIndices.push_back(vertexIndex[0]);
-                vertexIndices.push_back(vertexIndex[1]);
-                vertexIndices.push_back(vertexIndex[2]);
-                uvIndices    .push_back(uvIndex[0]);
-                uvIndices    .push_back(uvIndex[1]);
-                uvIndices    .push_back(uvIndex[2]);
-                normalIndices.push_back(normalIndex[0]);
-                normalIndices.push_back(normalIndex[1]);
-                normalIndices.push_back(normalIndex[2]);
-
-            }
-
-
-        }
-
-            cgra::Matrix<double> verts(temp_vertices.size()/3,3);
-            for(unsigned int i =0; i < temp_vertices.size()/3; i++) verts.setRow(i,{temp_vertices[i*3],temp_vertices[i*3+1],temp_vertices[i*3+2]});
-
-            cgra::Matrix<unsigned int> faces(vertexIndices.size()/3,3);
-            for(unsigned int i=0; i< vertexIndices.size()/3;i++) faces.setRow(i,{vertexIndices[i*3]-1,vertexIndices[i*3+1]-1,vertexIndices[i*3+2]-1});
-
-
-            int numVertices  = temp_vertices.size()/3;
-            int numTriangles = vertexIndices.size()/3;
-            printf("Verts %u, Tris %u,\n", numVertices, numTriangles);
-
-     m_mesh.maxdist = farvert;
-     m_mesh.setData(verts,faces);*/
-
      } //endif loading
     }//endif textinput
 
@@ -593,89 +506,83 @@ void Application::onCursorPos(double xpos, double ypos) {
 
            int size = glm::min(width,height);
 
-               fclick = glm::vec2(-1+2*m_mousePosition.x/width,-1+2*m_mousePosition.y/height);
-               sxa = xax;
-               sya = yax;
-               sza = zax;
+           fclick = glm::vec2(-1+2*m_mousePosition.x/width,-1+2*m_mousePosition.y/height);
+           sxa = xax;
+           sya = yax;
+           sza = zax;
+           glm::vec2 nowpos = glm::vec2(-1+2*currentMousePosition.x/width,-1+2*currentMousePosition.y/height);
 
-            glm::vec2 nowpos = glm::vec2(-1+2*currentMousePosition.x/width,-1+2*currentMousePosition.y/height);
+           if (height>width) {nowpos.y *= height/width; fclick.y *= height/width;}
+           else {nowpos.y *= width/height; fclick.y *= width/height;}
 
-            if (height>width) {nowpos.y *= height/width; fclick.y *= height/width;}
-            else {nowpos.y *= width/height; fclick.y *= width/height;}
+           nowpos.x *= 0.8;
+           nowpos.y *=0.8;
+           fclick.x *= 0.8;
+           fclick.y *=0.8;
 
-            nowpos.x *= 0.8;
-            nowpos.y *=0.8;
-            fclick.x *= 0.8;
-            fclick.y *=0.8;
+           nowpos.x*=-m_translation.z;
+           nowpos.y*=-m_translation.z;
+           fclick.x*=-m_translation.z;
+           fclick.y*=-m_translation.z;
+           nowpos.x = nowpos.x - m_translation.x;
+           fclick.x = fclick.x - m_translation.x;
+           nowpos.y = nowpos.y + m_translation.y;
+           fclick.y = fclick.y + m_translation.y;
 
-            nowpos.x*=-m_translation.z;
-            nowpos.y*=-m_translation.z;
-            fclick.x*=-m_translation.z;
-            fclick.y*=-m_translation.z;
-            nowpos.x = nowpos.x - m_translation.x;
-            fclick.x = fclick.x - m_translation.x;
-            nowpos.y = nowpos.y + m_translation.y;
-            fclick.y = fclick.y + m_translation.y;
-            /*
-            nowpos.x -= m_translation.x/(-m_translation.z);
-            nowpos.y -= m_translation.y/(-m_translation.z);
-            fclick.x -= m_translation.x/(-m_translation.z);
-            fclick.y -= m_translation.y/(-m_translation.z);*/
+           nowpos.x /= m_mesh.maxdist;
+           nowpos.y /= m_mesh.maxdist;
 
-            nowpos.x /= m_mesh.maxdist;
-            nowpos.y /= m_mesh.maxdist;
+           fclick.x /= m_mesh.maxdist;
+           fclick.y /= m_mesh.maxdist;
 
-            fclick.x /= m_mesh.maxdist;
-            fclick.y /= m_mesh.maxdist;
+           nowpos.x /=m_scale;
+           nowpos.y /=m_scale;
 
-            nowpos.x /=m_scale;
-            nowpos.y /=m_scale;
-
-            fclick.x /=m_scale;
-            fclick.y /=m_scale;
+           fclick.x /=m_scale;
+           fclick.y /=m_scale;
 
 
-            if (glm::length(fclick) > 1) fclick = glm::normalize(fclick);
-            if (glm::length(nowpos) > 1) nowpos = glm::normalize(nowpos);
+           if (glm::length(fclick) > 1) fclick = glm::normalize(fclick);
+           if (glm::length(nowpos) > 1) nowpos = glm::normalize(nowpos);
 
-            //vectorise Arc Points
-            printf("\ncurrentMouse: %lf, %lf",fclick.x,fclick.y);
-            glm::vec4 apA = glm::vec4(fclick.x,-fclick.y,glm::cos(glm::asin(glm::min(glm::length(fclick),0.99999f))),1.);
-            glm::vec4 apB = glm::vec4(nowpos.x,-nowpos.y,glm::cos(glm::asin(glm::min(glm::length(nowpos),0.99999f))),1.);
+           //vectorise Arc Points
+           printf("\ncurrentMouse: %lf, %lf",fclick.x,fclick.y);
+           glm::vec4 apA = glm::vec4(fclick.x,-fclick.y,glm::cos(glm::asin(glm::min(glm::length(fclick),0.99999f))),1.);
+           glm::vec4 apB = glm::vec4(nowpos.x,-nowpos.y,glm::cos(glm::asin(glm::min(glm::length(nowpos),0.99999f))),1.);
 
 
-            glm::vec3 apA3 = glm::vec3(apA.x,apA.y,apA.z);
-            glm::vec3 apB3 = glm::vec3(apB.x,apB.y,apB.z);
-            float t = glm::acos(glm::dot(glm::normalize(apA3),glm::normalize(apB3)));
+           glm::vec3 apA3 = glm::vec3(apA.x,apA.y,apA.z);
+           glm::vec3 apB3 = glm::vec3(apB.x,apB.y,apB.z);
+           float t = glm::acos(glm::dot(glm::normalize(apA3),glm::normalize(apB3)));
 
-            if (isnan(t) ) {printf("  T NAN !!!");
-                t = 0.f;
-                apA=glm::vec4(1.);
-                apB=glm::vec4(1.);
-                apA3=glm::vec3(1.,0.,0);
-                apB3=glm::vec3(0.,0.,1.);
-            }
+           if (isnan(t) ) {printf("  T NAN !!!");
+               t = 0.f;
+               apA=glm::vec4(1.);
+               apB=glm::vec4(1.);
+               apA3=glm::vec3(1.,0.,0);
+               apB3=glm::vec3(0.,0.,1.);
+           }
 
-            glm::vec3 n = glm::cross(apA3,apB3);
-            xax= glm::rotate(sxa,t,n);
-            yax= glm::rotate(sya,t,n);
-            zax= glm::rotate(sza,t,n);
+           glm::vec3 n = glm::cross(apA3,apB3);
+           xax= glm::rotate(sxa,t,n);
+           yax= glm::rotate(sya,t,n);
+           zax= glm::rotate(sza,t,n);
 
-            //Transform modified by arcball twiddling
-            //This codes updates the polar coords:
+           //Transform modified by arcball twiddling
+           //This codes updates the polar coords:
 
-            //1.Get Latitude and Longtitude
-            polarrotation.x = glm::acos(glm::dot(glm::vec3(0.,0.,1.),zax)); // -pi<Latitude<=pi ;
+           //1.Get Latitude and Longtitude
+           polarrotation.x = glm::acos(glm::dot(glm::vec3(0.,0.,1.),zax)); // -pi<Latitude<=pi ;
 
-            polarrotation.y = glm::atan(zax.y,zax.x);
+           polarrotation.y = glm::atan(zax.y,zax.x);
 
-            //2. Get the normal of current and reference Z basevecs
-            glm::vec3 tiltnorm = glm::cross(zax,glm::vec3(0.,0.,1.));
-            glm::vec3 uprightX = glm::rotate(xax,polarrotation.x,tiltnorm);
-            glm::vec3 uprightY = glm::rotate(yax,polarrotation.x,tiltnorm);
+           //2. Get the normal of current and reference Z basevecs
+           glm::vec3 tiltnorm = glm::cross(zax,glm::vec3(0.,0.,1.));
+           glm::vec3 uprightX = glm::rotate(xax,polarrotation.x,tiltnorm);
+           glm::vec3 uprightY = glm::rotate(yax,polarrotation.x,tiltnorm);
 
-            // Get the Z angle
-            polarrotation.z = glm::acos(glm::dot(uprightX,glm::vec3(1.0f,0.f,0.f)));
+           // Get the Z angle
+           polarrotation.z = glm::acos(glm::dot(uprightX,glm::vec3(1.0f,0.f,0.f)));
 
         }
 
