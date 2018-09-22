@@ -26,9 +26,8 @@ void a3_Application::a3_poseToFile( frame &somePose){
        }
        pfilestream << '\n';
        cout << '\n';
-       pfilestream.close();
      }
-
+     pfilestream.close();
    }
 
 

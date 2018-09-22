@@ -206,6 +206,7 @@ void a3_Application::drawScene() {
     //
     // Draw the mesh
     m_program.use();
+    GLuint nowprog = m_program.m_program;
 
     GLfloat idColor[4];   //WHITE
     idColor[0] = 255;

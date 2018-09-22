@@ -57,8 +57,9 @@ void asfApp::loadSkeleton(){
      NFD_OpenDialog( "*", "", &skelFile);
      printf("\nloading %s\n",skelFile);
      showskel = new Skeleton(skelFile); //hmmmm.. malloc perhaps?
-     showskel->defaultBoneMesh(&m_mesh);
      showskel->setProgram(m_program);
+     showskel->m_bonemesh = &m_mesh;
+     showskel->m_jointmesh = &m_jointMesh;
      skelload = true;
 
 
@@ -180,6 +181,11 @@ void asfApp::init() {
     // Create the cube mesh
     createCube();
 
+    static char pole[] = "../srctree/res/models/zpole.obj";
+    m_mesh = loadObj(pole);
+    static char sphere[] = "../srctree/res/models/sphere.obj";
+    m_jointMesh = loadObj(sphere);
+
     loadSkeleton();
 
     sittingPose["lfemur"] = {-90,30,-10};
@@ -212,6 +218,7 @@ void asfApp::init() {
     walkingPose["rhumerus"] = {-60,-30,-0};
     walkingPose["lradius"] = {50,45,45};
     walkingPose["rradius"] = {45,30,-45};
+
 
 
 }
@@ -259,26 +266,18 @@ void asfApp::createCube() {
     m_mesh.setData(vertices, triangles);
 }
 
-void asfApp::loadObj(const char *filename) {
+cgra::Mesh asfApp::loadObj(const char *filename) {
+
+    cgra::Mesh newMesh;
+
     cgra::Wavefront obj;
     // Wrap the loading in a try..catch block
     try {
         obj = cgra::Wavefront::load(filename);
     } catch (std::exception e) {
         std::cerr << "Couldn't load file: '" << e.what() << "'" << std::endl;
-        return;
+        return newMesh;
     }
-
-    /************************************************************
-     * 2. Create a Mesh                                         *
-     *                                                          *
-     * Use the data in `obj` to create appropriately-sized      *
-     * vertex and index matrices and fill them with data.       *
-     *                                                          *
-     * Assume that all the faces in the file are triangles.     *
-     ************************************************************/
-
-    // Replace these with appropriate values
     int numVertices  = obj.m_positions.size();
     int numTriangles = obj.m_faces.size();
     printf("\nVerts %u, Tris %u,\n", numVertices, numTriangles);
@@ -286,7 +285,6 @@ void asfApp::loadObj(const char *filename) {
 
     cgra::Matrix<double> vertices(numVertices, 3);
     cgra::Matrix<unsigned int> triangles(numTriangles, 3);
-
 
     std::cout << "\nFilling Verts\n" << std::endl;
 
@@ -301,8 +299,10 @@ void asfApp::loadObj(const char *filename) {
         for(int i = 0; i < numTriangles;i++) triangles.setRow(i,{obj.m_faces[i].m_vertices[0].m_p-1,
                                                                  obj.m_faces[i].m_vertices[1].m_p-1,
                                                                  obj.m_faces[i].m_vertices[2].m_p-1});
-    m_mesh.maxdist = obj.range;
-    m_mesh.setData(vertices, triangles);
+    newMesh.maxdist = obj.range;
+    newMesh.setData(vertices, triangles);
+
+    return newMesh;
 }
 
 void asfApp::updateScene() {
@@ -456,7 +456,7 @@ void asfApp::doGUI() {
         }else {
             printf("Loading %s \n", path);
 
-            loadObj(path);
+            m_mesh = loadObj(path);
 
      } //endif loading
     }//endif textinput
@@ -508,6 +508,12 @@ void asfApp::onScroll(double xoffset, double yoffset) {
 
 frame asfApp::getPose(){
 
-frame saveFrame; saveFrame.clear();
+frame saveFrame;
+if (skelload == true) {
+  saveFrame = showskel->makeFrame();
+} else {  
+  cout << (" No skeleton is posing!");
+}
 return saveFrame;
+
 }

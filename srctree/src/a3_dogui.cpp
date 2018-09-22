@@ -4,6 +4,7 @@
 
 #include "imgui.h"
 
+using namespace std;
 
 void a3_Application::doGUI() {
 
@@ -69,29 +70,24 @@ void a3_Application::doGUI() {
     ImGui::End();
 
     ImGui::Begin("Shader Controls");
-       if (ImGui::Button("Reload Shader")){/*
-         m_program = cgra::Program::load_program(
-        CGRA_SRCDIR "/res/shaders/warpthedragon.vs.glsl",
-        //CGRA_SRCDIR "/res/shaders/lambert.fs.glsl");
-        CGRA_SRCDIR "/res/shaders/lambert.fs.glsl");
+    if(ImGui::Button("Toggle Picker Test")){
+      a3Renderer.previewPick = !a3Renderer.previewPick;
+    }
 
-         GLint *params;
-         //glGetShaderiv(GL_COMPILE_STATUS);
-         //printf("%s shader compilation\n", (params == GL_TRUE) ? "Succeeded" : "FAILED" );
-
-         glGetProgramiv(m_program.m_program,GL_LINK_STATUS,params);
-
-         printf("%s program linking\n", (*params == GL_TRUE) ? "Succeeded" : "FAILED" );
-         //update uniforms
-         //
-*/
-         }
-
+    if (ImGui::Button("Reload Shader")){ 
+      a3Renderer.loadPickShader();
+      cout<< "loaded Pickshader\n";
+    }
+    ImGui::End();
 
     ImGui::Begin("File Menu");
     if (ImGui::Button("Save This Pose")) {
+      if (theAsfApp -> skelload){
       frame nowPose = theAsfApp->getPose();
       a3_poseToFile(nowPose);
+      }else{
+        cout <<"Load a Skeleton first.\n";
+      }
     }
     ImGui::End();
 
@@ -103,6 +99,8 @@ void a3_Application::doGUI() {
      * 5. Add a checkbox for rendering the object in wireframe  *
      *  mode.                                                   *
      ************************************************************/
+    ImGui::Begin("meshes");
+
 
     static bool wireframe;
     if(ImGui::Checkbox("Draw Wireframe",&wireframe)) {

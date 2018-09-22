@@ -80,6 +80,7 @@ enum dof {
 
 // Type to represent a bone
 struct bone {
+  int boneID = -1;
 	cgra::Mesh * boneMesh;
   cgra::Mesh * jointMesh;
 
@@ -151,6 +152,8 @@ private:
 public:
 	Skeleton(std::string);
 	cgra::Program * m_program;
+  cgra::Mesh * m_jointmesh;
+  cgra::Mesh * m_bonemesh;
 
   std::vector<drawStyle> stylePack;
 
@@ -158,7 +161,6 @@ public:
 	std::vector<drawStyle> * renderSkeleton(cgra::Mesh * placeholderbone, bool tether);
 	void readAMC(std::string);
 
-	void defaultBoneMesh(cgra::Mesh *);
 	// YOUR CODE GOES HERE
 	// ...
 	std::vector<bone> m_bones;
@@ -166,6 +168,8 @@ public:
 
 	void applyFrame(std::vector<frame> & clip, float pos);
 	void applyPose(frame *);
+
+  frame makeFrame();
 
 	float axisSize = 0.1;
 

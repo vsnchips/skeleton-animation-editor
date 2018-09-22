@@ -34,6 +34,8 @@ public:
     Skeleton * showskel;
     bool skelload =  false;
    cgra::Mesh m_mesh;
+   cgra::Mesh m_jointMesh;
+
 
 // glm view stuff:
     glm::vec2 m_viewportSize;
@@ -78,7 +80,7 @@ public:
     void init();
 
     void createCube();
-    void loadObj(const char *filename);
+    cgra::Mesh loadObj(const char *filename);
 
     std::vector<drawStyle> stylePack;
     void updateScene();

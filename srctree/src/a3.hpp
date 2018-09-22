@@ -76,6 +76,9 @@ public:
     void loadObj(const char *filename,cgra::Mesh &);
 
     void drawScene();
+
+    void pickDraw();
+
     void doGUI();
 
     void onKey(int key, int scancode, int action, int mods);

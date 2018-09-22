@@ -21,6 +21,7 @@ class drawStyle{
   //this allows drawStyles with only uniform settings
   //to be included like optional lines
 public:
+  std::string tag;
   cgra::Program * prog = nullptr;
   uniforms unfms;
   glm::mat4 wmMat;

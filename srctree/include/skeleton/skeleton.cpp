@@ -74,12 +74,6 @@ void Skeleton::setProgram(cgra::Program & prog){
 	m_program = & prog;
 }
 
-void Skeleton::defaultBoneMesh(cgra::Mesh * d){
-	//for (bone b : m_bones ){ b.boneMesh=d;}
-	for (int i = 0; i<m_bones.size(); i++){
-		//m_bones.at(i).boneMesh=d;
-	}
-}
 //-------------------------------------------------------------
 // [Assignment 2] :
 // You may need to revise this function for Completion/Challenge
@@ -155,7 +149,6 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 	mat4 nextOrigin = accumT * myR * translate(mat4(1.0), cpos);
 	//mat4 nextOrigin = accumT * translate(mat4(1.0), cpos);  //test without articulation
 
-
 	mat4 meshPoleRot(1.0);
 	float latr=acos(b->boneDir.y);
 	float lonr=atan(b->boneDir.x/b->boneDir.z); //Pole tips towards high noon
@@ -173,6 +166,11 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
  boneRep.unfms.f3["ucol"] = vec3(0.8,0.8,0.8);
  boneRep.m_mesh = placeholderbone;
 stylePack.push_back(boneRep);
+ boneRep.m_mesh = m_jointmesh;
+ boneRep.tag = "joint";
+ boneRep.unfms.i1["id"]=b->boneID;
+stylePack.push_back(boneRep);
+
 
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				0.8, 0.8, 0.8);
@@ -413,6 +411,8 @@ void Skeleton::readBone(ifstream &file) {
 		if (line == "end") {
 			// End of the data for this bone
 			// Push the bone into the vector
+      
+      b.boneID = m_bones.size();
 			m_bones.push_back(b);
 
 			return;
@@ -549,7 +549,7 @@ void Skeleton::readAMC(string filename) {
 
 void Skeleton::applyPose(frame * k){
 		for (auto const & e : *k){
-			printf("getting bone %s \n" , e.first);
+			//printf("getting bone %s \n" , e.first);
 
 			//bone * fb = bonemap[e.first];
 			if (e.first != "root"){
@@ -583,12 +583,12 @@ void Skeleton::applyPose(frame * k){
 void Skeleton::applyFrame(std::vector<frame> & clip, float pos){
 
 	//breakpoint here
-	printf("frame two:");
+	//printf("frame two:");
 
 	for (auto const& x : clip[0]) {
-		std::cout << x.first;  // string (key)
+		//std::cout << x.first;  // string (key)
 
-		std::cout << "Xrotation " << bonemap[x.first] << std::endl;
+		//std::cout << "Xrotation " << bonemap[x.first] << std::endl;
 		//	<< ':'
 		//	<< x.second // string's value
 		//	<< std::endl ;
@@ -598,11 +598,25 @@ void Skeleton::applyFrame(std::vector<frame> & clip, float pos){
 
 	unsigned int getFrame = glm::min( (unsigned int)(clip.size()-1), (unsigned int)(clip.size()*pos));
 
-	printf ("getting frame %d:\n" ,getFrame);
+	//printf ("getting frame %d:\n" ,getFrame);
 
 	frame *k = &clip[getFrame];
 
 	applyPose(k);
+
+}
+
+frame Skeleton::makeFrame(){
+
+  frame newFrame;
+  for(bone b : m_bones){
+    vector<float> configuration; configuration.clear();
+    configuration.push_back(b.rotation.x); 
+    configuration.push_back(b.rotation.y); 
+    configuration.push_back(b.rotation.z); 
+    newFrame[b.name] = configuration;
+  }
+ return newFrame;
 
 }
 // YOUR CODE GOES HERE

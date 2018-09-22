@@ -1,6 +1,7 @@
 #pragma once
 
 //Base includes
+#include <iostream>
 #include <vector>
 #include <map>
 #include <string>
