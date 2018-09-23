@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <cstring>
 
+#include "includes-l1.hpp"
 #include "opengl.hpp"
 #include "imgui.h"
 
@@ -11,14 +12,7 @@
 #include "cgra/wavefront.hpp"
 
 #include "a3.hpp"
-
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtx/euler_angles.hpp"
-#include "glm/gtx/rotate_vector.hpp"
-
 #include "math.h"
-
 
 void a3_Application::init() {
 
@@ -170,6 +164,26 @@ void a3_Application::loadObj(const char *filename,cgra::Mesh &targetMesh) {
 
 void a3_Application::drawScene() {
 
+  glfwMakeContextCurrent(m_window);
+
+      ImGui_ImplGlfwGL3_NewFrame();
+      int width, height;
+      glfwGetFramebufferSize(m_window, &width, &height);
+      glViewport(0, 0, width, height);
+      setWindowSize(width, height);
+      glClearColor(0, 0, 0.1, 1); // Clears the color to a dark blue
+      glClearDepth(1); // Clears the depth buffer to it's maximum value
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+      // Create the GUI.
+      // Note: this does not draw the GUI
+      doGUI();
+
+  //Draw the skeleton
+
+  theAsfApp -> updateScene();//  Draw The Skeleton
+  //m_program.use();
+  a3Renderer.execute(theAsfApp->stylePack);
 
     // Calculate the aspect ratio of the viewport;
     // width / height
@@ -199,139 +213,39 @@ void a3_Application::drawScene() {
     glm::mat4 viewMatrix(1);
     viewMatrix[3] = glm::vec4(0, 0, -1, 1);
 
-    //Draw the Lattice
-    // todo: see theLattice class for line drawing code
-    //
-    // theLattice.latProgram.use();
-    //use this space for drawing wireframes
-    //
-    // Draw the mesh
+    // Draw the box
     m_program.use();
 
-    GLfloat idColor[4];   //WHITE
-    idColor[0] = 255;
-    idColor[1] = 255;
-    idColor[2] = 255;
-    idColor[3] = 1.0;
-   /* GLuint loc = glGetUniformLocation(
-    m_program.m_program, "gColor");
-    glUniform4fv(loc, 1, idColor);
-*/
     m_program.setViewMatrix(viewMatrix);
     m_program.setProjectionMatrix(projectionMatrix);
     m_program.setModelMatrix(m_modelTransform);
     m_mesh.draw(GL_TRIANGLES);
 
-
-}
-
-void a3_Application::doGUI() {
-    ImGui::SetNextWindowSize(ImVec2(250, 250), ImGuiSetCond_FirstUseEver);
-    ImGui::Begin("Shapes");
-
-    /************************************************************
-     *                                                          *
-     * 2. Load an .obj file                                     *
-     *                                                          *
-     * Add an input for a filename.                             *
-     *                                                          *
-     ************************************************************
-     *                                                          *
-     * 3. Manual Transforms                                     *
-     *                                                          *
-     * Create inputs for controlling translation, scale and     *
-     * rotation.                                                *
-     *
-     ************************************************************
-     */
-
-    ImGui::SliderFloat3("Translate",&m_translation[0],-20.0f,20.0f, "%.5f",1.5f);
-    ImGui::SliderFloat("Scale",&m_scale,0,5.0f, "%.5f", 2.5f);
-    if(ImGui::SliderFloat3("Rotate",&polarrotation[0],-M_PI,M_PI, "%.5f", 1.0f)){
-        // User's spun the globe
-        // Find the resulting matrix!
-
-        //1. Transform the Z/north pole, X/west, and Y/celestial vectors via the input lat/long TODO: How do i get this into a mat3x3?
-     if ( polarrotation.x == 0 ){
-         zax = glm::vec3(0,0,1);
-         yax = glm::vec3(0,1,0);
-         xax = glm::vec3(1,0,0);
-     }
-     else {
-         //fix for negative latitudes:
-         float polx,poly;
-         if (polarrotation.x < 0){
-             polx =-polarrotation.x;
-             poly = polarrotation.y + M_PI;
-         } else {
-             polx = polarrotation.x;
-             poly = polarrotation.y;
-         }
-
-         zax = glm::rotate(
-                    (glm::rotate(glm::vec3(0.,0.,1.),polx,glm::vec3(0.,1.,0.))) // tilt it on Y over to X to latitude
-                    ,poly, glm::vec3(0.,0.,1.));  // spin it on true Zorth to longtitude
-
-        //2.Find the normal and angle between Zorth and the new Z, and apply the same rotation to Xwest and YCelestial
-        glm::vec3 tnorm = glm::cross(glm::vec3(0.,0.,1.),zax);
-        yax = glm::rotate(glm::vec3(0.,1.,0.),polx,tnorm);
-        xax = glm::rotate(glm::vec3(1.,0.,0.),polx,tnorm);
-      }
-        //3. Rotate X and Y around the tilted Z pole/
-        yax = glm::rotate(yax, polarrotation.z, zax);
-        xax = glm::rotate(xax, polarrotation.z, zax);
-
-    };
-
-    ImGui::End();
-
-    ImGui::Begin("Shader Controls");
-       if (ImGui::Button("Reload Shader")){/*
-         m_program = cgra::Program::load_program(
-        CGRA_SRCDIR "/res/shaders/warpthedragon.vs.glsl",
-        //CGRA_SRCDIR "/res/shaders/lambert.fs.glsl");
-        CGRA_SRCDIR "/res/shaders/lambert.fs.glsl");
-
-         GLint *params;
-         //glGetShaderiv(GL_COMPILE_STATUS);
-         //printf("%s shader compilation\n", (params == GL_TRUE) ? "Succeeded" : "FAILED" );
-
-         glGetProgramiv(m_program.m_program,GL_LINK_STATUS,params);
-
-         printf("%s program linking\n", (*params == GL_TRUE) ? "Succeeded" : "FAILED" );
-         //update uniforms
-         //
-*/
-         }
-
-
-    ImGui::Begin("Gui Tweaking");
-    //    ImGui::SliderFloat("Handle Size", &theSkeleton.jointSize, 0, 1);
-    //
-    ImGui::End();
+   // Make sure that we're drawing with the correct
+   // polygon mode
+   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+   // Now we draw the GUI over the top of everything else
+   ImGui::Render();
+   // Finally, swap the front and back buffers.
+   // We've been drawing to the back buffer so far, so this
+   // makes it visible.
+                   // Next frame we draw to the other buffer
+   glfwSwapBuffers(m_window);
+	
     
+                
+                
+                
+                
+                
+                
+                // Keyframe Curve Window
+    //
+    glfwMakeContextCurrent( keyframe_window);
+    //draw some beziers.
 
 
-    /*
-     ************************************************************
-     *                                                          *
-     * 5. Add a checkbox for rendering the object in wireframe  *
-     *  mode.                                                   *
-     ************************************************************/
-
-    static bool wireframe;
-    if(ImGui::Checkbox("Draw Wireframe",&wireframe)) {
-        m_mesh.setDrawWireframe(wireframe);
-    }
-
-    //debugging stuff:
-
-    ImGui::Text("tricount :%d" , m_mesh.m_indices.size()/3);
-    ImGui::Text("vertcount : %d" , m_mesh.m_vertices.size());
-
-    ImGui::End();
 }
-
 
 // Input Handlers
 
@@ -341,7 +255,7 @@ void a3_Application::onMouseButton(int button, int action, int) {
         // Set the 'down' state for the appropriate mouse button
         if (button ==0){
             if( action == GLFW_PRESS) {
-                pickID = pickTest();
+                pickID = a3Renderer.pickTest(theAsfApp->stylePack, m_mousePosition);
                 clickon = pickID > 0;
                 printf("clickon %s\n" , clickon ? "true" : "false");
             }
@@ -467,20 +381,20 @@ void a3_Application::onCursorPos(double xpos, double ypos) {
             }  else {
 /* picking code
                 if(pickID>=0 && pickID < theLattice.getFullSize()){
-                    theLattice.getByID(pickID).move(glm::vec2(mousePositionDelta.x/height,mousePositionDelta.y/height),m_rotationMatrix,m_scale,pickDepth); 
+                    theLattice.getByID(pickID).move(glm::vec2(mousePositionDelta.x/height,mousePositionDelta.y/height),m_rotationMatrix,m_scale,pickDepth);
                     theLattice.vao.setRow(pickID,{  theLattice.getByID(pickID).p.x  ,
                                                 theLattice.getByID(pickID).p.y  ,
-                                                theLattice.getByID(pickID).p.z }); 
+                                                theLattice.getByID(pickID).p.z });
                     theLattice.setMesh();
                     theLattice.VSArraytoUniform(m_program);
                     if(!theLattice.GPUwarp)theLattice.makeWarpMesh(m_mesh);
                     */
                 }
-            } 
+            }
 
         }
 
-        
+
 
      if (m_mouseButtonDown[GLFW_MOUSE_BUTTON_MIDDLE]) {
          static int width, height;
@@ -501,25 +415,25 @@ void a3_Application::onCursorPos(double xpos, double ypos) {
 
 void a3_Application::onKey(int key, int scancode, int action, int mods) {
     // `(void)foo` suppresses unused variable warnings
-    if(key == "x" && action == GLFW_PRESS) //cycle axes
+    if(key == GLFW_KEY_X && action == GLFW_PRESS) //cycle axes
     {
     }
 
-    if(key == "a" && action == GLFW_PRESS) //cycle axes
+    if(key == GLFW_KEY_A && action == GLFW_PRESS) //cycle axes
     {
-      theAsfApp.play = !theAsfApp.m_play;
-    }
-    
-     if(key == "n" && action == GLFW_PRESS) //cycle axes
-    {
-      theAsfApp.nextPose();
+      theAsfApp->m_play = !theAsfApp->m_play;
     }
 
-     if(key == "p" && action == GLFW_PRESS) //cycle axes
+     if(key == GLFW_KEY_N && action == GLFW_PRESS) //cycle axes
     {
-      theAsfApp.prevPose();
+      theAsfApp->nextPose();
     }
-    
+
+     if(key == GLFW_KEY_P && action == GLFW_PRESS) //cycle axes
+    {
+      theAsfApp->prevPose();
+    }
+
     (void)key;
     (void)scancode;
     (void)action;
@@ -530,48 +444,4 @@ void a3_Application::onScroll(double xoffset, double yoffset) {
     // `(void)foo` suppresses unused variable warnings
     (void)xoffset;
     (void)yoffset;
-}
-
-
-int a3_Application::pickTest(){
-
-int pickedID = -1;
-// Clear the back buffer
-glClearColor(255, 255, 255, 1);
-glClearDepth(1);
-glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-//Draw the pickable elements
-/*theLattice.drawForPick(theLattice.latProgram,
-                                        m_modelTransform,
-                                        m_rotationMatrix,
-                                        glm::translate(glm::mat4(),m_translation),
-                                        m_scale);
-*/
-
-// Reading in after drawing
-unsigned char pixel[4];
-glReadPixels(m_mousePosition.x,
-m_viewportSize.y - m_mousePosition.y, 1, 1,   GL_RGBA,   GL_UNSIGNED_BYTE,   &pixel);
-glReadPixels(m_mousePosition.x,
-m_viewportSize.y - m_mousePosition.y, 1, 1,   GL_DEPTH_BUFFER_BIT,   GL_FLOAT,   &pickDepth);
-
-if (!(pixel[0]==255) || !(pixel[1]==255) || !(pixel[2]==255) ){
-
-    pickedID = pixel[0] + pixel[1]*256 + pixel[2]*256*256;
-
-    
-    printf("RED %i\n", pixel[0]);
-    printf("GREEN %i\n", pixel[1]);
-    printf("BLUE %i\n", pixel[2]);
-
-}
-
-m_program.use();
-
-//glfwSwapBuffers(m_window);
-printf("Picked id %d\n", pickedID );
-printf("Picked pickDepth %f\n", pickDepth );
-return pickedID;
-
 }

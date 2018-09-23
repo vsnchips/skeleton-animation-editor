@@ -1,30 +1,55 @@
-#pragma once 
+#pragma once
 
-#include "opengl.hpp"
-#include "glm/glm.hpp"
-
-#include "cgra/mesh.hpp"
-#include "cgra/shader.hpp"
+#include "includes-l1.hpp"
 
 //each composite object returns an array of draw styles
 // instead of each object overriding a draw function,
 // the app implements a draw function that iterates
-// over the object's array of draw styles. 
+// over the object's array of draw styles.
 
 //each vao/mesh has a drawStyle
 
 struct uniforms{
-  std::map<String, int   *> uniforms1i;
-  std::map<String, float *> uniforms1f;
+  std::map<std::string, int> i1;
+  std::map<std::string, float> f1;
+  std::map<std::string, glm::vec3> f3;
+  std::map<std::string, glm::mat4> m4;
 };
 
-struct drawStyle{
+class drawStyle{
   //all ptrs can be null
   //this allows drawStyles with only uniform settings
   //to be included like optional lines
-  cgra::Program * prog;
-  cgra::Mesh * m_mesh;
-  glm::mat4 * wmMat;
-  uniforms * ufs;
+public:
+  std::string tag;
+  cgra::Program * prog = nullptr;
+  uniforms unfms;
+  glm::mat4 wmMat;
+  cgra::Mesh * m_mesh = nullptr;    // Draw meshrs as they appear in the lineStream
 
+  void clear(){
+  prog = nullptr;
+  m_mesh = nullptr;
+  unfms.i1.clear();
+  unfms.f1.clear();
+  unfms.f3.clear();
+  unfms.m4.clear();
+
+}
+
+
+ void  putProjMat( glm::mat4 pm){
+  unfms.m4["projectionMat"] = pm;
+ }
+
+ void putViewMat( glm::mat4 vm){
+  unfms.m4["viewMat"] = vm;
+ }
+
+ void putModelMat( glm::mat4 wmm){
+  unfms.m4["modelMat"] = wmm;
+ }
+
+  
+  
 };

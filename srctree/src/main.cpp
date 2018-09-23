@@ -129,45 +129,9 @@ int main(int argc, const char** argv) {
             // Loop until the GLFW window is marked to be closed
             while (!glfwWindowShouldClose(window)) {
                 // Poll GLFW for input events
-                glfwPollEvents();
-                ImGui_ImplGlfwGL3_NewFrame();
-
-                // Get the width and height of the framebuffer.
-                // That is, the area of the window we are drawing to
-                int width, height;
-                glfwGetFramebufferSize(window, &width, &height);
-
-                // Tell OpenGL the size and position of the viewport,
-                // we're using a full-sized viewport, so it starts at (0,0)
-                // and is `width` wide and `height` high.
-                glViewport(0, 0, width, height);
-                // Update the app's window size
-                app.setWindowSize(width, height);
-
-                // Clear the color and depth buffers.
-                glClearColor(0, 0, 0.1, 1); // Clears the color to a dark blue
-                glClearDepth(1); // Clears the depth buffer to it's maximum value
-                // Actually tell OpenGL to clear the buffers
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-                // Create the GUI.
-                // Note: this does not draw the GUI
-                app.doGUI();
-
-                // Draw the scene.
+                glfwPollEvents();                // Draw the scene.
                 app.drawScene();
-
-                // Make sure that we're drawing with the correct
-                // polygon mode
-                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-                // Now we draw the GUI over the top of everything else
-                ImGui::Render();
-                // Finally, swap the front and back buffers.
-                // We've been drawing to the back buffer so far, so this
-                // makes it visible.
-                                // Next frame we draw to the other buffer
-                glfwSwapBuffers(window);
-		std::this_thread::sleep_for(5ms);
+	std::this_thread::sleep_for(5ms);
             }
         } catch (std::exception e) {
             // Catch any exceptions that bubble up to here and print out

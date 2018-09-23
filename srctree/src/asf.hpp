@@ -2,7 +2,7 @@
 
 #include "cgra/mesh.hpp"
 #include "cgra/shader.hpp"
-
+#include "drawStyle.hpp"
 #include <glm/glm.hpp>
 
 #include <skeleton.hpp>
@@ -11,10 +11,13 @@ class asfApp {
 public:
 
 //declare poses
-    frame sittingPose; 
+    frame sittingPose;
     frame guitarPose;
     frame walkingPose;
+    frame currentFrame;
     void switchPose(int dir);
+    void prevPose();
+    void nextPose();
     void loadAnimation();
     void loadSkeleton();
     void play();
@@ -24,13 +27,15 @@ public:
     float m_play_pos;
     bool tether = true;
     float m_speed;
-	
+
     std::vector<frame> theClip;
-    
- // actors in the play:	
+
+ // actors in the play:
     Skeleton * showskel;
     bool skelload =  false;
    cgra::Mesh m_mesh;
+   cgra::Mesh m_jointMesh;
+
 
 // glm view stuff:
     glm::vec2 m_viewportSize;
@@ -48,11 +53,11 @@ public:
 
     // Whether or not the left, middle or right buttons are down.
     bool m_mouseButtonDown[3];
-   
-    
-    //admin: 
+
+
+    //admin:
     GLFWwindow *m_window;
-    
+
     cgra::Program m_program;
      //
      //
@@ -75,9 +80,10 @@ public:
     void init();
 
     void createCube();
-    void loadObj(const char *filename);
+    cgra::Mesh loadObj(const char *filename);
 
-    void drawScene();
+    std::vector<drawStyle> stylePack;
+    void updateScene();
     void doGUI();
 
     void onKey(int key, int scancode, int action, int mods);
@@ -87,4 +93,6 @@ public:
     void onCursorPos(double xpos, double ypos);
 
     void onScroll(double xoffset, double yoffset);
+
+    frame getPose();
 };

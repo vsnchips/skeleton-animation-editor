@@ -4,38 +4,34 @@
 #include "cgra/shader.hpp"
 
 #include "glm/glm.hpp"
-#include "lattice.hpp"
+#include "asf.hpp"
+#include "app_renderer.hpp"
 
 typedef struct shareGlobals{
 //fill this later
 
 }myGlobs;
 
-class Application {
+class a3_Application {
 public:
-
-    ///Part 2 vars
-    
     bool clickon;
-
     int deformTechniqueId;
-    Lattice theLattice;
-    
     bool sceneon = 1;
-    int pickID; 
-
+    int pickID;
     int pickNode;
-
-
     int lx = 2,ly = 2,lz = 2;
-
     float pickDepth=1;
-
     GLint triangleMode;
 
+    int pickState = -1;
+
+    asfApp * theAsfApp;
+    app_renderer a3Renderer;
     /////////////////////////////////////////// Part 1 Vars
     // The window object managed by GLFW
     GLFWwindow *m_window;
+
+    GLFWwindow *  keyframe_window;
 
     // The shader program used for drawing
     cgra::Program m_program;
@@ -53,8 +49,6 @@ public:
     // The scale of the mesh
     float m_scale;
 
-
-
     // A 4x4 matrix representing the rotation of the
     // mesh,
     // And a vec3 with the z/y/x/ coords.
@@ -66,7 +60,7 @@ public:
     // Whether or not the left, middle or right buttons are down.
     bool m_mouseButtonDown[3];
 
-    Application(GLFWwindow *win)
+    a3_Application(GLFWwindow *win)
         : m_window(win),
           m_viewportSize(1, 1), m_mousePosition(0, 0),
           m_translation(0), m_scale(1), m_rotationMatrix(1) {
@@ -78,6 +72,9 @@ public:
     void setWindowSize(int width, int height) {
         m_viewportSize.x = float(width);
         m_viewportSize.y = float(height);
+
+        a3Renderer.m_viewportSize = m_viewportSize;
+
     }
 
     void init();
@@ -87,6 +84,9 @@ public:
     void loadObj(const char *filename,cgra::Mesh &);
 
     void drawScene();
+
+    void pickDraw();
+
     void doGUI();
 
     void onKey(int key, int scancode, int action, int mods);
@@ -97,9 +97,23 @@ public:
 
     void onScroll(double xoffset, double yoffset);
 
-    int pickTest(float mX, float mY);
-    int pickTest();
 
-    void generate_Lattice();
+    //File saving methods
+
+    void a3_poseToFile(frame & somePose);
+
+    void a3_writeAMC();
+
+    void a3_saveKeyFrames();
+
+    // Keyframe window methods
+   
+    typedef const std::vector<glm::vec3> a3curve;
+    void makeCurve();
+    void drawCurve();
+    void kfwin_oncursor(double xpos, double ypos);
+    void kfwin_onMouse(int button, int action, int mods);
+    void kfwin_onkey(int key, int scancode, int action, int mods);
+    void kfwin_onscroll(double xoffset, double yoffset);
 
 };

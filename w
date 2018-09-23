@@ -59,7 +59,7 @@ void asfApp::loadSkeleton(){
      showskel = new Skeleton(skelFile); //hmmmm.. malloc perhaps?
      showskel->setProgram(m_program);
      showskel->m_bonemesh = &m_mesh;
-     showskel->m_jointmesh = &m_jointMesh;
+     showskel->m_jointmesh = &m_spheremesh;
      skelload = true;
 
 
@@ -182,7 +182,7 @@ void asfApp::init() {
     createCube();
 
     static char pole[] = "../srctree/res/models/zpole.obj";
-    m_mesh = loadObj(pole);
+    m_mesh=loadObj(pole);
     static char sphere[] = "../srctree/res/models/sphere.obj";
     m_jointMesh = loadObj(sphere);
 
@@ -276,7 +276,7 @@ cgra::Mesh asfApp::loadObj(const char *filename) {
         obj = cgra::Wavefront::load(filename);
     } catch (std::exception e) {
         std::cerr << "Couldn't load file: '" << e.what() << "'" << std::endl;
-        return newMesh;
+        return;
     }
     int numVertices  = obj.m_positions.size();
     int numTriangles = obj.m_faces.size();
@@ -301,8 +301,6 @@ cgra::Mesh asfApp::loadObj(const char *filename) {
                                                                  obj.m_faces[i].m_vertices[2].m_p-1});
     newMesh.maxdist = obj.range;
     newMesh.setData(vertices, triangles);
-
-    return newMesh;
 }
 
 void asfApp::updateScene() {

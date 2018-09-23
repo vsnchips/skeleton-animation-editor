@@ -2,8 +2,8 @@
 //***
 //*** This is an annotated version of a file from the COMP308 assignment on
 //*** which we based the 2018 CGRA350 assignment 2.
-//*** 
-//*** 
+//***
+//***
 //*** This file contains a parser for the ASF file format.
 //***
 //***
@@ -27,7 +27,7 @@
 // Copyright (c) 2016 Taehyun Rhee, Joshua Scott, Ben Allen
 //
 // This software is provided 'as-is' for assignment of COMP308 in ECS,
-// Victoria University of Wellington, without any express or implied warranty. 
+// Victoria University of Wellington, without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from
 // the use of this software.
 //
@@ -44,7 +44,7 @@
 #include <stdexcept>
 
 
-//*** COMP308 had its own math and geometry libraries. CGRA350 students are 
+//*** COMP308 had its own math and geometry libraries. CGRA350 students are
 //*** expected to use GLM for their mathematics and create their own sphere,
 //*** cylinder and cone objects, either by creating them as for the sphere in
 //*** assignment 1 or by reading them in from a file (which will require
@@ -74,29 +74,19 @@ void Skeleton::setProgram(cgra::Program & prog){
 	m_program = & prog;
 }
 
-void Skeleton::defaultBoneMesh(cgra::Mesh * d){
-	//for (bone b : m_bones ){ b.boneMesh=d;}
-	for (int i=0; i<m_bones.size(); i++){
-		//m_bones.at(i).boneMesh=d;
-	}
-}
 //-------------------------------------------------------------
 // [Assignment 2] :
 // You may need to revise this function for Completion/Challenge
 //-------------------------------------------------------------
-void Skeleton::renderSkeleton( cgra::Mesh * placeholderbone, bool tet) {
+vector<drawStyle> * Skeleton::renderSkeleton( cgra::Mesh * placeholderbone, bool tet) {
 
+	//prepare
 	tether = tet;
-	m_program->use();
-	//*** glMatrixMode is a deprecated function that should
-	//*** not be used in modern OpenGL - you need to manage
-	//*** your matrices yourself
-	//glMatrixMode(GL_MODELVIEW);
-
-	//*** glPushMatrix is a deprecated function that you will
-	//*** not use in modern OpenGL because modern OpenGL expects
-	//*** you to manage the matrices yourself
-	//glPushMatrix();
+	//m_program->use();
+	stylePack.clear();
+	drawStyle useShader;
+	useShader.prog = m_program;
+  stylePack.push_back(useShader);
 
 	//Actually draw the skeleton
 	mat4 at(1.0f);
@@ -104,10 +94,8 @@ void Skeleton::renderSkeleton( cgra::Mesh * placeholderbone, bool tet) {
 
 	renderBone(at,ar,&m_bones[0], placeholderbone);
 
-	// Clean up
-	//*** glPopMatrix is a deprecated function that is the
-	//*** partner of glPushMatrix (see above)
-	//glPopMatrix();
+	return &stylePack;
+
 }
 
 
@@ -126,11 +114,11 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 
 	//animation first. The bone's own animation affects the bones orientation,
 	//and the translation toward the next.
-	
+
 	const float DEGMUL = pi<float>()/180;
 
 	//extrinsic:
-        mat4 precalcthis = 
+        mat4 precalcthis =
 	rotate(DEGMUL*b->basisRot.z,vec3(0,0,1)) *     //z third
 	rotate(DEGMUL*b->basisRot.y,vec3(0,1,0)) *     //y second
 	rotate(DEGMUL*b->basisRot.x,vec3(1,0,0));      //x first
@@ -145,7 +133,7 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 	ty3 = vec3(ty.x,ty.y,ty.z);
 	tx3 = vec3(tx.x,tx.y,tx.z);
 
-	mat4 tweak = 
+	mat4 tweak =
 
 	rotate(DEGMUL*b->rotation.z,tz3) *     //z third
 	rotate(DEGMUL*b->rotation.y,ty3) *     //y second
@@ -161,7 +149,6 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 	mat4 nextOrigin = accumT * myR * translate(mat4(1.0), cpos);
 	//mat4 nextOrigin = accumT * translate(mat4(1.0), cpos);  //test without articulation
 
-
 	mat4 meshPoleRot(1.0);
 	float latr=acos(b->boneDir.y);
 	float lonr=atan(b->boneDir.x/b->boneDir.z); //Pole tips towards high noon
@@ -172,38 +159,79 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 	meshPoleRot = myR * spin*tip * scale(mat4(),vec3(0.1,b->length,0.1));
 
  	//now draw the bone
+
+ drawStyle boneRep;
+ boneRep.putModelMat(accumT*meshPoleRot);
+ boneRep.unfms.f3.clear();
+ boneRep.unfms.f3["ucol"] = vec3(0.8,0.8,0.8);
+ boneRep.m_mesh = placeholderbone;
+stylePack.push_back(boneRep);
+ boneRep.m_mesh = m_jointmesh;
+ boneRep.tag = "joint";
+ boneRep.unfms.i1["id"]=b->boneID;
+stylePack.push_back(boneRep);
+
+
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				0.8, 0.8, 0.8);
 	m_program->setModelMatrix(accumT*meshPoleRot);
 //	m_program->setModelMatrix(accumT);
-	placeholderbone->draw();
+	//placeholderbone->draw();
 
 
 	//Draw the bone's Tait-Bryan basis.
 	//
 
  	mat4 myBasis = accumT*eulerBasis * scale(mat4(),vec3(axisSize));			//Draw the axes back at the joint
-	
+
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
-				1 , 0, 0);
-	m_program->setModelMatrix(myBasis*rotate(-0.5f* pi<float>() , vec3(0,0,1))) ;
-	placeholderbone->draw();
+				0 , 0, 1);
+	mat4 zBasis = myBasis*rotate(-0.5f* pi<float>() , vec3(1,0,0)) ;
+	m_program->setModelMatrix(zBasis);
+	//placeholderbone->draw();
+
+//////////////////////DRAW STYLE//////////////////////////////
+ drawStyle zb;
+ zb.putModelMat(zBasis);
+ zb.unfms.f3.clear();
+ zb.unfms.f3["ucol"] = vec3(0, 0, 1);
+ zb.m_mesh = placeholderbone;
+stylePack.push_back(zb);
+//////////////////////////////////////////////////////////////
 
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				0 , 1, 0);
 	m_program->setModelMatrix(myBasis);
-	placeholderbone->draw();
+	//placeholderbone->draw();
+
+//////////////////////DRAW STYLE//////////////////////////////
+ drawStyle yb;
+ yb.putModelMat(myBasis);
+ yb.unfms.f3.clear();
+ yb.unfms.f3["ucol"] = vec3(0, 1, 0);
+ yb.m_mesh = placeholderbone;
+stylePack.push_back(yb);
+//////////////////////////////////////////////////////////////
 
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
-				0 , 0, 1);
-	m_program->setModelMatrix(myBasis*rotate(0.5f* pi<float>() , vec3(1,0,0))) ;
-	placeholderbone->draw();
+				1 , 0, 0);
+	mat4 xBasis=myBasis*rotate(0.5f* pi<float>() , vec3(0,0,1)) ;
+	m_program->setModelMatrix(xBasis);
+	//placeholderbone->draw();
 
+//////////////////////DRAW STYLE//////////////////////////////
+ drawStyle xb;
+ xb.putModelMat(xBasis);
+ xb.unfms.f3.clear();
+ xb.unfms.f3["ucol"] = vec3(1, 0, 0);
+ xb.m_mesh = placeholderbone;
+stylePack.push_back(xb);
+//////////////////////////////////////////////////////////////
 
 	//and Move the root
 	if (!tether) nextOrigin = translate(mat4(1.0), b->translation) * nextOrigin;
-	for (bone * child : b->children) renderBone(nextOrigin, myR, child, placeholderbone);	
-	
+	for (bone * child : b->children) renderBone(nextOrigin, myR, child, placeholderbone);
+
 
 }
 
@@ -310,7 +338,7 @@ void Skeleton::readHeading(string headerline, ifstream &file) {
 	else if (head == "units") {
 		// Has factors for the units to be able to model the
 		// real person, these must be parsed correctly. Only
-		// really need to check if deg or rad, but that is 
+		// really need to check if deg or rad, but that is
 		// not needed for this assignment.
 
 		// We are going to assume that the units:length feild
@@ -383,12 +411,14 @@ void Skeleton::readBone(ifstream &file) {
 		if (line == "end") {
 			// End of the data for this bone
 			// Push the bone into the vector
+      
+      b.boneID = m_bones.size();
 			m_bones.push_back(b);
 
 			return;
 		}
 		else {
-			
+
 			string head;
 			istringstream lineStream(line);
 			lineStream >> head; // Get the first token
@@ -426,7 +456,7 @@ void Skeleton::readBone(ifstream &file) {
 				}
 			}
 			else if (head == "axis") {
-				// Basis rotations 
+				// Basis rotations
 				lineStream >> b.basisRot.x >> b.basisRot.y >> b.basisRot.z;
 			}
 			else if (head == "limits") {
@@ -491,7 +521,7 @@ void Skeleton::readHierarchy(ifstream &file) {
 
 				// Set a POINTER to the child to be recorded in the parents
 				m_bones[parentIndex].children.push_back(&m_bones[childIndex]);
-				
+
 				// Get the next child
 				lineStream >> childName;
 			}
@@ -516,14 +546,14 @@ void Skeleton::readAMC(string filename) {
 	// ...
 
 }
-	
+
 void Skeleton::applyPose(frame * k){
 		for (auto const & e : *k){
-			printf("getting bone %s \n" , e.first);
-			
+			//printf("getting bone %s \n" , e.first);
+
 			//bone * fb = bonemap[e.first];
 			if (e.first != "root"){
-			
+
 			bone * fb = &m_bones[findBone(e.first)];
 
 			int fdm = fb -> freedom;
@@ -531,7 +561,7 @@ void Skeleton::applyPose(frame * k){
 			//fb->rotation = k.second;
 			unsigned int nox=1, noy =1;
 			if (fb->freedom % 2 > 0){
-			fb->rotation.x=e.second[0];    
+			fb->rotation.x=e.second[0];
 				nox=0;
 			}
 			if (fb->freedom > 0 && fb->freedom % 4 > 1){
@@ -542,7 +572,7 @@ void Skeleton::applyPose(frame * k){
 			fb->rotation.z=e.second[2-nox-noy];
 			}
 			} else {
-			
+
 			bone * root = &m_bones[0];
 			root -> rotation = vec3(e.second[3], e.second[4], e.second[5]);
 			root -> translation = vec3(e.second[0], e.second[1], e.second[2]);
@@ -552,28 +582,42 @@ void Skeleton::applyPose(frame * k){
 
 void Skeleton::applyFrame(std::vector<frame> & clip, float pos){
 
-	//breakpoint here	
-	printf("frame two:");
-	
-	for (auto const& x : clip[0]) {
-		std::cout << x.first;  // string (key)
+	//breakpoint here
+	//printf("frame two:");
 
-		std::cout << "Xrotation " << bonemap[x.first] << std::endl;
-		//	<< ':' 
-		//	<< x.second // string's value 
+	for (auto const& x : clip[0]) {
+		//std::cout << x.first;  // string (key)
+
+		//std::cout << "Xrotation " << bonemap[x.first] << std::endl;
+		//	<< ':'
+		//	<< x.second // string's value
 		//	<< std::endl ;
-	}	
+	}
 
 	unsigned int maxFrame = clip.size() - 1;
 
 	unsigned int getFrame = glm::min( (unsigned int)(clip.size()-1), (unsigned int)(clip.size()*pos));
 
-	printf ("getting frame %d:\n" ,getFrame);
+	//printf ("getting frame %d:\n" ,getFrame);
 
 	frame *k = &clip[getFrame];
 
 	applyPose(k);
-	
+
+}
+
+frame Skeleton::makeFrame(){
+
+  frame newFrame;
+  for(bone b : m_bones){
+    vector<float> configuration; configuration.clear();
+    configuration.push_back(b.rotation.x); 
+    configuration.push_back(b.rotation.y); 
+    configuration.push_back(b.rotation.z); 
+    newFrame[b.name] = configuration;
+  }
+ return newFrame;
+
 }
 // YOUR CODE GOES HERE
 // ...
