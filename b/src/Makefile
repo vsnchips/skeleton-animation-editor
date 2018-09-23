@@ -225,6 +225,33 @@ a3.cpp.s:
 	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/a3.cpp.s
 .PHONY : a3.cpp.s
 
+app_renderer.o: app_renderer.cpp.o
+
+.PHONY : app_renderer.o
+
+# target to build an object file
+app_renderer.cpp.o:
+	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/app_renderer.cpp.o
+.PHONY : app_renderer.cpp.o
+
+app_renderer.i: app_renderer.cpp.i
+
+.PHONY : app_renderer.i
+
+# target to preprocess a source file
+app_renderer.cpp.i:
+	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/app_renderer.cpp.i
+.PHONY : app_renderer.cpp.i
+
+app_renderer.s: app_renderer.cpp.s
+
+.PHONY : app_renderer.s
+
+# target to generate assembly for a file
+app_renderer.cpp.s:
+	cd /home/shelly/local/CGRA350/assignment3/ass3-local/b && $(MAKE) -f src/CMakeFiles/a2-loader.dir/build.make src/CMakeFiles/a2-loader.dir/app_renderer.cpp.s
+.PHONY : app_renderer.cpp.s
+
 asf.o: asf.cpp.o
 
 .PHONY : asf.o
@@ -406,6 +433,9 @@ help:
 	@echo "... a3.o"
 	@echo "... a3.i"
 	@echo "... a3.s"
+	@echo "... app_renderer.o"
+	@echo "... app_renderer.i"
+	@echo "... app_renderer.s"
 	@echo "... asf.o"
 	@echo "... asf.i"
 	@echo "... asf.s"

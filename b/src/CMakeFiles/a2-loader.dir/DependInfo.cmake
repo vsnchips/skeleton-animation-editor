@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/include/skeleton/skeleton.cpp" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/src/CMakeFiles/a2-loader.dir/__/include/skeleton/skeleton.cpp.o"
   "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/src/a3.cpp" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/src/CMakeFiles/a2-loader.dir/a3.cpp.o"
+  "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/src/app_renderer.cpp" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/src/CMakeFiles/a2-loader.dir/app_renderer.cpp.o"
   "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/src/asf.cpp" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/src/CMakeFiles/a2-loader.dir/asf.cpp.o"
   "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/src/cgra/imgui_impl_glfw_gl3.cpp" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/src/CMakeFiles/a2-loader.dir/cgra/imgui_impl_glfw_gl3.cpp.o"
   "/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/src/cgra/mesh.cpp" "/home/shelly/local/CGRA350/assignment3/ass3-local/b/src/CMakeFiles/a2-loader.dir/cgra/mesh.cpp.o"
