@@ -64,7 +64,8 @@ void app_renderer::execute(std::vector<drawStyle> & target){
       passUniforms(c_prog,&d.unfms);
 
       if (d.m_mesh){
-        d.m_mesh->draw();
+        if (d.mode > -1) d.m_mesh->draw(d.mode);
+        else d.m_mesh->draw();
       }
     }
   }

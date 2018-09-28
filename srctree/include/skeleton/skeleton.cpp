@@ -156,16 +156,20 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
  	 //tip calls for the pole
 	 mat4 tip = rotate(latr, vec3(1,0,0));
 	 mat4 spin = rotate(lonr, vec3(0,1,0));
-	meshPoleRot = myR * spin*tip * scale(mat4(),vec3(0.1,b->length,0.1));
+
+   //meshPoleRot = myR * spin*tip * scale(mat4(),vec3(0.1,b->length,0.1));
+   meshPoleRot = myR * spin*tip ;
+   mat4 scaleBone = scale(mat4(),vec3(0.1,b->length,0.1));
 
  	//now draw the bone
 
  drawStyle boneRep;
- boneRep.putModelMat(accumT*meshPoleRot);
+ boneRep.putModelMat(accumT*meshPoleRot*scaleBone);
  boneRep.unfms.f3.clear();
  boneRep.unfms.f3["ucol"] = vec3(0.8,0.8,0.8);
  boneRep.m_mesh = placeholderbone;
 stylePack.push_back(boneRep);
+ boneRep.putModelMat(accumT*meshPoleRot * scale(mat4(),vec3(0.1,0.1,0.1)));
  boneRep.m_mesh = m_jointmesh;
  boneRep.tag = "joint";
  boneRep.unfms.i1["id"]=b->boneID;

@@ -71,6 +71,7 @@ void a3_Application::doGUI() {
 
     ImGui::Begin("Keyframe Controls");
     if(ImGui::Button("Toggle Keyframe Editor")){
+
       keyframe_window = glfwCreateWindow(1920,300, "Curve Editor", NULL, NULL) ;
     }
     ImGui::End();
@@ -87,10 +88,21 @@ void a3_Application::doGUI() {
     ImGui::End();
 
     ImGui::Begin("File Menu");
-    if (ImGui::Button("Save This Pose")) {
+ 
+    if (ImGui::Button("Keyframe This Pose")) {
       if (theAsfApp -> skelload){
-      frame nowPose = theAsfApp->getPose();
-      a3_poseToFile(nowPose);
+        theAsfApp->newWorkPose(); 
+      }else{
+        cout <<"Load a Skeleton first.\n";
+      }
+    }
+
+   if (ImGui::Button("Save This Pose")) {
+      if (theAsfApp -> skelload){
+      pose nowPose;
+      theAsfApp->getFrame(&nowPose.my_frame);
+      theAsfApp->poseToFile(nowPose);
+        
       }else{
         cout <<"Load a Skeleton first.\n";
       }

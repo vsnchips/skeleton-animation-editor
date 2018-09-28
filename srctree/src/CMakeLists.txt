@@ -3,6 +3,8 @@
 #
 # If you add any new files, remember to add them here
 SET(sources
+  splineMath.cpp
+  boneCurve.cpp
   a3_kfwin.cpp
   asf.hpp
   asf.cpp

@@ -14,10 +14,10 @@
 #include "a3.hpp"
 #include "math.h"
 
-void a3_Application::init() {
+void a3_Application::init(const char * skelfile) {
 
     theAsfApp= new asfApp(m_window);
-    theAsfApp->init();
+    theAsfApp->init(skelfile);
     // Load the shader program
     // The use of CGRA_SRCDIR "/path/to/shader" is so you don't
     // have to run the program from a specific folder.
@@ -241,9 +241,16 @@ void a3_Application::drawScene() {
                 
                 // Keyframe Curve Window
     //
+    if (keyframe_window){
     glfwMakeContextCurrent( keyframe_window);
-    //draw some beziers.
+      glClearColor(0, 0, 0.1, 1); // Clears the color to a dark blue
+      glClearDepth(1); // Clears the depth buffer to it's maximum value
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+     styleCurve() ;
 
+    glfwSwapBuffers(keyframe_window);
+    //draw some beziers.
+    }
 
 }
 
@@ -315,6 +322,9 @@ void a3_Application::onCursorPos(double xpos, double ypos) {
             fclick.x *= 0.8;
             fclick.y *=0.8;
 
+           //Transform the coords to match the target object
+           //
+           
             nowpos.x*=-m_translation.z;
             nowpos.y*=-m_translation.z;
             fclick.x*=-m_translation.z;
@@ -445,3 +455,11 @@ void a3_Application::onScroll(double xoffset, double yoffset) {
     (void)xoffset;
     (void)yoffset;
 }
+
+
+// void frameToPose(){
+//  pose newPose(asfApp.getPose());
+//
+// }
+//
+// 

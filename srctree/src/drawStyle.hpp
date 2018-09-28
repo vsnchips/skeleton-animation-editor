@@ -21,11 +21,14 @@ class drawStyle{
   //this allows drawStyles with only uniform settings
   //to be included like optional lines
 public:
+  int mode=-1;
   std::string tag;
   cgra::Program * prog = nullptr;
   uniforms unfms;
   glm::mat4 wmMat;
-  cgra::Mesh * m_mesh = nullptr;    // Draw meshrs as they appear in the lineStream
+  cgra::Mesh * m_mesh = nullptr;    // Draw meshes as they appear in the lineStream
+  std::vector<glm::vec2> * partBuffer; //particle buffer
+  
 
   void clear(){
   prog = nullptr;

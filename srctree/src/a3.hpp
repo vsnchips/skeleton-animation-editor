@@ -6,6 +6,7 @@
 #include "glm/glm.hpp"
 #include "asf.hpp"
 #include "app_renderer.hpp"
+#include "boneCurve.hpp"
 
 typedef struct shareGlobals{
 //fill this later
@@ -17,8 +18,13 @@ public:
     bool clickon;
     int deformTechniqueId;
     bool sceneon = 1;
+    
     int pickID;
     int pickNode;
+    
+    int pickKF;
+
+
     int lx = 2,ly = 2,lz = 2;
     float pickDepth=1;
     GLint triangleMode;
@@ -26,7 +32,11 @@ public:
     int pickState = -1;
 
     asfApp * theAsfApp;
+
     app_renderer a3Renderer;
+    bool kf_window_see = true;
+    app_renderer a3_kf_renderer;
+
     /////////////////////////////////////////// Part 1 Vars
     // The window object managed by GLFW
     GLFWwindow *m_window;
@@ -77,7 +87,7 @@ public:
 
     }
 
-    void init();
+    void init(const char *);
     void reloadShader();
 
     void createCube();
@@ -107,10 +117,15 @@ public:
     void a3_saveKeyFrames();
 
     // Keyframe window methods
+    //
+    glm::vec2 m_kfMousePos;
+    boneCurve * currentViewCurve;
+
+    void a3_pose2bones();
    
     typedef const std::vector<glm::vec3> a3curve;
     void makeCurve();
-    void drawCurve();
+    void styleCurve();
     void kfwin_oncursor(double xpos, double ypos);
     void kfwin_onMouse(int button, int action, int mods);
     void kfwin_onkey(int key, int scancode, int action, int mods);

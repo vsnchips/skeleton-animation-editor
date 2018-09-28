@@ -56,6 +56,10 @@ void asfApp::loadSkeleton(){
 
      NFD_OpenDialog( "*", "", &skelFile);
      printf("\nloading %s\n",skelFile);
+     loadSkeleton(skelFile);
+}
+
+void asfApp::loadSkeleton(const char * skelFile){
      showskel = new Skeleton(skelFile); //hmmmm.. malloc perhaps?
      showskel->setProgram(m_program);
      showskel->m_bonemesh = &m_mesh;
@@ -155,7 +159,11 @@ void asfApp::pause(){
 	m_play = false;
 }
 
-void asfApp::init() {
+void asfApp::init(const char * skelFile) {
+    
+    if (skelFile) loadSkeleton(skelFile);
+    else loadSkeleton();
+  
     // Load the shader rogram
     // The use of CGRA_SRCDIR "/path/to/shader" is so you don't
     // have to run the program from a specific folder.
@@ -186,7 +194,6 @@ void asfApp::init() {
     static char sphere[] = "../srctree/res/models/sphere.obj";
     m_jointMesh = loadObj(sphere);
 
-    loadSkeleton();
 
     sittingPose["lfemur"] = {-90,30,-10};
     sittingPose["rfemur"] = {-90,-30,10};
@@ -266,7 +273,7 @@ void asfApp::createCube() {
     m_mesh.setData(vertices, triangles);
 }
 
-cgra::Mesh asfApp::loadObj(const char *filename) {
+cgra::Mesh asfApp::loadObj(char *filename) {
 
     cgra::Mesh newMesh;
 
@@ -336,6 +343,14 @@ if (skelload && m_play){
 }
 
 void asfApp::doGUI() {
+
+  ImGui::Begin("Joint Controls");
+  
+  if (skelload && currentFrame.count(currentJoint) && ImGui::SliderFloat3("Bone Rotation", &currentFrame[currentJoint][0], -M_PI, M_PI, "%.3f", 1.0f )){
+      //TODO:: update the entries in the curves?
+      }
+
+  ImGui::End();
 
     // --- Clip Controls
     ImGui::SetNextWindowSize(ImVec2(500, 50), ImGuiSetCond_FirstUseEver);
@@ -506,14 +521,43 @@ void asfApp::onScroll(double xoffset, double yoffset) {
 
 }
 
-frame asfApp::getPose(){
+
+void asfApp::poseToFile(pose & somePose){
+ printf("asfAp postToFile to be implemented\n");
+}
+
+void asfApp::poseToBones(pose & somePose){
+ printf("asfAp poseToBones to be tested\n");
+ 
+   boneCurveMap.clear();
+ for (const auto x : somePose.my_frame){
+  boneCurveMap[x.first].newKF(somePose);     // Passing the whole map being iterated into the thing it maps to. This is either messy, or convenient? 
+ 
+ }
+}
+
+int asfApp::getFrame(frame * dest){
 
 frame saveFrame;
 if (skelload == true) {
   saveFrame = showskel->makeFrame();
+  *dest  = saveFrame;
 } else {  
   cout << (" No skeleton is posing!");
+  return -1;
 }
-return saveFrame;
+return 0;
+}
 
+void asfApp::newWorkPose(){
+  pose newpose;
+   int att = getFrame(   &newpose.my_frame   );
+   newpose.index = workPoses.size()+1;
+   if (att>-1) workPoses.push_back(newpose);
 }
+
+void asfApp::setWorkPose(int i, frame newframe){
+  workPoses[i].my_frame = newframe;
+}
+
+

@@ -124,8 +124,9 @@ int main(int argc, const char** argv) {
 
         try {
 			// Initialise `app`
-			app.init();
-
+      const char * skelPath = nullptr;//"";
+      if (argc > 1){skelPath = argv[1];}
+      app.init(skelPath);
             // Loop until the GLFW window is marked to be closed
             while (!glfwWindowShouldClose(window)) {
                 // Poll GLFW for input events
