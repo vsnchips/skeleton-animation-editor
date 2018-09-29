@@ -21,8 +21,8 @@ void main() {
 
     vec3 fragColor = vec3(0);
     
-    fragColor.g = float(1)/255.0;
-    fragColor.g *= id;
+    fragColor.r = float(1)/255.0;
+    fragColor.r *= id;
 
     color = vec4(fragColor, 1.0);
 }

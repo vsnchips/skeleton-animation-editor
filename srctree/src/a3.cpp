@@ -219,7 +219,6 @@ void a3_Application::drawScene() {
     m_program.setProjectionMatrix(projectionMatrix);
     m_program.setViewMatrix(viewMatrix);
     m_program.setModelMatrix(m_modelTransform);
-    //m_mesh.draw(GL_TRIANGLES);
 
   //Draw the skeleton
 
@@ -269,13 +268,14 @@ void a3_Application::onMouseButton(int button, int action, int) {
         // Set the 'down' state for the appropriate mouse button
         if (button ==0){
             if( action == GLFW_PRESS) {
-              a3Renderer.pickProg.use();
+    a3Renderer.pickProg.use();
     a3Renderer.pickProg.setViewMatrix(viewMatrix);
     a3Renderer.pickProg.setProjectionMatrix(projectionMatrix);
-    a3Renderer.pickProg.setModelMatrix(m_modelTransform);
                 pickID = a3Renderer.pickTest(theAsfApp->stylePack, m_mousePosition);
                 clickon = pickID > 0;
                 printf("clickon %s\n" , clickon ? "true" : "false");
+
+                  if (clickon) { theAsfApp -> focusBone( pickID );}
             }
             else {clickon = false;
                 printf("unclick\n");

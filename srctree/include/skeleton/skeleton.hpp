@@ -146,7 +146,7 @@ public:
 	std::vector<bone> m_bones;
 	std::map<std::string, bone * > bonemap;
 
-	void applyFrame(std::vector<frame> & clip, float pos);
+	void applyFromClip(std::vector<frame> & clip, float pos);
 	void applyPose(frame *);
 
   frame makeFrame();

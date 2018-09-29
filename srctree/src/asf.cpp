@@ -318,19 +318,29 @@ stylePack.clear();
 
 //updates
 if (skelload && m_play){
-	  m_play_pos += m_speed * 0.0002; showskel-> applyFrame( theClip, m_play_pos);
+	  m_play_pos += m_speed * 0.0004; showskel-> applyFromClip( theClip, m_play_pos);
+    m_play_pos = glm::fract( m_play_pos );
 	}
 stylePack = *(showskel->renderSkeleton( & m_mesh , tether));
 
 }
 
+  float workRot[] = {0,0,0};
 void asfApp::doGUI() {
 
-  ImGui::Begin("Joint Controls");
+  ImGui::SetNextWindowSize(ImVec2(300, 50), ImGuiSetCond_FirstUseEver);
+  ImGui::Begin(string("Joint Controls : ").append(currentJoint).c_str());
   
-  if (skelload && currentFrame.count(currentJoint) && ImGui::SliderFloat3("Bone Rotation", &currentFrame[currentJoint][0], -M_PI, M_PI, "%.3f", 1.0f )){
-      //TODO:: update the entries in the curves?
-      }
+//  float * workRot = &(showskel->bonemap[currentJoint]->rotation[0]);
+ // if (skelload && currentJoint != "" ) { 
+    if (ImGui::SliderFloat3("Bone Rotation", &workRot[0], -180 , 180 , "%.3f", 1.0f )){}
+      showskel->bonemap[currentJoint]->rotation.x = workRot[0];
+      showskel->bonemap[currentJoint]->rotation.y = workRot[1];
+      showskel->bonemap[currentJoint]->rotation.z = workRot[2];
+    //TODO:: update the entries in the curves?
+    
+
+   //   }
 
   ImGui::End();
 
@@ -338,7 +348,7 @@ void asfApp::doGUI() {
     ImGui::SetNextWindowSize(ImVec2(500, 50), ImGuiSetCond_FirstUseEver);
     ImGui::Begin("Shapes");
     if(ImGui::SliderFloat("Position", &m_play_pos, 0.f, 1.f, "%.5f", 1.0f)){
-    	showskel->applyFrame(theClip,m_play_pos);
+    	showskel->applyFromClip(theClip,m_play_pos);
     }
 
     if(ImGui::Button("Load A Clip")){
@@ -503,7 +513,20 @@ void asfApp::onScroll(double xoffset, double yoffset) {
 
 }
 
+//Joint editing funcs
+//
+void asfApp::focusBone(int i){
+if (showskel){
+  if ( i > showskel->m_bones.size()-1){
+    printf("Dont have a bone with that ID \n");
+  }
+  else{
+  currentJoint = showskel->m_bones[i].name;
+  printf("focused %s \n", currentJoint);
+  }
 
+}
+}
 void asfApp::poseToFile(pose & somePose){
  printf("asfAp postToFile to be implemented\n");
 }

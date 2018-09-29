@@ -39,6 +39,8 @@ public:
 
     std::vector<pose> workPoses;
     pose * currentWorkPose;
+
+    void focusBone( int i );
     std::string currentJoint = "root";
 
  // actors in the play:

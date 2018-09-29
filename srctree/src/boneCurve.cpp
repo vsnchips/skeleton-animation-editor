@@ -228,4 +228,7 @@ void boneCurve::movePoint( int id, glm::vec2 dv){
 
 void boneCurve::newKF (pose & newpose){
  //convert the euler angle to a quaternion  
+	const float DEGMUL = pi<float>()/180;
+  
+
 }

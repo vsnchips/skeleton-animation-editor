@@ -20,7 +20,6 @@ class app_renderer{
   // window stuff
   glm::vec2 m_viewportSize;
 
-
   //rendering options
   bool previewPick = false;
 

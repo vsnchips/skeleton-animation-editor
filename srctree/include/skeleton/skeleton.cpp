@@ -59,6 +59,7 @@ using namespace std;
 using namespace glm;
 
 Skeleton::Skeleton(string filename) {
+  m_bones.clear();
 	bone b = bone();
 	b.name = "root";
 	b.freedom |= dof_rx;
@@ -418,6 +419,7 @@ void Skeleton::readBone(ifstream &file) {
       
       b.boneID = m_bones.size();
 			m_bones.push_back(b);
+			bonemap[b.name]=&m_bones.back();
 
 			return;
 		}
@@ -430,7 +432,6 @@ void Skeleton::readBone(ifstream &file) {
 			if (head == "name") {
 				// Name of the bone
 				lineStream >> b.name;
-				bonemap[b.name]=&b;
 			}
 			else if (head == "direction") {
 				// Direction of the bone
@@ -584,25 +585,11 @@ void Skeleton::applyPose(frame * k){
 		}
 	}
 
-void Skeleton::applyFrame(std::vector<frame> & clip, float pos){
-
-	//breakpoint here
-	//printf("frame two:");
-
-	for (auto const& x : clip[0]) {
-		//std::cout << x.first;  // string (key)
-
-		//std::cout << "Xrotation " << bonemap[x.first] << std::endl;
-		//	<< ':'
-		//	<< x.second // string's value
-		//	<< std::endl ;
-	}
+void Skeleton::applyFromClip(std::vector<frame> & clip, float pos){
 
 	unsigned int maxFrame = clip.size() - 1;
 
 	unsigned int getFrame = glm::min( (unsigned int)(clip.size()-1), (unsigned int)(clip.size()*pos));
-
-	//printf ("getting frame %d:\n" ,getFrame);
 
 	frame *k = &clip[getFrame];
 
