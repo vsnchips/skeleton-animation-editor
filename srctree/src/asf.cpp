@@ -327,20 +327,21 @@ stylePack = *(showskel->renderSkeleton( & m_mesh , tether));
 
   float workRot[] = {0,0,0};
 void asfApp::doGUI() {
-
+//the bonemap definitely works.
   ImGui::SetNextWindowSize(ImVec2(300, 50), ImGuiSetCond_FirstUseEver);
   ImGui::Begin(string("Joint Controls : ").append(currentJoint).c_str());
   
-//  float * workRot = &(showskel->bonemap[currentJoint]->rotation[0]);
- // if (skelload && currentJoint != "" ) { 
-    if (ImGui::SliderFloat3("Bone Rotation", &workRot[0], -180 , 180 , "%.3f", 1.0f )){}
-      showskel->bonemap[currentJoint]->rotation.x = workRot[0];
-      showskel->bonemap[currentJoint]->rotation.y = workRot[1];
-      showskel->bonemap[currentJoint]->rotation.z = workRot[2];
-    //TODO:: update the entries in the curves?
-    
+  //bone * boneptr = showskel->bonemap[currentJoint];//the bonemap works for bones above id 15.
+  bone * boneptr = &(showskel->m_bones[showskel->findBone(currentJoint)]);
 
-   //   }
+  
+  if (boneptr && 
+      ImGui::SliderFloat3("Bone Rotation", &boneptr->rotation[0], -180 , 180 , "%.3f", 1.0f )){
+    printf("moving bone %d\n", boneptr->boneID);
+      
+    //TODO:: update the entries in the curves?
+}
+
 
   ImGui::End();
 
@@ -521,8 +522,9 @@ if (showskel){
     printf("Dont have a bone with that ID \n");
   }
   else{
+  currentJointID  = i;
   currentJoint = showskel->m_bones[i].name;
-  printf("focused %s \n", currentJoint);
+  printf("focused %s \n", currentJoint.c_str());
   }
 
 }

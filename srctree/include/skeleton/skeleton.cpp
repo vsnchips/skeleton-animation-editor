@@ -67,7 +67,7 @@ Skeleton::Skeleton(string filename) {
 	b.freedom |= dof_rz;
 	b.freedom |= dof_root;
 	m_bones.push_back(b);
-	bonemap[b.name] = &b;
+	bonemap[b.name] = &m_bones.back();
 	readASF(filename);
 }
 
@@ -170,7 +170,7 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
  boneRep.unfms.f3["ucol"] = vec3(0.8,0.8,0.8);
  boneRep.m_mesh = placeholderbone;
 stylePack.push_back(boneRep);
- boneRep.putModelMat(accumT*meshPoleRot * scale(mat4(),vec3(0.1,0.1,0.1)));
+ boneRep.putModelMat(accumT*meshPoleRot * scale(mat4(),vec3(0.03,0.03,0.03)));
  boneRep.m_mesh = m_jointmesh;
  boneRep.tag = "joint";
  boneRep.unfms.i1["id"]=b->boneID;
@@ -417,7 +417,7 @@ void Skeleton::readBone(ifstream &file) {
 			// End of the data for this bone
 			// Push the bone into the vector
       
-      b.boneID = m_bones.size();
+      //b.boneID = m_bones.size();
 			m_bones.push_back(b);
 			bonemap[b.name]=&m_bones.back();
 
@@ -429,6 +429,9 @@ void Skeleton::readBone(ifstream &file) {
 			istringstream lineStream(line);
 			lineStream >> head; // Get the first token
 
+      if (head == "id"){
+        lineStream >> b.boneID;
+      }
 			if (head == "name") {
 				// Name of the bone
 				lineStream >> b.name;

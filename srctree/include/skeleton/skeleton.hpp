@@ -92,7 +92,7 @@ struct bone {
 	std::vector<bone *> children; // Pointers to bone children
 
 	// Completion and Challenge
-	glm::vec3 rotation;          // Rotation of joint in the basis (degrees)
+	glm::vec3 rotation = glm::vec3(0,0,0);          // Rotation of joint in the basis (degrees)
 
 	// Challenge
 	glm::vec3 translation = glm::vec3(0);       // Translation (Only for the Root)
@@ -118,8 +118,6 @@ class Skeleton {
 
 private:
 
-	// Helper method
-	int findBone(std::string);
 
 	// Reading code
 	void readASF(std::string);
@@ -130,6 +128,8 @@ private:
 	void renderBone(glm::mat4 &, glm::mat4 &,bone *, cgra::Mesh * placeholderbone);
 
 public:
+	// Helper method
+	int findBone(std::string);
 	Skeleton(std::string);
 	cgra::Program * m_program;
   cgra::Mesh * m_jointmesh;

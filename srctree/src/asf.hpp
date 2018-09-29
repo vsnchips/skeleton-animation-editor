@@ -42,6 +42,7 @@ public:
 
     void focusBone( int i );
     std::string currentJoint = "root";
+   int currentJointID;
 
  // actors in the play:
     Skeleton * showskel;
