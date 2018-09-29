@@ -36,7 +36,9 @@ void app_renderer::passUniforms(cgra::Program * p, uniforms * unfms){
 
 void app_renderer::pickDraw(std::vector<drawStyle> & t){
 
-  pickProg.use(); 
+ pickProg.use();
+ // pickProg.setProjectionMatrix(projection);
+ // pickProg.setProjectionMatrix(view);
     for(drawStyle d: t){
       passUniforms(&pickProg,&d.unfms);
       if (d.m_mesh && d.tag == "joint") d.m_mesh->draw();

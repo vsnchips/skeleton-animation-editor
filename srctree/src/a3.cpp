@@ -25,14 +25,15 @@ void a3_Application::init(const char * skelfile) {
         CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
         //CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
         //CGRA_SRCDIR "/res/shaders/lambert.fs.glsl");
-        CGRA_SRCDIR "/res/shaders/lambert.fs.glsl");
+        CGRA_SRCDIR "/res/shaders/simple.fs.glsl");
 
 
     // Create a view matrix that positions the camera
     // 10 units behind the object
-    glm::mat4 viewMatrix(1);
+    viewMatrix = glm::mat4 (1);
     viewMatrix[3] = glm::vec4(0, 0, -1, 1);
     m_program.setViewMatrix(viewMatrix);
+    a3Renderer.pickProg.setViewMatrix(viewMatrix);
 
     xax = glm::vec3(1.,0.,0.);
     yax = glm::vec3(0.,1.,0.);
@@ -52,17 +53,17 @@ void a3_Application::init(const char * skelfile) {
     loadObj("res/models/sphere.obj",m_spheremesh);
 
 
-    printf("setting brush color uniform\n");
-    GLfloat idColor[4];
+//    printf("setting brush color uniform\n");
+    GLfloat idColor[3];
 
     idColor[0] = 255;
     idColor[1] = 255;
     idColor[2] = 255;
-    idColor[3] = 1.0;
-    GLuint loc = glGetUniformLocation(
-    m_program.m_program, "gColor");
-    glUniform4fv(loc, 1, idColor);
-    printf("brush color uniform set\n");
+//    idColor[3] = 1.0;
+ //GLuint loc = glGetUniformLocation(
+//    m_program.m_program, "ucol");
+ //   glUniform3fv(loc, 1, idColor);
+//    printf("brush color uniform set\n");
 
     triangleMode = GL_TRIANGLES;
 
@@ -179,17 +180,12 @@ void a3_Application::drawScene() {
       // Note: this does not draw the GUI
       doGUI();
 
-  //Draw the skeleton
-
-  theAsfApp -> updateScene();//  Draw The Skeleton
-  //m_program.use();
-  a3Renderer.execute(theAsfApp->stylePack);
 
     // Calculate the aspect ratio of the viewport;
     // width / height
     float aspectRatio = m_viewportSize.x / m_viewportSize.y;
     // Calculate the projection matrix with a field-of-view of 45 degrees
-    glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
+    projectionMatrix = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
 
 
     m_modelTransform = glm::mat4(1.0f);
@@ -204,26 +200,37 @@ void a3_Application::drawScene() {
      *    `glm::scale`                                          *
      ************************************************************/
 
-    m_modelTransform *= glm::translate(glm::mat4(),m_translation);
-    m_modelTransform *= glm::scale(m_modelTransform,glm::vec3(m_scale));
-    m_rotationMatrix = glm::mat4(glm::vec4(xax,0),glm::vec4(yax,0),glm::vec4(zax,0),glm::vec4(0.f,0.f,0.f,1.f));
-    m_modelTransform *= m_rotationMatrix;
-
-
-    glm::mat4 viewMatrix(1);
+    viewMatrix = glm::mat4(1);
     viewMatrix[3] = glm::vec4(0, 0, -1, 1);
+
+
+    viewMatrix *= glm::translate(glm::mat4(),m_translation);
+    viewMatrix *= glm::scale(m_modelTransform,glm::vec3(m_scale));
+    m_rotationMatrix = glm::mat4(glm::vec4(xax,0),glm::vec4(yax,0),glm::vec4(zax,0),glm::vec4(0.f,0.f,0.f,1.f));
+    viewMatrix *= m_rotationMatrix;
 
     // Draw the box
     m_program.use();
 
-    m_program.setViewMatrix(viewMatrix);
-    m_program.setProjectionMatrix(projectionMatrix);
-    m_program.setModelMatrix(m_modelTransform);
-    m_mesh.draw(GL_TRIANGLES);
 
+    a3Renderer.pickProg.setViewMatrix(viewMatrix);
+    a3Renderer.pickProg.setProjectionMatrix(projectionMatrix);
+    //a3Renderer.pickProg.setModelMatrix(m_modelTransform);
+    m_program.setProjectionMatrix(projectionMatrix);
+    m_program.setViewMatrix(viewMatrix);
+    m_program.setModelMatrix(m_modelTransform);
+    //m_mesh.draw(GL_TRIANGLES);
+
+  //Draw the skeleton
+
+  theAsfApp -> showskel -> setProgram( m_program );
+  theAsfApp -> updateScene();//  Draw The Skeleton
+  //m_program.use();
+  a3Renderer.execute(theAsfApp->stylePack);
    // Make sure that we're drawing with the correct
    // polygon mode
-   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  
+  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
    // Now we draw the GUI over the top of everything else
    ImGui::Render();
    // Finally, swap the front and back buffers.
@@ -262,6 +269,10 @@ void a3_Application::onMouseButton(int button, int action, int) {
         // Set the 'down' state for the appropriate mouse button
         if (button ==0){
             if( action == GLFW_PRESS) {
+              a3Renderer.pickProg.use();
+    a3Renderer.pickProg.setViewMatrix(viewMatrix);
+    a3Renderer.pickProg.setProjectionMatrix(projectionMatrix);
+    a3Renderer.pickProg.setModelMatrix(m_modelTransform);
                 pickID = a3Renderer.pickTest(theAsfApp->stylePack, m_mousePosition);
                 clickon = pickID > 0;
                 printf("clickon %s\n" , clickon ? "true" : "false");
@@ -389,7 +400,9 @@ void a3_Application::onCursorPos(double xpos, double ypos) {
             // Get the Z angle
             polarrotation.z = glm::acos(glm::dot(uprightX,glm::vec3(1.0f,0.f,0.f)));
             }  else {
-/* picking code
+
+              
+              /* picking code
                 if(pickID>=0 && pickID < theLattice.getFullSize()){
                     theLattice.getByID(pickID).move(glm::vec2(mousePositionDelta.x/height,mousePositionDelta.y/height),m_rotationMatrix,m_scale,pickDepth);
                     theLattice.vao.setRow(pickID,{  theLattice.getByID(pickID).p.x  ,

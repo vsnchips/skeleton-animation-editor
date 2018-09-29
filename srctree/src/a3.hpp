@@ -34,6 +34,9 @@ public:
     asfApp * theAsfApp;
 
     app_renderer a3Renderer;
+    glm::mat4 viewMatrix;
+    glm::mat4 projectionMatrix;
+
     bool kf_window_see = true;
     app_renderer a3_kf_renderer;
 
