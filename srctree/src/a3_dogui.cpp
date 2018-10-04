@@ -72,23 +72,11 @@ void a3_Application::doGUI() {
     ImGui::Begin("Keyframe Controls");
     if(ImGui::Button("Toggle Keyframe Editor")){
 
-      if (!keyframe_window){
-      keyframe_window = glfwCreateWindow(1000,1000, "Curve Editor", NULL, m_window) ;
-//      glfwDestroyWindow(m_window);
- //    m_window = glfwCreateWindow(1000,1000, "Pose Editor", NULL, keyframe_window) ;
- //
-        glfwMakeContextCurrent(keyframe_window);
-        m_program_sliders = cgra::Program::load_program(
-        CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
-        //CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
-        //CGRA_SRCDIR "/res/shaders/lambert.fs.glsl");
-        CGRA_SRCDIR "/res/shaders/simple.fs.glsl");
-
-
+      if (glfwGetWindowAttrib(keyframe_window,GLFW_VISIBLE)){
+      glfwHideWindow(keyframe_window);
       }
       else{
-      glfwDestroyWindow(keyframe_window);
-      keyframe_window=nullptr;
+      glfwShowWindow(keyframe_window);
       }
     }
     ImGui::End();

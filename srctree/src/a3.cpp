@@ -25,11 +25,7 @@ void a3_Application::init(const char * skelfile) {
     
     m_program = cgra::Program::load_program(
         CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
-        //CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
-        //CGRA_SRCDIR "/res/shaders/lambert.fs.glsl");
         CGRA_SRCDIR "/res/shaders/simple.fs.glsl");
-
-
 
 
     // Create a view matrix that positions the camera
@@ -129,7 +125,27 @@ void a3_Application::loadObj(const char *filename,cgra::Mesh &targetMesh) {
 
 void a3_Application::drawScene() {
 
-  glfwMakeContextCurrent(m_window);
+    // Keyframe Curve Window
+    //
+    if (glfwGetWindowAttrib(keyframe_window,GLFW_VISIBLE)){
+    glfwMakeContextCurrent( keyframe_window);
+    int w, h;
+     glfwGetFramebufferSize(keyframe_window, &w, &h);
+     glViewport(0, 0, w,h);
+     setWindowSize(1000,1000);
+     glClearColor(0.2,0,0.1, 1); // Clears the color to a dark blue
+    //  glClearDepth(1); // Clears the depth buffer to it's maximum value
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+     
+    styleCurve();
+
+    //draw some beziers.
+
+    glfwSwapBuffers(keyframe_window);
+    }
+
+    
+    glfwMakeContextCurrent(m_window);
 
       ImGui_ImplGlfwGL3_NewFrame();
       int width, height;
@@ -173,7 +189,9 @@ void a3_Application::drawScene() {
     m_rotationMatrix = glm::mat4(glm::vec4(xax,0),glm::vec4(yax,0),glm::vec4(zax,0),glm::vec4(0.f,0.f,0.f,1.f));
     viewMatrix *= m_rotationMatrix;
 
-    // Draw the box
+    
+ 
+    // Draw the skel
     m_program.use();
 
 
@@ -189,29 +207,12 @@ void a3_Application::drawScene() {
   theAsfApp -> showskel -> setProgram( m_program );
   theAsfApp -> updateScene();//  Draw The Skeleton
   
- //a3Renderer.execute(theAsfApp->stylePack);
+//  if (!glfwGetWindowAttrib(keyframe_window,GLFW_VISIBLE))
+   a3Renderer.execute(theAsfApp->stylePack);
    
    ImGui::Render();
                 
-   // Keyframe Curve Window
-    //
-    if (keyframe_window){
-    glfwMakeContextCurrent( keyframe_window);
-    int w, h;
-     // glfwGetFramebufferSize(keyframe_window, &w, &h);
-     glViewport(0, 0, 1000,1000);
-     setWindowSize(1000,1000);
-     glClearColor(0.2,0,0.1, 1); // Clears the color to a dark blue
-    //  glClearDepth(1); // Clears the depth buffer to it's maximum value
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-     
-    styleCurve();
-
-    //draw some beziers.
-
-    glfwSwapBuffers(keyframe_window);
-    }
-   glfwSwapBuffers(m_window);
+  glfwSwapBuffers(m_window);
 
 }
 

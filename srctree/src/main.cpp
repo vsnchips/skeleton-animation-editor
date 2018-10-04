@@ -59,6 +59,7 @@ int main(int argc, const char** argv) {
     if (window == nullptr) {
         return 1;
     }
+
     glfwMakeContextCurrent(window);
 
     // Initialize GLEW
@@ -107,19 +108,38 @@ int main(int argc, const char** argv) {
 
     // Enabe depth testing
     glEnable(GL_DEPTH_TEST);
-
     // Enable backface culling
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    // Faces with a clockwise winding order when viewed are
-    // front-facing
     glFrontFace(GL_CCW);
 
     {
         // Create the application object
         a3_Application app(window);
+    
+  glfwWindowHint(GLFW_DOUBLEBUFFER, GL_TRUE);
+  app.keyframe_window = glfwCreateWindow(1000,1000, "Curve Editor", NULL,window) ;
+   glfwMakeContextCurrent(app.keyframe_window);
 
-        // Tell GLFW to pass along a pointer to `app` in callbacks
+   // Enable depth testing
+    glEnable(GL_DEPTH_TEST);
+    // Enable backface culling
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CCW);
+
+
+     app.m_program_sliders = cgra::Program::load_program(
+     CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
+     //CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
+     //CGRA_SRCDIR "/res/shaders/lambert.fs.glsl");
+     CGRA_SRCDIR "/res/shaders/simple.fs.glsl");
+
+
+     
+     
+     
+     // Tell GLFW to pass along a pointer to `app` in callbacks
         glfwSetWindowUserPointer(window, reinterpret_cast<void *>(&app));
 
         try {
