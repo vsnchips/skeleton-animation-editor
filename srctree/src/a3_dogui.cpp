@@ -76,6 +76,15 @@ void a3_Application::doGUI() {
       keyframe_window = glfwCreateWindow(1000,1000, "Curve Editor", NULL, m_window) ;
 //      glfwDestroyWindow(m_window);
  //    m_window = glfwCreateWindow(1000,1000, "Pose Editor", NULL, keyframe_window) ;
+ //
+        glfwMakeContextCurrent(keyframe_window);
+        m_program_sliders = cgra::Program::load_program(
+        CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
+        //CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
+        //CGRA_SRCDIR "/res/shaders/lambert.fs.glsl");
+        CGRA_SRCDIR "/res/shaders/simple.fs.glsl");
+
+
       }
       else{
       glfwDestroyWindow(keyframe_window);

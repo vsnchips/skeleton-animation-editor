@@ -24,7 +24,6 @@ public:
     
     int pickKF;
 
-
     int lx = 2,ly = 2,lz = 2;
     float pickDepth=1;
     GLint triangleMode;
@@ -48,6 +47,7 @@ public:
 
     // The shader program used for drawing
     cgra::Program m_program;
+    cgra::Program m_program_sliders;
     // The mesh data
     cgra::Mesh m_mesh;
     cgra::Mesh m_spheremesh;

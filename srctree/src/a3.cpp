@@ -20,12 +20,16 @@ void a3_Application::init(const char * skelfile) {
     theAsfApp->init(skelfile);
     // Load the shader program
     // The use of CGRA_SRCDIR "/path/to/shader" is so you don't
-    // have to run the program from a specific folder.
+    // have to run the program from a specific folder
+    ///
+    
     m_program = cgra::Program::load_program(
         CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
         //CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
         //CGRA_SRCDIR "/res/shaders/lambert.fs.glsl");
         CGRA_SRCDIR "/res/shaders/simple.fs.glsl");
+
+
 
 
     // Create a view matrix that positions the camera
@@ -71,46 +75,6 @@ void a3_Application::init(const char * skelfile) {
 }
 
 void a3_Application::createCube() {
-    /************************************************************
-     * 2. Create a Mesh                                         *
-     *                                                          *
-     * Add the remaining triangles for the cube                 *
-     ************************************************************/
-
-    // Use the correct number of rows for the full
-    // cube.
-    cgra::Matrix<double> vertices(8, 3);
-    cgra::Matrix<unsigned int> triangles(12, 3);
-
-    vertices.setRow(0, {  1.0,  1.0,  1.0 });
-    vertices.setRow(1, { -1.0, -1.0,  1.0 });
-    vertices.setRow(2, {  1.0, -1.0,  1.0 });
-
-    vertices.setRow(3, { -1.0, 1.0,  1.0 });
-    vertices.setRow(4, { 1.0, 1.0,  -1.0 });
-    vertices.setRow(5, { -1.0, -1.0,  -1.0 });
-
-    vertices.setRow(6, { 1.0, -1.0,  -1.0 });
-    vertices.setRow(7, { -1.0, 1.0,  -1.0 });
-
-    // Remember to make sure that the order of the vertices
-    // is counter-clockwise when looking at the front of the
-    // triangle.
-    triangles.setRow(0, { 0, 1, 2 });
-    triangles.setRow(1, { 0, 3, 1 });
-    triangles.setRow(2, { 4, 6, 5 });
-    triangles.setRow(3, { 4, 5, 7 });
-    triangles.setRow(4, { 0, 2, 6 });
-    triangles.setRow(5, { 0, 6, 4 });
-    triangles.setRow(6, { 3, 5, 1 });
-    triangles.setRow(7, { 3, 7, 5 });
-    triangles.setRow(8, { 0, 7, 3 });
-    triangles.setRow(9, { 0, 4, 7 });
-    triangles.setRow(10, { 2, 1, 5 });
-    triangles.setRow(11, { 2, 5, 6 });
-
-    m_mesh.maxdist = sqrt(3);
-    m_mesh.setData(vertices, triangles);
 
 }
 
@@ -225,35 +189,23 @@ void a3_Application::drawScene() {
   theAsfApp -> showskel -> setProgram( m_program );
   theAsfApp -> updateScene();//  Draw The Skeleton
   
-   a3Renderer.execute(theAsfApp->stylePack);
-   // Make sure that we're drawing with the correct
-   // polygon mode
-  
-  //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-   // Now we draw the GUI over the top of everything else
+ //a3Renderer.execute(theAsfApp->stylePack);
+   
    ImGui::Render();
-   // Finally, swap the front and back buffers.
-   // We've been drawing to the back buffer so far, so this
-   // makes it visible.
-                   // Next frame we draw to the other buffer
-	
-    
-                // Keyframe Curve Window
+                
+   // Keyframe Curve Window
     //
     if (keyframe_window){
     glfwMakeContextCurrent( keyframe_window);
-      int w, h;
+    int w, h;
      // glfwGetFramebufferSize(keyframe_window, &w, &h);
      glViewport(0, 0, 1000,1000);
-     // setWindowSize(w,h);
+     setWindowSize(1000,1000);
      glClearColor(0.2,0,0.1, 1); // Clears the color to a dark blue
-      glClearDepth(1); // Clears the depth buffer to it's maximum value
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //  glClearDepth(1); // Clears the depth buffer to it's maximum value
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
      
-   // a3_kf_renderer.c_prog = &m_program;
-    styleCurve() ;
-    //a3Renderer.execute(theAsfApp -> stylePack);
-    //a3_kf_renderer.execute(theAsfApp -> stylePack);
+    styleCurve();
 
     //draw some beziers.
 
@@ -351,11 +303,6 @@ void a3_Application::onCursorPos(double xpos, double ypos) {
             nowpos.y = nowpos.y + m_translation.y;
             fclick.y = fclick.y + m_translation.y;
 
-            nowpos.x /= m_mesh.maxdist;
-            nowpos.y /= m_mesh.maxdist;
-
-            fclick.x /= m_mesh.maxdist;
-            fclick.y /= m_mesh.maxdist;
 
             nowpos.x /=m_scale;
             nowpos.y /=m_scale;
@@ -386,9 +333,9 @@ void a3_Application::onCursorPos(double xpos, double ypos) {
             }
 
             glm::vec3 n = glm::cross(apA3,apB3);
-            xax= glm::rotate(sxa,t,n);
-            yax= glm::rotate(sya,t,n);
-            zax= glm::rotate(sza,t,n);
+            xax = glm::rotate(sxa,t,n);
+            yax = glm::rotate(sya,t,n);
+            zax = glm::rotate(sza,t,n);
 
             //Transform modified by arcball tnwiddling
             //This codes updates the polar coords:

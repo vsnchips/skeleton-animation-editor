@@ -101,14 +101,15 @@ void a3_Application::styleCurve(){
  // if (currentViewCurve){
 //    vector<drawStyle> cs = currentViewCurve->getStyle();
 //
-   m_program.use();
-   a3Renderer.c_prog = &m_program;
-   a3_kf_renderer.c_prog = &m_program;
+   m_program_sliders.use();
+   //drawList controls = testDrawList(&m_spheremesh);
    drawList controls = testDrawList(&theAsfApp->m_jointMesh);
+   
+   a3_kf_renderer.c_prog = &m_program_sliders;
 
    //theAsfApp->m_jointMesh.draw();
    a3_kf_renderer.execute( controls );
-//   a3Renderer.execute( theAsfApp->stylePack );
+   m_spheremesh.draw(GL_TRIANGLES);
  
   //}
 
