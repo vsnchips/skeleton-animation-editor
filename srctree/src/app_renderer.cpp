@@ -37,14 +37,13 @@ void app_renderer::passUniforms(cgra::Program * p, uniforms * unfms){
 void app_renderer::pickDraw(std::vector<drawStyle> & t){
 
  pickProg.use();
- // pickProg.setProjectionMatrix(projection);
- // pickProg.setProjectionMatrix(view);
     for(drawStyle d: t){
       passUniforms(&pickProg,&d.unfms);
       if (d.m_mesh && d.tag == "joint") d.m_mesh->draw();
     }
 
 }
+
 void app_renderer::execute(std::vector<drawStyle> & target){
 
   // Pick Preview
@@ -59,7 +58,6 @@ void app_renderer::execute(std::vector<drawStyle> & target){
         if (c_prog != d.prog){
           d.prog->use();
           c_prog = d.prog;
-          //d.prog->setViewMatrix(currentProjViewMat);
         }
       }
 
@@ -104,9 +102,6 @@ if (!(pixel[0]==255) || !(pixel[1]==255) || !(pixel[2]==255) ){
 
 }
 
-//m_program.use();
-
-//glfwSwapBuffers(m_window);
 printf("Picked id %d\n", pickedID );
 printf("Picked pickDepth %f\n", pickDepth );
 return pickedID;

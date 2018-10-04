@@ -128,7 +128,7 @@ int main(int argc, const char** argv) {
       if (argc > 1){skelPath = argv[1];}
       app.init(skelPath);
             // Loop until the GLFW window is marked to be closed
-            while (!glfwWindowShouldClose(window)) {
+            while (!glfwWindowShouldClose(app.m_window)) {
                 // Poll GLFW for input events
                 glfwPollEvents();                // Draw the scene.
                 app.drawScene();

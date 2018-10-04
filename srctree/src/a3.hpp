@@ -42,7 +42,7 @@ public:
 
     /////////////////////////////////////////// Part 1 Vars
     // The window object managed by GLFW
-    GLFWwindow *m_window;
+    GLFWwindow * m_window;
 
     GLFWwindow *  keyframe_window;
 
@@ -119,6 +119,7 @@ public:
 
     void a3_saveKeyFrames();
 
+    drawList testDrawList(cgra::Mesh * ctlMesh);
     // Keyframe window methods
     //
     glm::vec2 m_kfMousePos;

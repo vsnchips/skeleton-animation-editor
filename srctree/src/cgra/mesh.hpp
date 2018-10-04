@@ -124,7 +124,7 @@ namespace cgra {
 
         // Move assignment, same as the move constructor
         // except the GPU objects are released first.
-        Mesh & operator=(Mesh &&m) {
+        Mesh & operator = (Mesh &&m) {
             m_vertices = std::move(m.m_vertices);
             m_indices = std::move(m.m_indices);
             m_drawWireframe = m.m_drawWireframe;

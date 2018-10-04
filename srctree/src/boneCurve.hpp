@@ -31,6 +31,7 @@ class boneCurve{
     std::vector<float> integration;  //one for every kf.
 
     std::vector<glm::quat> qBezFromCats( glm::quat ca, glm::quat a, glm::quat b, glm::quat cb);
+
     void measure(int );
     void integrate(int ); //includes a measure method
     void measure();

@@ -179,21 +179,13 @@ stylePack.push_back(boneRep);
 
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				0.8, 0.8, 0.8);
-	//m_program->setModelMatrix(accumT*meshPoleRot);
-//	m_program->setModelMatrix(accumT);
-	//placeholderbone->draw();
 
 
 	//Draw the bone's Tait-Bryan basis.
-	//
 
  	mat4 myBasis = accumT*eulerBasis * scale(mat4(),vec3(axisSize));			//Draw the axes back at the joint
 
-//	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
-//				0 , 0, 1);
 	mat4 zBasis = myBasis*rotate(-0.5f* pi<float>() , vec3(1,0,0)) ;
-//	m_program->setModelMatrix(zBasis);
-	//placeholderbone->draw();
 
 //////////////////////DRAW STYLE//////////////////////////////
  drawStyle zb;

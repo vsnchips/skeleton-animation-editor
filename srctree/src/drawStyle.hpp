@@ -56,3 +56,6 @@ public:
   
   
 };
+
+
+typedef std::vector<drawStyle> drawList;

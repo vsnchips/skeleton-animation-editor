@@ -72,7 +72,15 @@ void a3_Application::doGUI() {
     ImGui::Begin("Keyframe Controls");
     if(ImGui::Button("Toggle Keyframe Editor")){
 
-      keyframe_window = glfwCreateWindow(1920,300, "Curve Editor", NULL, NULL) ;
+      if (!keyframe_window){
+      keyframe_window = glfwCreateWindow(1000,1000, "Curve Editor", NULL, m_window) ;
+//      glfwDestroyWindow(m_window);
+ //    m_window = glfwCreateWindow(1000,1000, "Pose Editor", NULL, keyframe_window) ;
+      }
+      else{
+      glfwDestroyWindow(keyframe_window);
+      keyframe_window=nullptr;
+      }
     }
     ImGui::End();
 

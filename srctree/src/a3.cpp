@@ -224,39 +224,42 @@ void a3_Application::drawScene() {
 
   theAsfApp -> showskel -> setProgram( m_program );
   theAsfApp -> updateScene();//  Draw The Skeleton
-  //m_program.use();
-  a3Renderer.execute(theAsfApp->stylePack);
+  
+   a3Renderer.execute(theAsfApp->stylePack);
    // Make sure that we're drawing with the correct
    // polygon mode
   
-  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
    // Now we draw the GUI over the top of everything else
    ImGui::Render();
    // Finally, swap the front and back buffers.
    // We've been drawing to the back buffer so far, so this
    // makes it visible.
                    // Next frame we draw to the other buffer
-   glfwSwapBuffers(m_window);
 	
     
-                
-                
-                
-                
-                
-                
                 // Keyframe Curve Window
     //
     if (keyframe_window){
     glfwMakeContextCurrent( keyframe_window);
-      glClearColor(0, 0, 0.1, 1); // Clears the color to a dark blue
+      int w, h;
+     // glfwGetFramebufferSize(keyframe_window, &w, &h);
+     glViewport(0, 0, 1000,1000);
+     // setWindowSize(w,h);
+     glClearColor(0.2,0,0.1, 1); // Clears the color to a dark blue
       glClearDepth(1); // Clears the depth buffer to it's maximum value
-      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-     styleCurve() ;
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+     
+   // a3_kf_renderer.c_prog = &m_program;
+    styleCurve() ;
+    //a3Renderer.execute(theAsfApp -> stylePack);
+    //a3_kf_renderer.execute(theAsfApp -> stylePack);
+
+    //draw some beziers.
 
     glfwSwapBuffers(keyframe_window);
-    //draw some beziers.
     }
+   glfwSwapBuffers(m_window);
 
 }
 
@@ -387,7 +390,7 @@ void a3_Application::onCursorPos(double xpos, double ypos) {
             yax= glm::rotate(sya,t,n);
             zax= glm::rotate(sza,t,n);
 
-            //Transform modified by arcball twiddling
+            //Transform modified by arcball tnwiddling
             //This codes updates the polar coords:
 
             //1.Get Latitude and Longtitude

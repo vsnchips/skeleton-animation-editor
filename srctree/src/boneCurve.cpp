@@ -55,12 +55,12 @@ vector<quat> boneCurve::qBezFromCats( quat ca, quat a, quat b, quat cb){
 void boneCurve::measure(){
 
   dds.clear();
-  for (int j =1; j <= cats.size()-3; j++){
+  for (int j =1; j <= qcats.size()-3; j++){
     
     float sd = 1/(samples+1);
 
     vector<quat> qb;
-    qb = qBezFromCats( cats[j-1], cats[j], cats[j+1], cats[j+2] );
+    qb = qBezFromCats( qcats[j-1], qcats[j], qcats[j+1], qcats[j+2] );
 
     for (float t = 0 ; t < 1; t+=sd){
       dds.push_back(
@@ -88,14 +88,14 @@ void boneCurve::integrate(){
 
 quat boneCurve::getQuat( float t){
 
-  // t should always be < cats.size-3;
+  // t should always be < qcats.size-3;
   // the floor call means you can never reach the end.
     int s = floor( t );
     float segt = s+fract(t);
 
-    if (s >= cats.size()-3){ segt=1; s= cats.size()-3;}
+    if (s >= qcats.size()-3){ segt=1; s= qcats.size()-3;}
 
-    vector<quat> qs=qBezFromCats(cats[s], cats[s+1], cats[+2], cats[s+3]);
+    vector<quat> qs=qBezFromCats(qcats[s], qcats[s+1], qcats[+2], qcats[s+3]);
     //return testSpline( segt, qs[0], qs[1], qs[2], qs[3]);
     return testSpline( segt, qs);
 
