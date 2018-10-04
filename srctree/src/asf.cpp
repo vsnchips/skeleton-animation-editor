@@ -56,8 +56,12 @@ void asfApp::loadSkeleton(){
 
      NFD_OpenDialog( "*", "", &skelFile);
      printf("\nloading %s\n",skelFile);
+     loadSkeleton(skelFile);
+}
+
+void asfApp::loadSkeleton(const char * skelFile){
      showskel = new Skeleton(skelFile); //hmmmm.. malloc perhaps?
-     showskel->setProgram(m_program);
+//     showskel->setProgram(m_program);
      showskel->m_bonemesh = &m_mesh;
      showskel->m_jointmesh = &m_jointMesh;
      skelload = true;
@@ -155,7 +159,11 @@ void asfApp::pause(){
 	m_play = false;
 }
 
-void asfApp::init() {
+void asfApp::init(const char * skelFile) {
+    
+    if (skelFile) loadSkeleton(skelFile);
+    else loadSkeleton();
+  
     // Load the shader rogram
     // The use of CGRA_SRCDIR "/path/to/shader" is so you don't
     // have to run the program from a specific folder.
@@ -186,7 +194,6 @@ void asfApp::init() {
     static char sphere[] = "../srctree/res/models/sphere.obj";
     m_jointMesh = loadObj(sphere);
 
-    loadSkeleton();
 
     sittingPose["lfemur"] = {-90,30,-10};
     sittingPose["rfemur"] = {-90,-30,10};
@@ -266,7 +273,7 @@ void asfApp::createCube() {
     m_mesh.setData(vertices, triangles);
 }
 
-cgra::Mesh asfApp::loadObj(const char *filename) {
+cgra::Mesh asfApp::loadObj(char *filename) {
 
     cgra::Mesh newMesh;
 
@@ -311,37 +318,38 @@ stylePack.clear();
 
 //updates
 if (skelload && m_play){
-	  m_play_pos += m_speed * 0.0002; showskel-> applyFrame( theClip, m_play_pos);
+	  m_play_pos += m_speed * 0.0004; showskel-> applyFromClip( theClip, m_play_pos);
+    m_play_pos = glm::fract( m_play_pos );
 	}
-
-//Deprecated draw stuff
-	float aspectRatio = m_viewportSize.x / m_viewportSize.y;
-    glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
-    // Create a view matrix that positions the camera
-    // 10 units behind the object
-    glm::mat4 viewMatrix(1);
-    viewMatrix[3] = glm::vec4(0, 0, -10, 1);//translate the view
-    viewMatrix *= glm::scale(viewMatrix,glm::vec3(m_scale));//zoom rel origin
-    m_rotationMatrix = glm::mat4(glm::vec4(xax,0),glm::vec4(yax,0),glm::vec4(zax,0),glm::vec4(0.f,0.f,0.f,1.f));
-     viewMatrix *= m_rotationMatrix;
-    viewMatrix *= glm::translate(glm::mat4(),m_translation);
-    m_program.setViewMatrix(viewMatrix);
-
-    if( skelload && showskel -> m_bones.size() > 0){
-    showskel->m_program->setProjectionMatrix(projectionMatrix);
-//	printf("there are %d bones\n", showskel->m_bones.size());
-	   stylePack = *showskel->renderSkeleton( & m_mesh , tether);
-    }
+stylePack = *(showskel->renderSkeleton( & m_mesh , tether));
 
 }
 
+  float workRot[] = {0,0,0};
 void asfApp::doGUI() {
+//the bonemap definitely works.
+  ImGui::SetNextWindowSize(ImVec2(300, 50), ImGuiSetCond_FirstUseEver);
+  ImGui::Begin(string("Joint Controls : ").append(currentJoint).c_str());
+  
+  //bone * boneptr = showskel->bonemap[currentJoint];//the bonemap works for bones above id 15.
+  bone * boneptr = &(showskel->m_bones[showskel->findBone(currentJoint)]);
+
+  
+  if (boneptr && 
+      ImGui::SliderFloat3("Bone Rotation", &boneptr->rotation[0], -180 , 180 , "%.3f", 1.0f )){
+    printf("moving bone %d\n", boneptr->boneID);
+      
+    //TODO:: update the entries in the curves?
+}
+
+
+  ImGui::End();
 
     // --- Clip Controls
     ImGui::SetNextWindowSize(ImVec2(500, 50), ImGuiSetCond_FirstUseEver);
     ImGui::Begin("Shapes");
     if(ImGui::SliderFloat("Position", &m_play_pos, 0.f, 1.f, "%.5f", 1.0f)){
-    	showskel->applyFrame(theClip,m_play_pos);
+    	showskel->applyFromClip(theClip,m_play_pos);
     }
 
     if(ImGui::Button("Load A Clip")){
@@ -506,14 +514,57 @@ void asfApp::onScroll(double xoffset, double yoffset) {
 
 }
 
-frame asfApp::getPose(){
+//Joint editing funcs
+//
+void asfApp::focusBone(int i){
+if (showskel){
+  if ( i > showskel->m_bones.size()-1){
+    printf("Dont have a bone with that ID \n");
+  }
+  else{
+  currentJointID  = i;
+  currentJoint = showskel->m_bones[i].name;
+  printf("focused %s \n", currentJoint.c_str());
+  }
+
+}
+}
+void asfApp::poseToFile(pose & somePose){
+ printf("asfAp postToFile to be implemented\n");
+}
+
+void asfApp::poseToBones(pose & somePose){
+ printf("asfAp poseToBones to be tested\n");
+ 
+   boneCurveMap.clear();
+ for (const auto x : somePose.my_frame){
+  boneCurveMap[x.first].newKF(somePose);     // Passing the whole map being iterated into the thing it maps to. This is either messy, or convenient? 
+ 
+ }
+}
+
+int asfApp::getFrame(frame * dest){
 
 frame saveFrame;
 if (skelload == true) {
   saveFrame = showskel->makeFrame();
+  *dest  = saveFrame;
 } else {  
   cout << (" No skeleton is posing!");
+  return -1;
 }
-return saveFrame;
+return 0;
+}
 
+void asfApp::newWorkPose(){
+  pose newpose;
+   int att = getFrame(   &newpose.my_frame   );
+   newpose.index = workPoses.size()+1;
+   if (att>-1) workPoses.push_back(newpose);
 }
+
+void asfApp::setWorkPose(int i, frame newframe){
+  workPoses[i].my_frame = newframe;
+}
+
+

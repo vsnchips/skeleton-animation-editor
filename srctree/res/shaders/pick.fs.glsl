@@ -18,29 +18,11 @@ uniform vec3 ucol;
 uniform int id;
 
 void main() {
-    vec3 normal = normalize(fragNormal);
-    vec3 lightDir = normalize(-lightDir);
 
-    float lambertian = max(dot(lightDir,normal), 0.0);
-    float specular = 0.0;
-
-    if (lambertian > 0.0) {
-        vec3 viewDir = normalize(-fragPosition);
-
-        vec3 halfDir = normalize(lightDir + viewDir);
-        float specAngle = max(dot(halfDir, normal), 0.0);
-
-        specular = pow(specAngle, shininess);
-    }
-
-    vec3 fragColor = ucol + ambientColor +
-        lambertian * diffuseColor +
-        specular * specColor;
-
-    fragColor *= 0.01;
+    vec3 fragColor = vec3(0);
     
-    fragColor.g = float(5)/255.0;
-    fragColor.g *= id;
+    fragColor.r = float(1)/255.0;
+    fragColor.r *= id;
 
     color = vec4(fragColor, 1.0);
 }

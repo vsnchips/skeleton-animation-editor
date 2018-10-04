@@ -14,10 +14,11 @@ class app_renderer{
 
   cgra::Program pickProg;
 
+  glm::mat4 projection;
+  glm::mat4 view;
 
   // window stuff
   glm::vec2 m_viewportSize;
-
 
   //rendering options
   bool previewPick = false;

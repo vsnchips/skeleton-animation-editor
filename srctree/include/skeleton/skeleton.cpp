@@ -59,6 +59,7 @@ using namespace std;
 using namespace glm;
 
 Skeleton::Skeleton(string filename) {
+  m_bones.clear();
 	bone b = bone();
 	b.name = "root";
 	b.freedom |= dof_rx;
@@ -66,7 +67,7 @@ Skeleton::Skeleton(string filename) {
 	b.freedom |= dof_rz;
 	b.freedom |= dof_root;
 	m_bones.push_back(b);
-	bonemap[b.name] = &b;
+	bonemap[b.name] = &m_bones.back();
 	readASF(filename);
 }
 
@@ -156,16 +157,20 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
  	 //tip calls for the pole
 	 mat4 tip = rotate(latr, vec3(1,0,0));
 	 mat4 spin = rotate(lonr, vec3(0,1,0));
-	meshPoleRot = myR * spin*tip * scale(mat4(),vec3(0.1,b->length,0.1));
+
+   //meshPoleRot = myR * spin*tip * scale(mat4(),vec3(0.1,b->length,0.1));
+   meshPoleRot = myR * spin*tip ;
+   mat4 scaleBone = scale(mat4(),vec3(0.1,b->length,0.1));
 
  	//now draw the bone
 
  drawStyle boneRep;
- boneRep.putModelMat(accumT*meshPoleRot);
+ boneRep.putModelMat(accumT*meshPoleRot*scaleBone);
  boneRep.unfms.f3.clear();
  boneRep.unfms.f3["ucol"] = vec3(0.8,0.8,0.8);
  boneRep.m_mesh = placeholderbone;
 stylePack.push_back(boneRep);
+ boneRep.putModelMat(accumT*meshPoleRot * scale(mat4(),vec3(0.03,0.03,0.03)));
  boneRep.m_mesh = m_jointmesh;
  boneRep.tag = "joint";
  boneRep.unfms.i1["id"]=b->boneID;
@@ -174,7 +179,7 @@ stylePack.push_back(boneRep);
 
 	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
 				0.8, 0.8, 0.8);
-	m_program->setModelMatrix(accumT*meshPoleRot);
+	//m_program->setModelMatrix(accumT*meshPoleRot);
 //	m_program->setModelMatrix(accumT);
 	//placeholderbone->draw();
 
@@ -184,10 +189,10 @@ stylePack.push_back(boneRep);
 
  	mat4 myBasis = accumT*eulerBasis * scale(mat4(),vec3(axisSize));			//Draw the axes back at the joint
 
-	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
-				0 , 0, 1);
+//	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
+//				0 , 0, 1);
 	mat4 zBasis = myBasis*rotate(-0.5f* pi<float>() , vec3(1,0,0)) ;
-	m_program->setModelMatrix(zBasis);
+//	m_program->setModelMatrix(zBasis);
 	//placeholderbone->draw();
 
 //////////////////////DRAW STYLE//////////////////////////////
@@ -199,9 +204,9 @@ stylePack.push_back(boneRep);
 stylePack.push_back(zb);
 //////////////////////////////////////////////////////////////
 
-	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
-				0 , 1, 0);
-	m_program->setModelMatrix(myBasis);
+//	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
+//				0 , 1, 0);
+//	m_program->setModelMatrix(myBasis);
 	//placeholderbone->draw();
 
 //////////////////////DRAW STYLE//////////////////////////////
@@ -213,10 +218,10 @@ stylePack.push_back(zb);
 stylePack.push_back(yb);
 //////////////////////////////////////////////////////////////
 
-	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
-				1 , 0, 0);
+//	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
+//				1 , 0, 0);
 	mat4 xBasis=myBasis*rotate(0.5f* pi<float>() , vec3(0,0,1)) ;
-	m_program->setModelMatrix(xBasis);
+//	m_program->setModelMatrix(xBasis);
 	//placeholderbone->draw();
 
 //////////////////////DRAW STYLE//////////////////////////////
@@ -412,8 +417,9 @@ void Skeleton::readBone(ifstream &file) {
 			// End of the data for this bone
 			// Push the bone into the vector
       
-      b.boneID = m_bones.size();
+      //b.boneID = m_bones.size();
 			m_bones.push_back(b);
+			bonemap[b.name]=&m_bones.back();
 
 			return;
 		}
@@ -423,10 +429,12 @@ void Skeleton::readBone(ifstream &file) {
 			istringstream lineStream(line);
 			lineStream >> head; // Get the first token
 
+      if (head == "id"){
+        lineStream >> b.boneID;
+      }
 			if (head == "name") {
 				// Name of the bone
 				lineStream >> b.name;
-				bonemap[b.name]=&b;
 			}
 			else if (head == "direction") {
 				// Direction of the bone
@@ -580,25 +588,11 @@ void Skeleton::applyPose(frame * k){
 		}
 	}
 
-void Skeleton::applyFrame(std::vector<frame> & clip, float pos){
-
-	//breakpoint here
-	//printf("frame two:");
-
-	for (auto const& x : clip[0]) {
-		//std::cout << x.first;  // string (key)
-
-		//std::cout << "Xrotation " << bonemap[x.first] << std::endl;
-		//	<< ':'
-		//	<< x.second // string's value
-		//	<< std::endl ;
-	}
+void Skeleton::applyFromClip(std::vector<frame> & clip, float pos){
 
 	unsigned int maxFrame = clip.size() - 1;
 
 	unsigned int getFrame = glm::min( (unsigned int)(clip.size()-1), (unsigned int)(clip.size()*pos));
-
-	//printf ("getting frame %d:\n" ,getFrame);
 
 	frame *k = &clip[getFrame];
 

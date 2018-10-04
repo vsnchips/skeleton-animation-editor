@@ -1,11 +1,17 @@
 #pragma once
 
+#include <string>
+#include <vector>
+#include <map>
+
 #include "cgra/mesh.hpp"
 #include "cgra/shader.hpp"
 #include "drawStyle.hpp"
 #include <glm/glm.hpp>
 
 #include <skeleton.hpp>
+
+#include "boneCurve.hpp"
 
 class asfApp {
 public:
@@ -19,6 +25,7 @@ public:
     void prevPose();
     void nextPose();
     void loadAnimation();
+    void loadSkeleton(const char *);
     void loadSkeleton();
     void play();
     void pause();
@@ -30,6 +37,13 @@ public:
 
     std::vector<frame> theClip;
 
+    std::vector<pose> workPoses;
+    pose * currentWorkPose;
+
+    void focusBone( int i );
+    std::string currentJoint = "root";
+    int currentJointID;
+
  // actors in the play:
     Skeleton * showskel;
     bool skelload =  false;
@@ -40,6 +54,7 @@ public:
 // glm view stuff:
     glm::vec2 m_viewportSize;
     glm::vec2 m_mousePosition;
+    glm::vec2 m_kfMousePos;
     glm::vec3 m_translation;
     float m_scale;
 
@@ -77,10 +92,10 @@ public:
         m_viewportSize.y = float(height);
     }
 
-    void init();
+    void init(const char *);
 
     void createCube();
-    cgra::Mesh loadObj(const char *filename);
+    cgra::Mesh loadObj( char *filename);
 
     std::vector<drawStyle> stylePack;
     void updateScene();
@@ -94,5 +109,16 @@ public:
 
     void onScroll(double xoffset, double yoffset);
 
-    frame getPose();
+    int getFrame(frame * dest);
+
+    void setWorkPose(int, frame);
+
+    void newWorkPose();
+
+    std::map<std::string,boneCurve> boneCurveMap;
+
+    void poseToFile( pose & somePose);
+    void poseToBones( pose & somePose);
+
+    void calcJointsFromXYZ();
 };

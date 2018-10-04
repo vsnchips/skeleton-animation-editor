@@ -51,6 +51,7 @@
 #include <cgra/mesh.hpp>
 #include <cgra/shader.hpp>
 
+
 // Needed for Completion/Challenge
 // We use bitmasking to work out the Degrees of Freedom
 // To work out if a bone b has a y-axis dof, simply:
@@ -92,54 +93,35 @@ struct bone {
 	std::vector<bone *> children; // Pointers to bone children
 
 	// Completion and Challenge
-	glm::vec3 rotation;          // Rotation of joint in the basis (degrees)
+	glm::vec3 rotation = glm::vec3(0,0,0);          // Rotation of joint in the basis (degrees)
 
 	// Challenge
 	glm::vec3 translation = glm::vec3(0);       // Translation (Only for the Root)
 	glm::vec3 rotation_max;      // Maximum value for rotation for this joint (degrees)
 	glm::vec3 rotation_min;      // Minimum value for rotation for this joint (degrees)
 
-};
-
-
-struct Pose{
-	glm::vec3 lsh;
-        glm::vec3 rsh;
-
-	glm::vec3 lelb;
-        glm::vec3 relb;
-
-	glm::vec3 lhand;
-        glm::vec3 rhand;
-
-	glm::vec3 lhip;
-        glm::vec3 rhip;
-
-	glm::vec3 lknee;
-        glm::vec3 rknee;
-
-	glm::vec3 lankle;
-        glm::vec3 rankle;
-/*
-	glm::vec3 lhip;
-        glm::vec3 rhip;
-
-	glm::vec3 lhip;
-        glm::vec3 rhip;
-	*/
+  glm::mat4 precalcthis;
+  glm::mat4 tweak;
 
 };
+
+
 
 #include <map>
 typedef std::map<std::string, std::vector<float>> frame;
+
+class pose{
+ public:
+   frame my_frame;
+   int index;
+
+};
 
 
 class Skeleton {
 
 private:
 
-	// Helper method
-	int findBone(std::string);
 
 	// Reading code
 	void readASF(std::string);
@@ -150,6 +132,8 @@ private:
 	void renderBone(glm::mat4 &, glm::mat4 &,bone *, cgra::Mesh * placeholderbone);
 
 public:
+	// Helper method
+	int findBone(std::string);
 	Skeleton(std::string);
 	cgra::Program * m_program;
   cgra::Mesh * m_jointmesh;
@@ -166,7 +150,7 @@ public:
 	std::vector<bone> m_bones;
 	std::map<std::string, bone * > bonemap;
 
-	void applyFrame(std::vector<frame> & clip, float pos);
+	void applyFromClip(std::vector<frame> & clip, float pos);
 	void applyPose(frame *);
 
   frame makeFrame();
