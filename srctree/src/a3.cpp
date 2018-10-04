@@ -268,6 +268,8 @@ void a3_Application::onMouseButton(int button, int action, int) {
         // Set the 'down' state for the appropriate mouse button
         if (button ==0){
             if( action == GLFW_PRESS) {
+
+              glfwMakeContextCurrent(m_window);
     a3Renderer.pickProg.use();
     a3Renderer.pickProg.setViewMatrix(viewMatrix);
     a3Renderer.pickProg.setProjectionMatrix(projectionMatrix);
@@ -292,6 +294,7 @@ void a3_Application::onCursorPos(double xpos, double ypos) {
      * Change `translation`, `scale` and `rotation` based on  *
      * `mousePositionDelta`.                                  *
      **********************************************************/
+
 
     // Make a vec2 with the current mouse position
     glm::vec2 currentMousePosition(xpos, ypos);
@@ -402,16 +405,6 @@ void a3_Application::onCursorPos(double xpos, double ypos) {
             }  else {
 
               
-              /* picking code
-                if(pickID>=0 && pickID < theLattice.getFullSize()){
-                    theLattice.getByID(pickID).move(glm::vec2(mousePositionDelta.x/height,mousePositionDelta.y/height),m_rotationMatrix,m_scale,pickDepth);
-                    theLattice.vao.setRow(pickID,{  theLattice.getByID(pickID).p.x  ,
-                                                theLattice.getByID(pickID).p.y  ,
-                                                theLattice.getByID(pickID).p.z });
-                    theLattice.setMesh();
-                    theLattice.VSArraytoUniform(m_program);
-                    if(!theLattice.GPUwarp)theLattice.makeWarpMesh(m_mesh);
-                    */
                 }
             }
 

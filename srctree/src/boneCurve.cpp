@@ -16,8 +16,6 @@ return spline[0];
 } 
 
 
-
-
 void boneCurve::setSamps(int i){
   samples = i;
 }
@@ -36,8 +34,6 @@ vector<quat> boneCurve::qBezFromCats( quat ca, quat a, quat b, quat cb){
   
   quat seg = getQuatBetween(a,b);
     float l = seg.x;
-
-
 
   quat ta = getQuatBetween(ca, b);
   ta.x = l/2;

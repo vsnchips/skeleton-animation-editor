@@ -42,7 +42,7 @@ public:
 
     void focusBone( int i );
     std::string currentJoint = "root";
-   int currentJointID;
+    int currentJointID;
 
  // actors in the play:
     Skeleton * showskel;
@@ -119,4 +119,6 @@ public:
 
     void poseToFile( pose & somePose);
     void poseToBones( pose & somePose);
+
+    void calcJointsFromXYZ();
 };

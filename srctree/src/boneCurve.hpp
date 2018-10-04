@@ -22,7 +22,8 @@ class boneCurve{
     void freshBuffs();
 
     int samples = 10;
-    std::vector<glm::quat> cats;  //always includes dummies
+    std::vector<glm::vec3> cats;  //always includes dummies
+    std::vector<glm::quat> qcats;  //always includes dummies
     std::vector<glm::vec2> catreps;
     std::vector<float> timings;  // the first pose is always at 0, but every kf has a time. 
 

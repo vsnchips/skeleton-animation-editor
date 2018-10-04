@@ -51,6 +51,7 @@
 #include <cgra/mesh.hpp>
 #include <cgra/shader.hpp>
 
+
 // Needed for Completion/Challenge
 // We use bitmasking to work out the Degrees of Freedom
 // To work out if a bone b has a y-axis dof, simply:
@@ -98,6 +99,9 @@ struct bone {
 	glm::vec3 translation = glm::vec3(0);       // Translation (Only for the Root)
 	glm::vec3 rotation_max;      // Maximum value for rotation for this joint (degrees)
 	glm::vec3 rotation_min;      // Minimum value for rotation for this joint (degrees)
+
+  glm::mat4 precalcthis;
+  glm::mat4 tweak;
 
 };
 
