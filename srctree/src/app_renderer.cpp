@@ -3,12 +3,6 @@
 
 using namespace glm;
 
-app_renderer::app_renderer(){
-
-  loadPickShader();
-
-}
-
 void app_renderer::loadPickShader(){
   pickProg = cgra::Program::load_program(
         CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
@@ -38,7 +32,7 @@ void app_renderer::passUniforms(cgra::Program * p, uniforms * unfms){
 
 void app_renderer::pickDraw(std::vector<drawStyle> & t){
 
- pickProg.use();
+pickProg.use();
 
 // Clear the back buffer
 glClearColor(255, 255, 255, 1);
@@ -87,7 +81,9 @@ void app_renderer::execute(std::vector<drawStyle> & target){
 
 }
 
-int app_renderer::pickTest( std::vector<drawStyle> target, glm::vec2 & m_mousePosition){
+int app_renderer::pickTest( std::vector<drawStyle> target, glm::vec2 & pickPos){
+
+  checkSize();
 
 int pickedID = -1;
 
@@ -95,13 +91,13 @@ pickDraw(target);
 
 // Reading in after drawing
 unsigned char pixel[4];
-glReadPixels(m_mousePosition.x,
-m_viewportSize.y - m_mousePosition.y, 1, 1,   GL_RGBA,   GL_UNSIGNED_BYTE,   &pixel);
+glReadPixels(pickPos.x,
+rtHei - pickPos.y, 1, 1,   GL_RGBA,   GL_UNSIGNED_BYTE,   &pixel);
 
 float pickDepth; //might need the depth to find things;
 
-glReadPixels(m_mousePosition.x,
-m_viewportSize.y - m_mousePosition.y, 1, 1,   GL_DEPTH_BUFFER_BIT,   GL_FLOAT,   &pickDepth);
+glReadPixels(pickPos.x,
+rtHei - pickPos.y, 1, 1,   GL_DEPTH_BUFFER_BIT,   GL_FLOAT,   &pickDepth);
 
 if (!(pixel[0]==255) || !(pixel[1]==255) || !(pixel[2]==255) ){
 
@@ -113,10 +109,9 @@ if (!(pixel[0]==255) || !(pixel[1]==255) || !(pixel[2]==255) ){
 
 }
 
-
 printf("Picked id %d\n", pickedID );
 printf("Picked  color %d, %d, %d, %d at %f, %f \n", pixel[0], pixel[1], pixel[2], pixel[3],
-    float(m_mousePosition.x), m_viewportSize.y - m_mousePosition.y);
+    float(pickPos.x), m_viewportSize.y - pickPos.y);
 printf("Picked pickDepth %f\n", pickDepth );
 return pickedID;
 

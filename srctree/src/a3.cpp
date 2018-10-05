@@ -140,6 +140,10 @@ void a3_Application::drawScene() {
     
     a3Renderer.pickProg.setProjectionMatrix(projectionMatrix);
     a3Renderer.pickProg.setViewMatrix(viewMatrix);
+
+    kf_Renderer.pickProg.setProjectionMatrix(projectionMatrix);
+    kf_Renderer.pickProg.setViewMatrix(viewMatrix);
+    
     m_program.setProjectionMatrix(projectionMatrix);
     m_program.setViewMatrix(viewMatrix);
 
@@ -161,7 +165,9 @@ void a3_Application::drawScene() {
   ImGui_ImplGlfwGL3_NewFrame();
   doGUI();
   ImGui::Render();
-  glfwSwapBuffers(m_window);
+
+//  if (!mouseDown)
+    glfwSwapBuffers(m_window);
 
   freshEditBuff();// reset the Viewport transform;
 

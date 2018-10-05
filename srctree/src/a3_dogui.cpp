@@ -71,6 +71,7 @@ void a3_Application::doGUI() {
 
     ImGui::Begin("Keyframe Controls");
     ImGui::Checkbox("Toggle Keyframe Editor",&kf_window_see);
+    ImGui::SliderFloat("T",&testT,-0.25f , 1.25f, "%.5f", 0.5f);
     ImGui::End();
 
     ImGui::Begin("Shader Controls");

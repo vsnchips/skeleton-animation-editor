@@ -32,11 +32,15 @@ typedef struct shareGlobals{
 class a3_Application {
 public:
     bool clickon;
+    bool mouseDown = false;
     int deformTechniqueId;
     bool sceneon = 1;
     
     int pickID;
-    
+   
+   //todo remove
+   float testT = 0;
+
     int pickKF;
 
     int lx = 2,ly = 2,lz = 2;
@@ -47,7 +51,9 @@ public:
 
     asfApp * theAsfApp;
 
-    app_renderer a3Renderer;
+    GLFWwindow * dummy;
+    app_renderer a3Renderer = app_renderer(dummy);
+    app_renderer kf_Renderer = app_renderer(dummy);
     glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;
 
@@ -95,13 +101,15 @@ public:
         m_mouseButtonDown[0] = false;
         m_mouseButtonDown[1] = false;
         m_mouseButtonDown[2] = false;
+
+        a3Renderer = app_renderer(m_window);
+        kf_Renderer = app_renderer(m_window);
     }
 
     void setWindowSize(int width, int height) {
         m_viewportSize.x = float(width);
         m_viewportSize.y = float(height);
 
-        a3Renderer.m_viewportSize = m_viewportSize;
 
     }
 

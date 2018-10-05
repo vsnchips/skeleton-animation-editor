@@ -4,32 +4,27 @@
 void a3_Application::onMouseButton(int button, int action, int) {
 
     if (button >=0 && button < 3) {
+      mouseDown = true; 
         // Set the 'down' state for the appropriate mouse button
         if (button ==0){
             if( action == GLFW_PRESS) {
 
    glfwMakeContextCurrent(m_window);
               
-   //kf window condition
    glm::vec2 glMousePos = glm::vec2(m_mousePosition.x, m_viewportSize.y - m_mousePosition.y);
 
+   //kf window condition
   if( kf_window_see && 
       glMousePos.x > 25 && glMousePos.y > 25 &&
       glMousePos.x < m_kfWinSize.x + 25 && glMousePos.y < m_kfWinSize.y + 25)
   {
-    kfWindowPick(); 
-  
+  kfWindowPick();
   }else{
-
 //General Window Condition
-   freshEditBuff();
-   a3Renderer.pickProg.setViewMatrix(viewMatrix);
-   a3Renderer.pickProg.setProjectionMatrix(projectionMatrix);
-                pickID = a3Renderer.pickTest(theAsfApp->stylePack, m_mousePosition);
-                a3Renderer.highLight = pickID;
+//
+  poseWindowPick();
   }
  
-
   //Got pick ID
   clickon = pickID > 0;
   printf("clickon %s\n" , clickon ? "true" : "false");
@@ -38,6 +33,7 @@ void a3_Application::onMouseButton(int button, int action, int) {
   }
   else {
     clickon = false;
+    mouseDown = false;
     printf("unclick\n");
   }
   }
@@ -45,13 +41,16 @@ void a3_Application::onMouseButton(int button, int action, int) {
   }
 }
 
+void a3_Application::poseWindowPick(){
+  
+   freshEditBuff();
+   a3Renderer.pickProg.setViewMatrix(viewMatrix);
+   a3Renderer.pickProg.setProjectionMatrix(projectionMatrix);
+                pickID = a3Renderer.pickTest(theAsfApp->stylePack, m_mousePosition);
+                a3Renderer.highLight = pickID;
+}
+
 void a3_Application::onCursorPos(double xpos, double ypos) {
-    /**********************************************************
-     * 4. Interactive Transforms                              *
-     *                                                        *
-     * Change `translation`, `scale` and `rotation` based on  *
-     * `mousePositionDelta`.                                  *
-     **********************************************************/
 
 
     // Make a vec2 with the current mouse position

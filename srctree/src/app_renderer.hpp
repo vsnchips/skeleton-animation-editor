@@ -2,13 +2,17 @@
 
 #include "includes-l1.hpp"
 #include "drawStyle.hpp"
+#include "opengl.hpp"
 // app renderer
 
 class app_renderer{
 
   public:
   
-    app_renderer();
+  GLFWwindow * renderTarget;
+  app_renderer(GLFWwindow * t) : renderTarget(t){
+  loadPickShader();
+  }
 
   cgra::Program * c_prog; //current program
 
@@ -19,6 +23,12 @@ class app_renderer{
 
   // window stuff
   glm::vec2 m_viewportSize;
+
+  int rtWid, rtHei;
+ 
+  void checkSize(){
+  glfwGetWindowSize(renderTarget, &rtWid, &rtHei);
+  }
 
   //rendering options
   int highLight = -1;
