@@ -18,3 +18,4 @@ glm::vec2 splineSamp2D( float t, std::vector<glm::vec2> spline);
 glm::quat qSpline( float t, std::vector<glm::quat> spline);
 
 glm::vec2 catSamp2D(float, std::vector<glm::vec2> &);
+glm::vec2 catSamp2D(float, std::vector<glm::vec2> &, float);

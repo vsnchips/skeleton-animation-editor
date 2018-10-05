@@ -67,14 +67,14 @@ drawList a3_Application::testDrawList(cgra::Mesh * ctlMesh ){
 
   static float ys[] = {0.5, 1, -1, -0.5};
   vector<vec2> testCats; testCats.clear();
-  testCats.push_back(vec2(0,0.));
-  testCats.push_back(vec2(1,-0.5));
-  testCats.push_back(vec2(2,0.5));
-  testCats.push_back(vec2(3,0.5));
-  testCats.push_back(vec2(4,-0.5));
-  testCats.push_back(vec2(5,-0.5));
-  testCats.push_back(vec2(6,0.5));
-  testCats.push_back(vec2(7,0.));
+  testCats.push_back(vec2(-2,0.));
+  testCats.push_back(vec2(-1,-0.5));
+  testCats.push_back(vec2(0,0.5));
+  testCats.push_back(vec2(1,0.5));
+  testCats.push_back(vec2(2,-0.5));
+  testCats.push_back(vec2(3,-0.5));
+  testCats.push_back(vec2(4,0.5));
+  testCats.push_back(vec2(5,0.));
 
   vec2 sp = catSamp2D(testT, testCats);
 
@@ -109,8 +109,8 @@ drawList a3_Application::testDrawList(cgra::Mesh * ctlMesh ){
   const int degree = 5;
   float fstep =2./float(degree);
   for (int i=0; i< 5; i++){
-    float x = i*fstep-1;
-    float y = ys[i];
+    float x = testCats[i].x;
+    float y = testCats[i].y;
 
     drawStyle thisPt;
 

@@ -34,7 +34,12 @@ vec2 splineSamp2D( float t, vector<vec2> spline){
 
 }
 
+
 vec2 catSamp2D ( float t, vector<vec2> & cats){
+  return catSamp2D (t, cats, 0.25);
+}
+
+vec2 catSamp2D ( float t, vector<vec2> & cats, float bend){
   vec2 p = vec2(0);
 
   vector<vec2> spline; spline.clear();
@@ -56,11 +61,11 @@ vec2 catSamp2D ( float t, vector<vec2> & cats){
           );
       //tan A
       spline.push_back( 
-          cats[seg+1] + 0.5f*(cats[seg+2] - cats[seg])
+          cats[seg+1] + bend*(cats[seg+2] - cats[seg])
           );
       //tan B
       spline.push_back( 
-          cats[seg+3] - 0.5f*(cats[seg+1] - cats[seg+3])
+          cats[seg+2] + bend*(cats[seg+1] - cats[seg+3])
           );
       //point b 
       spline.push_back( cats[seg+2] );
