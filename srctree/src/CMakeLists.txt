@@ -12,6 +12,7 @@ SET(sources
   a3.cpp
   a3-filesave.cpp
   a3_dogui.cpp
+  a3_inevents.cpp
   drawStyle.hpp
   #drawStyle.cpp
   app_renderer.hpp

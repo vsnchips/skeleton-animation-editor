@@ -8,6 +8,22 @@
 #include "app_renderer.hpp"
 #include "boneCurve.hpp"
 
+//src includes 
+#include <algorithm>
+#include <cmath>
+#include <iostream>
+#include <stdexcept>
+#include <cstring>
+
+#include "includes-l1.hpp"
+#include "opengl.hpp"
+#include "imgui.h"
+
+#include "cgra/matrix.hpp"
+#include "cgra/wavefront.hpp"
+#include "math.h"
+
+
 typedef struct shareGlobals{
 //fill this later
 
@@ -20,7 +36,6 @@ public:
     bool sceneon = 1;
     
     int pickID;
-    int pickNode;
     
     int pickKF;
 
@@ -37,7 +52,6 @@ public:
     glm::mat4 projectionMatrix;
 
     bool kf_window_see = true;
-    app_renderer a3_kf_renderer;
 
     /////////////////////////////////////////// Part 1 Vars
     // The window object managed by GLFW
@@ -54,6 +68,7 @@ public:
 
     // The current size of the viewport
     glm::vec2 m_viewportSize;
+    glm::vec2 m_kfWinSize;
     // The current mouse position
     glm::vec2 m_mousePosition;
 
@@ -90,15 +105,19 @@ public:
 
     }
 
-    void init(const char *);
+    
+void init(const char *);
     void reloadShader();
 
     void createCube();
     void loadObj(const char *filename,cgra::Mesh &);
 
-    void drawScene();
+    void freshEditBuff();
+    void poseWindowPick();
 
-    void pickDraw();
+    void kfWindowFresh();
+    void kfWindowPick();
+    void drawScene();
 
     void doGUI();
 

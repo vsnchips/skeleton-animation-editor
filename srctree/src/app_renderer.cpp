@@ -1,6 +1,8 @@
 #pragma once
 #include "app_renderer.hpp"
 
+using namespace glm;
+
 app_renderer::app_renderer(){
 
   loadPickShader();
@@ -37,9 +39,15 @@ void app_renderer::passUniforms(cgra::Program * p, uniforms * unfms){
 void app_renderer::pickDraw(std::vector<drawStyle> & t){
 
  pickProg.use();
-    for(drawStyle d: t){
+
+// Clear the back buffer
+glClearColor(255, 255, 255, 1);
+glClearDepth(1);
+glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+for(drawStyle d: t){
       passUniforms(&pickProg,&d.unfms);
-      if (d.m_mesh && d.tag == "joint") d.m_mesh->draw();
+      if (d.m_mesh && d.tag == "pickable") d.m_mesh->draw();
     }
 
 }
@@ -47,7 +55,8 @@ void app_renderer::pickDraw(std::vector<drawStyle> & t){
 void app_renderer::execute(std::vector<drawStyle> & target){
 
   // Pick Preview
-  if (previewPick){
+ 
+ if (previewPick){
     pickDraw(target);
   }
 
@@ -61,6 +70,12 @@ void app_renderer::execute(std::vector<drawStyle> & target){
         }
       }
 
+      //uniform overrides
+      if(d.unfms.i1["id"] > -1 && d.unfms.i1["id"] == highLight)
+      {
+        d.unfms.f3["ucol"] = vec3(0.8,0.8,0);
+      }
+
       passUniforms(c_prog,&d.unfms);
 
       if (d.m_mesh){
@@ -72,13 +87,9 @@ void app_renderer::execute(std::vector<drawStyle> & target){
 
 }
 
-int app_renderer::pickTest( std::vector<drawStyle> target, glm::vec2 &  m_mousePosition){
+int app_renderer::pickTest( std::vector<drawStyle> target, glm::vec2 & m_mousePosition){
 
 int pickedID = -1;
-// Clear the back buffer
-glClearColor(255, 255, 255, 1);
-glClearDepth(1);
-glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 pickDraw(target);
 
@@ -102,7 +113,10 @@ if (!(pixel[0]==255) || !(pixel[1]==255) || !(pixel[2]==255) ){
 
 }
 
+
 printf("Picked id %d\n", pickedID );
+printf("Picked  color %d, %d, %d, %d at %f, %f \n", pixel[0], pixel[1], pixel[2], pixel[3],
+    float(m_mousePosition.x), m_viewportSize.y - m_mousePosition.y);
 printf("Picked pickDepth %f\n", pickDepth );
 return pickedID;
 

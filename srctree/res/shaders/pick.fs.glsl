@@ -24,5 +24,7 @@ void main() {
     fragColor.r = float(1)/255.0;
     fragColor.r *= id;
 
+  //  fragColor.g=1.0;
+
     color = vec4(fragColor, 1.0);
 }

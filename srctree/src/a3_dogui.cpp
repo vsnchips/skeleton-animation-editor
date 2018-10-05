@@ -70,20 +70,13 @@ void a3_Application::doGUI() {
     ImGui::End();
 
     ImGui::Begin("Keyframe Controls");
-    if(ImGui::Button("Toggle Keyframe Editor")){
-
-      if (glfwGetWindowAttrib(keyframe_window,GLFW_VISIBLE)){
-      glfwHideWindow(keyframe_window);
-      }
-      else{
-      glfwShowWindow(keyframe_window);
-      }
-    }
+    ImGui::Checkbox("Toggle Keyframe Editor",&kf_window_see);
     ImGui::End();
 
     ImGui::Begin("Shader Controls");
     if(ImGui::Button("Toggle Picker Test")){
       a3Renderer.previewPick = !a3Renderer.previewPick;
+    //  a3_kf_renderer.previewPick = !a3_kf_renderer.previewPick;
     }
 
     if (ImGui::Button("Reload Shader")){ 
@@ -114,24 +107,13 @@ void a3_Application::doGUI() {
     }
     ImGui::End();
 
-
-
-    /*
-     ************************************************************
-     *                                                          *
-     * 5. Add a checkbox for rendering the object in wireframe  *
-     *  mode.                                                   *
-     ************************************************************/
     ImGui::Begin("meshes");
-
-
     static bool wireframe;
     if(ImGui::Checkbox("Draw Wireframe",&wireframe)) {
         m_mesh.setDrawWireframe(wireframe);
     }
 
     //debugging stuff:
-
     ImGui::Text("tricount :%d" , m_mesh.m_indices.size()/3);
     ImGui::Text("vertcount : %d" , m_mesh.m_vertices.size());
 

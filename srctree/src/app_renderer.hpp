@@ -21,6 +21,7 @@ class app_renderer{
   glm::vec2 m_viewportSize;
 
   //rendering options
+  int highLight = -1;
   bool previewPick = false;
 
   void execute(std::vector<drawStyle> & target);
@@ -32,10 +33,5 @@ class app_renderer{
 
   void pickDraw(std::vector<drawStyle> & t);
   int pickTest( std::vector<drawStyle> target, glm::vec2 & m_mousePosition);
-
-
-
-
-
 
 };

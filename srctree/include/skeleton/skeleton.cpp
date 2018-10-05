@@ -172,7 +172,7 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 stylePack.push_back(boneRep);
  boneRep.putModelMat(accumT*meshPoleRot * scale(mat4(),vec3(0.03,0.03,0.03)));
  boneRep.m_mesh = m_jointmesh;
- boneRep.tag = "joint";
+ boneRep.tag = "pickable";
  boneRep.unfms.i1["id"]=b->boneID;
 stylePack.push_back(boneRep);
 
