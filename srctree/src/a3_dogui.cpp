@@ -83,11 +83,11 @@ void a3_Application::doGUI() {
 
     ImGui::Begin("Shader Controls");
     if(ImGui::Button("Toggle Picker Test")){
-      a3Renderer.previewPick = !a3Renderer.previewPick;
+      a3Renderer->previewPick = !a3Renderer->previewPick;
     }
 
     if (ImGui::Button("Reload Shader")){ 
-      a3Renderer.loadPickShader();
+      a3Renderer->loadPickShader();
       cout<< "loaded Pickshader\n";
     }
     ImGui::End();

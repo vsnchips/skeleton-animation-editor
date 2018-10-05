@@ -12,28 +12,22 @@
 #include "cgra/wavefront.hpp"
 
 #include "a3.hpp"
+#include "callbacks.hpp"
+
 #include "math.h"
 
 void a3_Application::init(const char * skelfile) {
 
+
     theAsfApp= new asfApp(m_window);
     theAsfApp->init(skelfile);
-    // Load the shader program
-    // The use of CGRA_SRCDIR "/path/to/shader" is so you don't
-    // have to run the program from a specific folder
-    ///
-    
-    m_program = cgra::Program::load_program(
-        CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
-        CGRA_SRCDIR "/res/shaders/simple.fs.glsl");
-
 
     // Create a view matrix that positions the camera
     // 10 units behind the object
     viewMatrix = glm::mat4 (1);
     viewMatrix[3] = glm::vec4(0, 0, -1, 1);
     m_program.setViewMatrix(viewMatrix);
-    a3Renderer.pickProg.setViewMatrix(viewMatrix);
+    a3Renderer->pickProg.setViewMatrix(viewMatrix);
 
     xax = glm::vec3(1.,0.,0.);
     yax = glm::vec3(0.,1.,0.);
@@ -50,7 +44,7 @@ void a3_Application::init(const char * skelfile) {
     createCube();
 
     //Load the sphereobj;
-    loadObj("res/models/sphere.obj",m_spheremesh);
+    //loadObj("res/models/sphere.obj",m_spheremesh);
 
 
 //    printf("setting brush color uniform\n");
@@ -59,6 +53,7 @@ void a3_Application::init(const char * skelfile) {
     idColor[0] = 255;
     idColor[1] = 255;
     idColor[2] = 255;
+
 //    idColor[3] = 1.0;
  //GLuint loc = glGetUniformLocation(
 //    m_program.m_program, "ucol");
@@ -70,6 +65,14 @@ void a3_Application::init(const char * skelfile) {
 
 }
 
+void a3_Application::launch(const char * skfile){
+
+  std::thread posewinthread(&a3_Application::editor_thread, this, skfile);
+  std::thread curvewinthread(&a3_Application::curve_thread, this);
+
+  posewinthread.join();
+  curvewinthread.join();
+}
 void a3_Application::createCube() {
 
 }
@@ -142,6 +145,7 @@ void a3_Application::drawScene() {
     //draw some beziers.
 
     glfwSwapBuffers(keyframe_window);
+
     }
 
     
@@ -188,16 +192,13 @@ void a3_Application::drawScene() {
     viewMatrix *= glm::scale(m_modelTransform,glm::vec3(m_scale));
     m_rotationMatrix = glm::mat4(glm::vec4(xax,0),glm::vec4(yax,0),glm::vec4(zax,0),glm::vec4(0.f,0.f,0.f,1.f));
     viewMatrix *= m_rotationMatrix;
-
-    
  
     // Draw the skel
     m_program.use();
 
-
-    a3Renderer.pickProg.setViewMatrix(viewMatrix);
-    a3Renderer.pickProg.setProjectionMatrix(projectionMatrix);
-    //a3Renderer.pickProg.setModelMatrix(m_modelTransform);
+    a3Renderer->pickProg.setViewMatrix(viewMatrix);
+    a3Renderer->pickProg.setProjectionMatrix(projectionMatrix);
+    //a3Renderer->pickProg.setModelMatrix(m_modelTransform);
     m_program.setProjectionMatrix(projectionMatrix);
     m_program.setViewMatrix(viewMatrix);
     m_program.setModelMatrix(m_modelTransform);
@@ -207,13 +208,104 @@ void a3_Application::drawScene() {
   theAsfApp -> showskel -> setProgram( m_program );
   theAsfApp -> updateScene();//  Draw The Skeleton
   
-//  if (!glfwGetWindowAttrib(keyframe_window,GLFW_VISIBLE))
-   a3Renderer.execute(theAsfApp->stylePack);
+  if (!glfwGetWindowAttrib(keyframe_window,GLFW_VISIBLE))
+   a3Renderer->execute(theAsfApp->stylePack);
    
    ImGui::Render();
                 
   glfwSwapBuffers(m_window);
 
+}
+
+
+//Threads
+
+int a3_Application::initWindow(GLFWwindow * win, int x, int y, const char * name, GLFWwindow * link){
+
+// Window Initialisation
+
+    // Request at least OpenGL 3.3 with the Core profile
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    // Don't allow legacy functionality
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+    // Request a debug context so we can use debug callbacks
+    // Can reduce GL performance.
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+
+    // Explicitly request doublebuffering. This is normally the default,
+    // but is worth being explicit about
+    glfwWindowHint(GLFW_DOUBLEBUFFER, GL_TRUE);
+
+    win = glfwCreateWindow(x,y, name, NULL, link);
+    if (win == nullptr) {
+        return 1;
+    }
+
+    glfwMakeContextCurrent(win);
+
+    // Initialize GLEW
+    glewExperimental = GL_TRUE; // required for full functionality in OpenGL 3.0+
+    GLenum err = glewInit();
+    if (err != GLEW_OK) {
+        std::cerr << "GLEW Error: " << glewGetErrorString(err) << std::endl;
+        return 1;
+    }
+
+    // Initialize ImGui
+    ImGui_ImplGlfwGL3_Init(win, false);
+
+    // Set callbacks
+    glfwSetKeyCallback(win, key_callback);
+    glfwSetMouseButtonCallback(win, mouse_button_callback);
+    glfwSetCursorPosCallback(win, cursor_pos_callback);
+    glfwSetScrollCallback(win, scroll_callback);
+    glfwSetCharCallback(win, char_callback);
+
+    //glfwSetWindowUserPointer(win, reinterpret_cast<void *>(&(this)));
+    
+    // Enable depth testing
+    glEnable(GL_DEPTH_TEST);
+    // Enable backface culling
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CCW);
+
+    return 0;
+}
+
+
+#include <thread>
+void a3_Application::editor_thread(const char * skfile){
+  
+  initWindow(m_window, 1920,1080,"Pose Editor", NULL);
+
+  a3Renderer = new app_renderer();
+  
+  init(skfile);
+
+  m_program_sliders = cgra::Program::load_program(
+     CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
+     //CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
+     //CGRA_SRCDIR "/res/shaders/lambert.fs.glsl");
+     CGRA_SRCDIR "/res/shaders/simple.fs.glsl");
+
+}
+
+void a3_Application::curve_thread(){
+  
+  initWindow(keyframe_window,1000,300,"Curve Editor", m_window);
+
+  a3_kf_renderer = new app_renderer();
+  
+  m_program = cgra::Program::load_program(
+     CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
+     //CGRA_SRCDIR "/res/shaders/simple.vs.glsl",
+     //CGRA_SRCDIR "/res/shaders/lambert.fs.glsl");
+     CGRA_SRCDIR "/res/shaders/simple.fs.glsl");
 }
 
 // Input Handlers
@@ -226,10 +318,10 @@ void a3_Application::onMouseButton(int button, int action, int) {
             if( action == GLFW_PRESS) {
 
               glfwMakeContextCurrent(m_window);
-    a3Renderer.pickProg.use();
-    a3Renderer.pickProg.setViewMatrix(viewMatrix);
-    a3Renderer.pickProg.setProjectionMatrix(projectionMatrix);
-                pickID = a3Renderer.pickTest(theAsfApp->stylePack, m_mousePosition);
+    a3Renderer->pickProg.use();
+    a3Renderer->pickProg.setViewMatrix(viewMatrix);
+    a3Renderer->pickProg.setProjectionMatrix(projectionMatrix);
+                pickID = a3Renderer->pickTest(theAsfApp->stylePack, m_mousePosition);
                 clickon = pickID > 0;
                 printf("clickon %s\n" , clickon ? "true" : "false");
 

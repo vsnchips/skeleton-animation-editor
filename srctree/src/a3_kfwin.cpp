@@ -33,7 +33,7 @@ void a3_Application::kfwin_onMouse(int button, int action, int mods){
 
     if (button == 0){
       if (action == GLFW_PRESS && currentViewCurve) {
-        pickKF = a3_kf_renderer.pickTest( currentViewCurve->getStyle() , m_kfMousePos);
+        pickKF = a3_kf_renderer->pickTest( currentViewCurve->getStyle() , m_kfMousePos);
         clickon = pickKF > 0;
         printf("clickon kf %s\n" , clickon ? "true" : "false");
     }
@@ -65,10 +65,9 @@ drawList a3_Application::testDrawList(cgra::Mesh * ctlMesh ){
   //Bezier Line
 // Todo: get the line from the boneCurve
 
-// drawList lineStyle = nowCurve->getStyle();
   //Controls
   const int degree = 5;
-  float fstep =2./float(degree);
+  float fstep = 2./float(degree);
   for (int i=0; i< 5; i++){
     float x = i*fstep-1;
     float y = ys[i];
@@ -105,10 +104,10 @@ void a3_Application::styleCurve(){
    //drawList controls = testDrawList(&m_spheremesh);
    drawList controls = testDrawList(&theAsfApp->m_jointMesh);
    
-   a3_kf_renderer.c_prog = &m_program_sliders;
+   a3_kf_renderer->c_prog = &m_program_sliders;
 
    //theAsfApp->m_jointMesh.draw();
-   a3_kf_renderer.execute( controls );
+   a3_kf_renderer->execute( controls );
    m_spheremesh.draw(GL_TRIANGLES);
  
   //}

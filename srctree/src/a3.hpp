@@ -7,6 +7,7 @@
 #include "asf.hpp"
 #include "app_renderer.hpp"
 #include "boneCurve.hpp"
+#include <thread>
 
 typedef struct shareGlobals{
 //fill this later
@@ -32,12 +33,12 @@ public:
 
     asfApp * theAsfApp;
 
-    app_renderer a3Renderer;
+    app_renderer * a3Renderer;
     glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;
 
     bool kf_window_see = true;
-    app_renderer a3_kf_renderer;
+    app_renderer * a3_kf_renderer;
 
     /////////////////////////////////////////// Part 1 Vars
     // The window object managed by GLFW
@@ -73,6 +74,16 @@ public:
     // Whether or not the left, middle or right buttons are down.
     bool m_mouseButtonDown[3];
 
+    a3_Application()
+      :
+          m_viewportSize(1, 1), m_mousePosition(0, 0),
+          m_translation(0), m_scale(1), m_rotationMatrix(1) {
+        m_mouseButtonDown[0] = false;
+        m_mouseButtonDown[1] = false;
+        m_mouseButtonDown[2] = false;
+    }
+
+
     a3_Application(GLFWwindow *win)
         : m_window(win),
           m_viewportSize(1, 1), m_mousePosition(0, 0),
@@ -82,11 +93,16 @@ public:
         m_mouseButtonDown[2] = false;
     }
 
-    void setWindowSize(int width, int height) {
+  int initWindow(GLFWwindow * win, int x, int y, const char * name, GLFWwindow * link);
+
+  void editor_thread(const char * skfile);
+  void curve_thread();
+
+  void setWindowSize(int width, int height) {
         m_viewportSize.x = float(width);
         m_viewportSize.y = float(height);
 
-        a3Renderer.m_viewportSize = m_viewportSize;
+        a3Renderer->m_viewportSize = m_viewportSize;
 
     }
 
@@ -110,7 +126,6 @@ public:
 
     void onScroll(double xoffset, double yoffset);
 
-
     //File saving methods
 
     void a3_poseToFile(frame & somePose);
@@ -128,6 +143,7 @@ public:
     void a3_pose2bones();
    
     typedef const std::vector<glm::vec3> a3curve;
+    void launch(const char * skfile);
     void makeCurve();
     void styleCurve();
     void kfwin_oncursor(double xpos, double ypos);
