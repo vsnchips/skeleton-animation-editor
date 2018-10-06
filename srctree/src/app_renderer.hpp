@@ -27,7 +27,7 @@ class app_renderer{
   int rtWid, rtHei;
  
   void checkSize(){
-  glfwGetWindowSize(renderTarget, &rtWid, &rtHei);
+    glfwGetWindowSize(renderTarget, &rtWid, &rtHei);
   }
 
   //rendering options

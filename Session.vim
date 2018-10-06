@@ -1103,29 +1103,28 @@ set shortmess=aoO
 badd +96 srctree/src/a3.cpp
 badd +7 srctree/src/cgra/mesh.hpp
 badd +202 srctree/src/main.cpp
-badd +33 srctree/src/a3_dogui.cpp
+badd +74 srctree/src/a3_dogui.cpp
 badd +68 srctree/src/a3.hpp
 badd +13 srctree/src/a3_inevents.cpp
 badd +15 srctree/src/CMakeLists.txt
-badd +103 srctree/src/a3_kfwin.cpp
-badd +95 srctree/src/app_renderer.cpp
-badd +13 srctree/src/app_renderer.hpp
+badd +70 srctree/src/a3_kfwin.cpp
+badd +6 srctree/src/app_renderer.cpp
+badd +1 srctree/src/app_renderer.hpp
 badd +1 \[1m/home/shelly/local/CGRA350/assignment3/ass3-local/srctree/src/asf.hpp
 badd +27 srctree/res/shaders/pick.fs.glsl
 badd +175 srctree/include/skeleton/skeleton.cpp
 badd +179 srctree/src/asf.cpp
-badd +0 srctree/res/shaders/simple.fs.glsl
-badd +51 srctree/src/splineMath.cpp
-badd +5 srctree/src/splineMath.hpp
+badd +5 srctree/res/shaders/simple.fs.glsl
+badd +21 srctree/src/splineMath.cpp
+badd +21 srctree/src/splineMath.hpp
+badd +2 srctree/src/boneCurve.cpp
+badd +26 srctree/src/boneCurve.hpp
 argglobal
 silent! argdel *
 $argadd .
 tabnew
 tabnew
-tabnew
-tabnew
-tabnew
-tabnext -5
+tabnext -2
 edit srctree/src/a3.cpp
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -1699,7 +1698,7 @@ setlocal nospell
 setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
 setlocal spellfile=
 setlocal spelllang=en
-setlocal statusline=%#SpaceVim_statusline_ia#%{SpaceVim#layers#core#statusline#mode(mode())}\ %{\ SpaceVim#layers#core#statusline#winnr(get(w:,\ \"winid\",\ winnr()))\ }\ %#SpaceVim_statusline_ia_SpaceVim_statusline_b#%#SpaceVim_statusline_b#%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 38\ ?\ \"\"\ :\ (\"\ 6.7k\ a3_inevents.cpp\ \ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 46\ ?\ \"\"\ :\ (\"\ \ cpp\ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 60\ ?\ \"\"\ :\ (\"\ \ ❖\ ⓢ\ \ \ \")}%=%{\"\ \"\ .\ &ff\ .\ \"|\"\ .\ (&fenc!=\"\"?&fenc:&enc)\ .\ \"\ \"}\ %P\ 
+setlocal statusline=%#SpaceVim_statusline_ia#%{SpaceVim#layers#core#statusline#mode(mode())}\ %{\ SpaceVim#layers#core#statusline#winnr(get(w:,\ \"winid\",\ winnr()))\ }\ %#SpaceVim_statusline_ia_SpaceVim_statusline_b#%#SpaceVim_statusline_b#%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 38\ ?\ \"\"\ :\ (\"\ 6.4k\ a3_inevents.cpp\ \ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 46\ ?\ \"\"\ :\ (\"\ \ cpp\ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 60\ ?\ \"\"\ :\ (\"\ \ ❖\ ⓢ\ \ \ \")}%=%{\"\ \"\ .\ &ff\ .\ \"|\"\ .\ (&fenc!=\"\"?&fenc:&enc)\ .\ \"\ \"}\ %P\ 
 setlocal suffixesadd=
 setlocal noswapfile
 setlocal synmaxcol=3000
@@ -1724,18 +1723,25 @@ set nowrap
 setlocal nowrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 30 - ((29 * winheight(0) + 40) / 80)
+let s:l = 37 - ((36 * winheight(0) + 40) / 80)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-30
-normal! 03|
+37
+normal! 0
 tabnext
-edit srctree/src/splineMath.cpp
+edit srctree/src/a3_kfwin.cpp
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
 1wincmd h
+wincmd w
+wincmd _ | wincmd |
+split
+wincmd _ | wincmd |
+split
+2wincmd k
+wincmd w
 wincmd w
 set nosplitbelow
 set nosplitright
@@ -1745,8 +1751,301 @@ set winheight=1
 set winminwidth=0
 set winwidth=1
 exe 'vert 1resize ' . ((&columns * 144 + 144) / 288)
+exe '2resize ' . ((&lines * 40 + 41) / 83)
 exe 'vert 2resize ' . ((&columns * 143 + 144) / 288)
+exe '3resize ' . ((&lines * 28 + 41) / 83)
+exe 'vert 3resize ' . ((&columns * 143 + 144) / 288)
+exe '4resize ' . ((&lines * 10 + 41) / 83)
+exe 'vert 4resize ' . ((&columns * 143 + 144) / 288)
 argglobal
+let s:cpo_save=&cpo
+set cpo&vim
+imap <buffer> <S-BS> <Plug>delimitMateS-BS
+imap <buffer> <silent> g <Plug>delimitMateJumpMany
+imap <buffer> " <Plug>delimitMate"
+imap <buffer> ' <Plug>delimitMate'
+imap <buffer> ) <Plug>delimitMate)
+imap <buffer> [ <Plug>delimitMate[
+imap <buffer> ] <Plug>delimitMate]
+imap <buffer> ` <Plug>delimitMate`
+imap <buffer> { <Plug>delimitMate{
+imap <buffer> } <Plug>delimitMate}
+let &cpo=s:cpo_save
+unlet s:cpo_save
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal backupcopy=
+setlocal balloonexpr=
+setlocal nobinary
+setlocal nobreakindent
+setlocal breakindentopt=
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
+setlocal commentstring=/*%s*/
+setlocal complete=.,w,b,u,t
+setlocal concealcursor=niv
+setlocal conceallevel=2
+setlocal completefunc=
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'cpp'
+setlocal filetype=cpp
+endif
+setlocal fixendofline
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+set foldtext=SpaceVim#default#Customfoldtext()
+setlocal foldtext=SpaceVim#default#Customfoldtext()
+setlocal formatexpr=
+setlocal formatoptions=croql
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal formatprg=
+setlocal grepprg=
+setlocal iminsert=0
+setlocal imsearch=-1
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=
+setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255
+setlocal keywordprg=
+set linebreak
+setlocal linebreak
+setlocal nolisp
+setlocal lispwords=
+setlocal nolist
+setlocal makeencoding=
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal nomodeline
+setlocal modifiable
+setlocal nrformats=bin,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=ccomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+set relativenumber
+setlocal relativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=2
+setlocal noshortname
+setlocal signcolumn=auto
+setlocal smartindent
+setlocal softtabstop=2
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=%#SpaceVim_statusline_ia#%{SpaceVim#layers#core#statusline#mode(mode())}\ %{\ SpaceVim#layers#core#statusline#winnr(get(w:,\ \"winid\",\ winnr()))\ }\ %#SpaceVim_statusline_ia_SpaceVim_statusline_b#%#SpaceVim_statusline_b#%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 35\ ?\ \"\"\ :\ (\"\ 3.2k\ a3_kfwin.cpp\ \ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 43\ ?\ \"\"\ :\ (\"\ \ cpp\ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 57\ ?\ \"\"\ :\ (\"\ \ ❖\ ⓢ\ \ \ \")}%=%{\"\ \"\ .\ &ff\ .\ \"|\"\ .\ (&fenc!=\"\"?&fenc:&enc)\ .\ \"\ \"}\ %P\ 
+setlocal suffixesadd=
+setlocal noswapfile
+setlocal synmaxcol=3000
+if &syntax != 'cpp'
+setlocal syntax=cpp
+endif
+setlocal tabstop=2
+setlocal tagcase=
+setlocal tags=
+setlocal termwinkey=
+setlocal termwinscroll=10000
+setlocal termwinsize=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal undofile
+setlocal undolevels=-123456
+setlocal varsofttabstop=
+setlocal vartabstop=
+setlocal nowinfixheight
+setlocal nowinfixwidth
+set nowrap
+setlocal nowrap
+setlocal wrapmargin=0
+silent! normal! zE
+let s:l = 107 - ((73 * winheight(0) + 40) / 80)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+107
+normal! 0
+wincmd w
+argglobal
+if bufexists('srctree/src/boneCurve.hpp') | buffer srctree/src/boneCurve.hpp | else | edit srctree/src/boneCurve.hpp | endif
+let s:cpo_save=&cpo
+set cpo&vim
+imap <buffer> <S-BS> <Plug>delimitMateS-BS
+imap <buffer> <silent> g <Plug>delimitMateJumpMany
+imap <buffer> " <Plug>delimitMate"
+imap <buffer> ' <Plug>delimitMate'
+imap <buffer> ) <Plug>delimitMate)
+imap <buffer> [ <Plug>delimitMate[
+imap <buffer> ] <Plug>delimitMate]
+imap <buffer> ` <Plug>delimitMate`
+imap <buffer> { <Plug>delimitMate{
+imap <buffer> } <Plug>delimitMate}
+let &cpo=s:cpo_save
+unlet s:cpo_save
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal backupcopy=
+setlocal balloonexpr=
+setlocal nobinary
+setlocal nobreakindent
+setlocal breakindentopt=
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
+setlocal commentstring=/*%s*/
+setlocal complete=.,w,b,u,t
+setlocal concealcursor=niv
+setlocal conceallevel=2
+setlocal completefunc=
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'cpp'
+setlocal filetype=cpp
+endif
+setlocal fixendofline
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+set foldtext=SpaceVim#default#Customfoldtext()
+setlocal foldtext=SpaceVim#default#Customfoldtext()
+setlocal formatexpr=
+setlocal formatoptions=croql
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal formatprg=
+setlocal grepprg=
+setlocal iminsert=0
+setlocal imsearch=-1
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=
+setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255
+setlocal keywordprg=
+set linebreak
+setlocal linebreak
+setlocal nolisp
+setlocal lispwords=
+setlocal nolist
+setlocal makeencoding=
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal nomodeline
+setlocal modifiable
+setlocal nrformats=bin,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=ccomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+set relativenumber
+setlocal relativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=2
+setlocal noshortname
+setlocal signcolumn=auto
+setlocal smartindent
+setlocal softtabstop=2
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=%#SpaceVim_statusline_ia#%{SpaceVim#layers#core#statusline#mode(mode())}\ %{\ SpaceVim#layers#core#statusline#winnr(get(w:,\ \"winid\",\ winnr()))\ }\ %#SpaceVim_statusline_ia_SpaceVim_statusline_b#%#SpaceVim_statusline_b#%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 36\ ?\ \"\"\ :\ (\"\ 1.2k\ boneCurve.hpp\ \ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 44\ ?\ \"\"\ :\ (\"\ \ cpp\ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 58\ ?\ \"\"\ :\ (\"\ \ ❖\ ⓢ\ \ \ \")}%=%{\"\ \"\ .\ &ff\ .\ \"|\"\ .\ (&fenc!=\"\"?&fenc:&enc)\ .\ \"\ \"}\ %P\ 
+setlocal suffixesadd=
+setlocal noswapfile
+setlocal synmaxcol=3000
+if &syntax != 'cpp'
+setlocal syntax=cpp
+endif
+setlocal tabstop=2
+setlocal tagcase=
+setlocal tags=
+setlocal termwinkey=
+setlocal termwinscroll=10000
+setlocal termwinsize=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal undofile
+setlocal undolevels=-123456
+setlocal varsofttabstop=
+setlocal vartabstop=
+setlocal nowinfixheight
+setlocal nowinfixwidth
+set nowrap
+setlocal nowrap
+setlocal wrapmargin=0
+silent! normal! zE
+let s:l = 39 - ((31 * winheight(0) + 20) / 40)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+39
+normal! 034|
+wincmd w
+argglobal
+if bufexists('srctree/src/boneCurve.cpp') | buffer srctree/src/boneCurve.cpp | else | edit srctree/src/boneCurve.cpp | endif
 let s:cpo_save=&cpo
 set cpo&vim
 imap <buffer> <S-BS> <Plug>delimitMateS-BS
@@ -1857,7 +2156,7 @@ setlocal nospell
 setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
 setlocal spellfile=
 setlocal spelllang=en
-setlocal statusline=%#SpaceVim_statusline_a#%{SpaceVim#layers#core#statusline#mode(mode())}\ %{\ SpaceVim#layers#core#statusline#winnr(get(w:,\ \"winid\",\ winnr()))\ }\ %#SpaceVim_statusline_a_SpaceVim_statusline_b#%#SpaceVim_statusline_b#%{\ &modified\ ?\ '\ *\ '\ :\ '\ -\ '}1.4k\ splineMath.cpp\ %#SpaceVim_statusline_b_SpaceVim_statusline_c#%#SpaceVim_statusline_c#%{empty(&ft)?\ \"\"\ :\ \"\ \"\ .\ &ft\ .\ \"\ \"}%#SpaceVim_statusline_c_SpaceVim_statusline_b#%#SpaceVim_statusline_b#%#SpaceVim_statusline_warn#\ ●\ 6\ %#SpaceVim_statusline_b_SpaceVim_statusline_c#%#SpaceVim_statusline_c#\ ❖\ ⓢ\ \ %#SpaceVim_statusline_c_SpaceVim_statusline_b#%#SpaceVim_statusline_c_SpaceVim_statusline_z#%#SpaceVim_statusline_z#%=%#SpaceVim_statusline_z#%{SpaceVim#layers#core#statusline#_current_tag()}%#SpaceVim_statusline_b_SpaceVim_statusline_z#%#SpaceVim_statusline_b#%{\"\ \"\ .\ g:_spacevim_statusline_fileformat\ .\ \"\ |\ \"\ .\ (&fenc!=\"\"?&fenc:&enc)\ .\ \"\ \"}%#SpaceVim_statusline_c_SpaceVim_statusline_b#%#SpaceVim_statusline_c#\ %l:%c\ %#SpaceVim_statusline_b_SpaceVim_statusline_c#%#SpaceVim_statusline_b#\ %P\ %#SpaceVim_statusline_c_SpaceVim_statusline_b#
+setlocal statusline=%#SpaceVim_statusline_a#%{SpaceVim#layers#core#statusline#mode(mode())}\ %{\ SpaceVim#layers#core#statusline#winnr(get(w:,\ \"winid\",\ winnr()))\ }\ %#SpaceVim_statusline_a_SpaceVim_statusline_b#%#SpaceVim_statusline_b#%{\ &modified\ ?\ '\ *\ '\ :\ '\ -\ '}4.8k\ boneCurve.cpp\ %#SpaceVim_statusline_b_SpaceVim_statusline_c#%#SpaceVim_statusline_c#%{empty(&ft)?\ \"\"\ :\ \"\ \"\ .\ &ft\ .\ \"\ \"}%#SpaceVim_statusline_c_SpaceVim_statusline_b#%#SpaceVim_statusline_b#%#SpaceVim_statusline_warn#\ ●\ 14\ %#SpaceVim_statusline_error#●\ 2\ %#SpaceVim_statusline_b_SpaceVim_statusline_c#%#SpaceVim_statusline_c#\ ❖\ ⓢ\ \ %#SpaceVim_statusline_c_SpaceVim_statusline_b#%#SpaceVim_statusline_c_SpaceVim_statusline_z#%#SpaceVim_statusline_z#%=%#SpaceVim_statusline_z#%{SpaceVim#layers#core#statusline#_current_tag()}%#SpaceVim_statusline_b_SpaceVim_statusline_z#%#SpaceVim_statusline_b#\ %l:%c\ %#SpaceVim_statusline_c_SpaceVim_statusline_b#
 setlocal suffixesadd=
 setlocal noswapfile
 setlocal synmaxcol=3000
@@ -1882,18 +2181,19 @@ set nowrap
 setlocal nowrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 51 - ((50 * winheight(0) + 40) / 80)
+let s:l = 210 - ((18 * winheight(0) + 14) / 28)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-51
-normal! 05|
+210
+normal! 037|
 wincmd w
 argglobal
-if bufexists('srctree/src/splineMath.hpp') | buffer srctree/src/splineMath.hpp | else | edit srctree/src/splineMath.hpp | endif
+enew
 let s:cpo_save=&cpo
 set cpo&vim
 imap <buffer> <S-BS> <Plug>delimitMateS-BS
+nnoremap <buffer> <silent> q :cclose:lclose
 imap <buffer> <silent> g <Plug>delimitMateJumpMany
 imap <buffer> " <Plug>delimitMate"
 imap <buffer> ' <Plug>delimitMate'
@@ -1913,15 +2213,15 @@ setlocal balloonexpr=
 setlocal nobinary
 setlocal nobreakindent
 setlocal breakindentopt=
-setlocal bufhidden=
-setlocal buflisted
-setlocal buftype=
+setlocal bufhidden=wipe
+setlocal nobuflisted
+setlocal buftype=quickfix
 setlocal cindent
 setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
 setlocal cinoptions=
 setlocal cinwords=if,else,while,do,for,switch
 setlocal colorcolumn=
-setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
+setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,f://
 setlocal commentstring=/*%s*/
 setlocal complete=.,w,b,u,t
 setlocal concealcursor=niv
@@ -1938,8 +2238,8 @@ setlocal nodiff
 setlocal equalprg=
 setlocal errorformat=
 setlocal expandtab
-if &filetype != 'cpp'
-setlocal filetype=cpp
+if &filetype != 'qf'
+setlocal filetype=qf
 endif
 setlocal fixendofline
 setlocal foldcolumn=0
@@ -1954,7 +2254,7 @@ setlocal foldnestmax=20
 set foldtext=SpaceVim#default#Customfoldtext()
 setlocal foldtext=SpaceVim#default#Customfoldtext()
 setlocal formatexpr=
-setlocal formatoptions=croql
+setlocal formatoptions=tcq
 setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
 setlocal formatprg=
 setlocal grepprg=
@@ -1976,12 +2276,12 @@ setlocal makeencoding=
 setlocal makeprg=
 setlocal matchpairs=(:),{:},[:]
 setlocal nomodeline
-setlocal modifiable
+setlocal nomodifiable
 setlocal nrformats=bin,hex
 set number
 setlocal number
 setlocal numberwidth=4
-setlocal omnifunc=ccomplete#Complete
+setlocal omnifunc=
 setlocal path=
 setlocal nopreserveindent
 setlocal nopreviewwindow
@@ -2001,12 +2301,12 @@ setlocal nospell
 setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
 setlocal spellfile=
 setlocal spelllang=en
-setlocal statusline=%#SpaceVim_statusline_ia#%{SpaceVim#layers#core#statusline#mode(mode())}\ %{\ SpaceVim#layers#core#statusline#winnr(get(w:,\ \"winid\",\ winnr()))\ }\ %#SpaceVim_statusline_ia_SpaceVim_statusline_b#%#SpaceVim_statusline_b#%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 42\ ?\ \"\"\ :\ (\"\ 444\ bytes\ splineMath.hpp\ \ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 50\ ?\ \"\"\ :\ (\"\ \ cpp\ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 64\ ?\ \"\"\ :\ (\"\ \ ❖\ ⓢ\ \ \ \")}%=%{\"\ \"\ .\ &ff\ .\ \"|\"\ .\ (&fenc!=\"\"?&fenc:&enc)\ .\ \"\ \"}\ %P\ 
+setlocal statusline=%#SpaceVim_statusline_a#%{SpaceVim#layers#core#statusline#mode(mode())}\ %{\ SpaceVim#layers#core#statusline#winnr(get(w:,\ \"winid\",\ winnr()))\ }\ %#SpaceVim_statusline_a_SpaceVim_statusline_b#%#SpaceVim_statusline_b#%{\ &modified\ ?\ '\ *\ '\ :\ '\ -\ '}No\ Name\ %#SpaceVim_statusline_b_SpaceVim_statusline_c#%#SpaceVim_statusline_c#%{empty(&ft)?\ \"\"\ :\ \"\ \"\ .\ &ft\ .\ \"\ \"}%#SpaceVim_statusline_c_SpaceVim_statusline_b#%#SpaceVim_statusline_b#\ ❖\ ⓢ\ \ %#SpaceVim_statusline_b_SpaceVim_statusline_c#%#SpaceVim_statusline_b_SpaceVim_statusline_z#%#SpaceVim_statusline_z#%=%#SpaceVim_statusline_z#%{SpaceVim#layers#core#statusline#_current_tag()}%#SpaceVim_statusline_b_SpaceVim_statusline_z#%#SpaceVim_statusline_b#%{\"\ \"\ .\ g:_spacevim_statusline_fileformat\ .\ \"\ |\ \"\ .\ (&fenc!=\"\"?&fenc:&enc)\ .\ \"\ \"}%#SpaceVim_statusline_c_SpaceVim_statusline_b#%#SpaceVim_statusline_c#\ %l:%c\ %#SpaceVim_statusline_b_SpaceVim_statusline_c#%#SpaceVim_statusline_b#\ %P\ %#SpaceVim_statusline_c_SpaceVim_statusline_b#
 setlocal suffixesadd=
 setlocal noswapfile
 setlocal synmaxcol=3000
-if &syntax != 'cpp'
-setlocal syntax=cpp
+if &syntax != 'qf'
+setlocal syntax=qf
 endif
 setlocal tabstop=2
 setlocal tagcase=
@@ -2020,783 +2320,20 @@ setlocal undofile
 setlocal undolevels=-123456
 setlocal varsofttabstop=
 setlocal vartabstop=
-setlocal nowinfixheight
+setlocal winfixheight
 setlocal nowinfixwidth
 set nowrap
 setlocal nowrap
 setlocal wrapmargin=0
-silent! normal! zE
-let s:l = 4 - ((3 * winheight(0) + 40) / 80)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-4
-normal! 0
 wincmd w
+3wincmd w
 exe 'vert 1resize ' . ((&columns * 144 + 144) / 288)
+exe '2resize ' . ((&lines * 40 + 41) / 83)
 exe 'vert 2resize ' . ((&columns * 143 + 144) / 288)
-tabnext
-edit srctree/src/a3_dogui.cpp
-set splitbelow splitright
-set nosplitbelow
-set nosplitright
-wincmd t
-set winminheight=0
-set winheight=1
-set winminwidth=0
-set winwidth=1
-argglobal
-let s:cpo_save=&cpo
-set cpo&vim
-imap <buffer> <S-BS> <Plug>delimitMateS-BS
-imap <buffer> <silent> g <Plug>delimitMateJumpMany
-imap <buffer> " <Plug>delimitMate"
-imap <buffer> ' <Plug>delimitMate'
-imap <buffer> ) <Plug>delimitMate)
-imap <buffer> [ <Plug>delimitMate[
-imap <buffer> ] <Plug>delimitMate]
-imap <buffer> ` <Plug>delimitMate`
-imap <buffer> { <Plug>delimitMate{
-imap <buffer> } <Plug>delimitMate}
-let &cpo=s:cpo_save
-unlet s:cpo_save
-setlocal keymap=
-setlocal noarabic
-setlocal autoindent
-setlocal backupcopy=
-setlocal balloonexpr=
-setlocal nobinary
-setlocal nobreakindent
-setlocal breakindentopt=
-setlocal bufhidden=
-setlocal buflisted
-setlocal buftype=
-setlocal cindent
-setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
-setlocal cinoptions=
-setlocal cinwords=if,else,while,do,for,switch
-setlocal colorcolumn=
-setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
-setlocal commentstring=/*%s*/
-setlocal complete=.,w,b,u,t
-setlocal concealcursor=niv
-setlocal conceallevel=2
-setlocal completefunc=
-setlocal nocopyindent
-setlocal cryptmethod=
-setlocal nocursorbind
-setlocal nocursorcolumn
-setlocal nocursorline
-setlocal define=
-setlocal dictionary=
-setlocal nodiff
-setlocal equalprg=
-setlocal errorformat=
-setlocal expandtab
-if &filetype != 'cpp'
-setlocal filetype=cpp
-endif
-setlocal fixendofline
-setlocal foldcolumn=0
-setlocal foldenable
-setlocal foldexpr=0
-setlocal foldignore=#
-setlocal foldlevel=0
-setlocal foldmarker={{{,}}}
-setlocal foldmethod=manual
-setlocal foldminlines=1
-setlocal foldnestmax=20
-set foldtext=SpaceVim#default#Customfoldtext()
-setlocal foldtext=SpaceVim#default#Customfoldtext()
-setlocal formatexpr=
-setlocal formatoptions=croql
-setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
-setlocal formatprg=
-setlocal grepprg=
-setlocal iminsert=0
-setlocal imsearch=-1
-setlocal include=
-setlocal includeexpr=
-setlocal indentexpr=
-setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
-setlocal noinfercase
-setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=
-set linebreak
-setlocal linebreak
-setlocal nolisp
-setlocal lispwords=
-setlocal nolist
-setlocal makeencoding=
-setlocal makeprg=
-setlocal matchpairs=(:),{:},[:]
-setlocal nomodeline
-setlocal modifiable
-setlocal nrformats=bin,hex
-set number
-setlocal number
-setlocal numberwidth=4
-setlocal omnifunc=ccomplete#Complete
-setlocal path=
-setlocal nopreserveindent
-setlocal nopreviewwindow
-setlocal quoteescape=\\
-setlocal noreadonly
-set relativenumber
-setlocal relativenumber
-setlocal norightleft
-setlocal rightleftcmd=search
-setlocal noscrollbind
-setlocal shiftwidth=2
-setlocal noshortname
-setlocal signcolumn=auto
-setlocal smartindent
-setlocal softtabstop=2
-setlocal nospell
-setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
-setlocal spellfile=
-setlocal spelllang=en
-setlocal statusline=%#SpaceVim_statusline_ia#%{SpaceVim#layers#core#statusline#mode(mode())}\ %{\ SpaceVim#layers#core#statusline#winnr(get(w:,\ \"winid\",\ winnr()))\ }\ %#SpaceVim_statusline_ia_SpaceVim_statusline_b#%#SpaceVim_statusline_b#%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 35\ ?\ \"\"\ :\ (\"\ 4.0k\ a3_dogui.cpp\ \ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 43\ ?\ \"\"\ :\ (\"\ \ cpp\ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 57\ ?\ \"\"\ :\ (\"\ \ ❖\ ⓢ\ \ \ \")}%=%{\"\ \"\ .\ &ff\ .\ \"|\"\ .\ (&fenc!=\"\"?&fenc:&enc)\ .\ \"\ \"}\ %P\ 
-setlocal suffixesadd=
-setlocal noswapfile
-setlocal synmaxcol=3000
-if &syntax != 'cpp'
-setlocal syntax=cpp
-endif
-setlocal tabstop=2
-setlocal tagcase=
-setlocal tags=
-setlocal termwinkey=
-setlocal termwinscroll=10000
-setlocal termwinsize=
-setlocal textwidth=0
-setlocal thesaurus=
-setlocal undofile
-setlocal undolevels=-123456
-setlocal varsofttabstop=
-setlocal vartabstop=
-setlocal nowinfixheight
-setlocal nowinfixwidth
-set nowrap
-setlocal nowrap
-setlocal wrapmargin=0
-silent! normal! zE
-let s:l = 33 - ((32 * winheight(0) + 40) / 80)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-33
-normal! 063|
-tabnext
-edit srctree/res/shaders/pick.fs.glsl
-set splitbelow splitright
-wincmd _ | wincmd |
-vsplit
-1wincmd h
-wincmd w
-set nosplitbelow
-set nosplitright
-wincmd t
-set winminheight=0
-set winheight=1
-set winminwidth=0
-set winwidth=1
-exe 'vert 1resize ' . ((&columns * 112 + 144) / 288)
-exe 'vert 2resize ' . ((&columns * 175 + 144) / 288)
-argglobal
-let s:cpo_save=&cpo
-set cpo&vim
-imap <buffer> <S-BS> <Plug>delimitMateS-BS
-imap <buffer> <silent> g <Plug>delimitMateJumpMany
-imap <buffer> " <Plug>delimitMate"
-imap <buffer> ' <Plug>delimitMate'
-imap <buffer> ) <Plug>delimitMate)
-imap <buffer> [ <Plug>delimitMate[
-imap <buffer> ] <Plug>delimitMate]
-imap <buffer> ` <Plug>delimitMate`
-imap <buffer> { <Plug>delimitMate{
-imap <buffer> } <Plug>delimitMate}
-let &cpo=s:cpo_save
-unlet s:cpo_save
-setlocal keymap=
-setlocal noarabic
-setlocal autoindent
-setlocal backupcopy=
-setlocal balloonexpr=
-setlocal nobinary
-setlocal nobreakindent
-setlocal breakindentopt=
-setlocal bufhidden=
-setlocal buflisted
-setlocal buftype=
-setlocal cindent
-setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
-setlocal cinoptions=
-setlocal cinwords=if,else,while,do,for,switch
-setlocal colorcolumn=
-setlocal comments=:#
-setlocal commentstring=#\ %s
-setlocal complete=.,w,b,u,t
-setlocal concealcursor=niv
-setlocal conceallevel=2
-setlocal completefunc=
-setlocal nocopyindent
-setlocal cryptmethod=
-setlocal nocursorbind
-setlocal nocursorcolumn
-setlocal nocursorline
-setlocal define=
-setlocal dictionary=
-setlocal nodiff
-setlocal equalprg=
-setlocal errorformat=
-setlocal expandtab
-if &filetype != 'conf'
-setlocal filetype=conf
-endif
-setlocal fixendofline
-setlocal foldcolumn=0
-setlocal foldenable
-setlocal foldexpr=0
-setlocal foldignore=#
-setlocal foldlevel=0
-setlocal foldmarker={{{,}}}
-setlocal foldmethod=manual
-setlocal foldminlines=1
-setlocal foldnestmax=20
-set foldtext=SpaceVim#default#Customfoldtext()
-setlocal foldtext=SpaceVim#default#Customfoldtext()
-setlocal formatexpr=
-setlocal formatoptions=croql
-setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
-setlocal formatprg=
-setlocal grepprg=
-setlocal iminsert=0
-setlocal imsearch=-1
-setlocal include=
-setlocal includeexpr=
-setlocal indentexpr=
-setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
-setlocal noinfercase
-setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=
-set linebreak
-setlocal linebreak
-setlocal nolisp
-setlocal lispwords=
-setlocal nolist
-setlocal makeencoding=
-setlocal makeprg=
-setlocal matchpairs=(:),{:},[:]
-setlocal nomodeline
-setlocal modifiable
-setlocal nrformats=bin,hex
-set number
-setlocal number
-setlocal numberwidth=4
-setlocal omnifunc=
-setlocal path=
-setlocal nopreserveindent
-setlocal nopreviewwindow
-setlocal quoteescape=\\
-setlocal noreadonly
-set relativenumber
-setlocal relativenumber
-setlocal norightleft
-setlocal rightleftcmd=search
-setlocal noscrollbind
-setlocal shiftwidth=2
-setlocal noshortname
-setlocal signcolumn=auto
-setlocal smartindent
-setlocal softtabstop=2
-setlocal nospell
-setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
-setlocal spellfile=
-setlocal spelllang=en
-setlocal statusline=%#SpaceVim_statusline_ia#%{SpaceVim#layers#core#statusline#mode(mode())}\ %{\ SpaceVim#layers#core#statusline#winnr(get(w:,\ \"winid\",\ winnr()))\ }\ %#SpaceVim_statusline_ia_SpaceVim_statusline_b#%#SpaceVim_statusline_b#%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 40\ ?\ \"\"\ :\ (\"\ 504\ bytes\ pick.fs.glsl\ \ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 49\ ?\ \"\"\ :\ (\"\ \ conf\ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 63\ ?\ \"\"\ :\ (\"\ \ ❖\ ⓢ\ \ \ \")}%=%{\"\ \"\ .\ &ff\ .\ \"|\"\ .\ (&fenc!=\"\"?&fenc:&enc)\ .\ \"\ \"}\ %P\ 
-setlocal suffixesadd=
-setlocal noswapfile
-setlocal synmaxcol=3000
-if &syntax != 'conf'
-setlocal syntax=conf
-endif
-setlocal tabstop=2
-setlocal tagcase=
-setlocal tags=
-setlocal termwinkey=
-setlocal termwinscroll=10000
-setlocal termwinsize=
-setlocal textwidth=0
-setlocal thesaurus=
-setlocal undofile
-setlocal undolevels=-123456
-setlocal varsofttabstop=
-setlocal vartabstop=
-setlocal nowinfixheight
-setlocal nowinfixwidth
-set nowrap
-setlocal nowrap
-setlocal wrapmargin=0
-silent! normal! zE
-let s:l = 27 - ((26 * winheight(0) + 40) / 80)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-27
-normal! 04|
-wincmd w
-argglobal
-if bufexists('srctree/res/shaders/simple.fs.glsl') | buffer srctree/res/shaders/simple.fs.glsl | else | edit srctree/res/shaders/simple.fs.glsl | endif
-let s:cpo_save=&cpo
-set cpo&vim
-imap <buffer> <S-BS> <Plug>delimitMateS-BS
-imap <buffer> <silent> g <Plug>delimitMateJumpMany
-imap <buffer> " <Plug>delimitMate"
-imap <buffer> ' <Plug>delimitMate'
-imap <buffer> ) <Plug>delimitMate)
-imap <buffer> [ <Plug>delimitMate[
-imap <buffer> ] <Plug>delimitMate]
-imap <buffer> ` <Plug>delimitMate`
-imap <buffer> { <Plug>delimitMate{
-imap <buffer> } <Plug>delimitMate}
-let &cpo=s:cpo_save
-unlet s:cpo_save
-setlocal keymap=
-setlocal noarabic
-setlocal autoindent
-setlocal backupcopy=
-setlocal balloonexpr=
-setlocal nobinary
-setlocal nobreakindent
-setlocal breakindentopt=
-setlocal bufhidden=
-setlocal buflisted
-setlocal buftype=
-setlocal cindent
-setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
-setlocal cinoptions=
-setlocal cinwords=if,else,while,do,for,switch
-setlocal colorcolumn=
-setlocal comments=:#
-setlocal commentstring=#\ %s
-setlocal complete=.,w,b,u,t
-setlocal concealcursor=niv
-setlocal conceallevel=2
-setlocal completefunc=
-setlocal nocopyindent
-setlocal cryptmethod=
-setlocal nocursorbind
-setlocal nocursorcolumn
-setlocal nocursorline
-setlocal define=
-setlocal dictionary=
-setlocal nodiff
-setlocal equalprg=
-setlocal errorformat=
-setlocal expandtab
-if &filetype != 'conf'
-setlocal filetype=conf
-endif
-setlocal fixendofline
-setlocal foldcolumn=0
-setlocal foldenable
-setlocal foldexpr=0
-setlocal foldignore=#
-setlocal foldlevel=0
-setlocal foldmarker={{{,}}}
-setlocal foldmethod=manual
-setlocal foldminlines=1
-setlocal foldnestmax=20
-set foldtext=SpaceVim#default#Customfoldtext()
-setlocal foldtext=SpaceVim#default#Customfoldtext()
-setlocal formatexpr=
-setlocal formatoptions=croql
-setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
-setlocal formatprg=
-setlocal grepprg=
-setlocal iminsert=0
-setlocal imsearch=-1
-setlocal include=
-setlocal includeexpr=
-setlocal indentexpr=
-setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
-setlocal noinfercase
-setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=
-set linebreak
-setlocal linebreak
-setlocal nolisp
-setlocal lispwords=
-setlocal nolist
-setlocal makeencoding=
-setlocal makeprg=
-setlocal matchpairs=(:),{:},[:]
-setlocal nomodeline
-setlocal modifiable
-setlocal nrformats=bin,hex
-set number
-setlocal number
-setlocal numberwidth=4
-setlocal omnifunc=
-setlocal path=
-setlocal nopreserveindent
-setlocal nopreviewwindow
-setlocal quoteescape=\\
-setlocal noreadonly
-set relativenumber
-setlocal relativenumber
-setlocal norightleft
-setlocal rightleftcmd=search
-setlocal noscrollbind
-setlocal shiftwidth=2
-setlocal noshortname
-setlocal signcolumn=auto
-setlocal smartindent
-setlocal softtabstop=2
-setlocal nospell
-setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
-setlocal spellfile=
-setlocal spelllang=en
-setlocal statusline=%#SpaceVim_statusline_ia#%{SpaceVim#layers#core#statusline#mode(mode())}\ %{\ SpaceVim#layers#core#statusline#winnr(get(w:,\ \"winid\",\ winnr()))\ }\ %#SpaceVim_statusline_ia_SpaceVim_statusline_b#%#SpaceVim_statusline_b#%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 42\ ?\ \"\"\ :\ (\"\ 864\ bytes\ simple.fs.glsl\ \ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 51\ ?\ \"\"\ :\ (\"\ \ conf\ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 65\ ?\ \"\"\ :\ (\"\ \ ❖\ ⓢ\ \ \ \")}%=%{\"\ \"\ .\ &ff\ .\ \"|\"\ .\ (&fenc!=\"\"?&fenc:&enc)\ .\ \"\ \"}\ %P\ 
-setlocal suffixesadd=
-setlocal noswapfile
-setlocal synmaxcol=3000
-if &syntax != 'conf'
-setlocal syntax=conf
-endif
-setlocal tabstop=2
-setlocal tagcase=
-setlocal tags=
-setlocal termwinkey=
-setlocal termwinscroll=10000
-setlocal termwinsize=
-setlocal textwidth=0
-setlocal thesaurus=
-setlocal undofile
-setlocal undolevels=-123456
-setlocal varsofttabstop=
-setlocal vartabstop=
-setlocal nowinfixheight
-setlocal nowinfixwidth
-set nowrap
-setlocal nowrap
-setlocal wrapmargin=0
-silent! normal! zE
-let s:l = 40 - ((39 * winheight(0) + 40) / 80)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-40
-normal! 0
-wincmd w
-exe 'vert 1resize ' . ((&columns * 112 + 144) / 288)
-exe 'vert 2resize ' . ((&columns * 175 + 144) / 288)
-tabnext
-edit srctree/src/app_renderer.cpp
-set splitbelow splitright
-wincmd _ | wincmd |
-vsplit
-1wincmd h
-wincmd w
-set nosplitbelow
-set nosplitright
-wincmd t
-set winminheight=0
-set winheight=1
-set winminwidth=0
-set winwidth=1
-exe 'vert 1resize ' . ((&columns * 112 + 144) / 288)
-exe 'vert 2resize ' . ((&columns * 175 + 144) / 288)
-argglobal
-let s:cpo_save=&cpo
-set cpo&vim
-imap <buffer> <S-BS> <Plug>delimitMateS-BS
-imap <buffer> <silent> g <Plug>delimitMateJumpMany
-imap <buffer> " <Plug>delimitMate"
-imap <buffer> ' <Plug>delimitMate'
-imap <buffer> ) <Plug>delimitMate)
-imap <buffer> [ <Plug>delimitMate[
-imap <buffer> ] <Plug>delimitMate]
-imap <buffer> ` <Plug>delimitMate`
-imap <buffer> { <Plug>delimitMate{
-imap <buffer> } <Plug>delimitMate}
-let &cpo=s:cpo_save
-unlet s:cpo_save
-setlocal keymap=
-setlocal noarabic
-setlocal autoindent
-setlocal backupcopy=
-setlocal balloonexpr=
-setlocal nobinary
-setlocal nobreakindent
-setlocal breakindentopt=
-setlocal bufhidden=
-setlocal buflisted
-setlocal buftype=
-setlocal cindent
-setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
-setlocal cinoptions=
-setlocal cinwords=if,else,while,do,for,switch
-setlocal colorcolumn=
-setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
-setlocal commentstring=/*%s*/
-setlocal complete=.,w,b,u,t
-setlocal concealcursor=niv
-setlocal conceallevel=2
-setlocal completefunc=
-setlocal nocopyindent
-setlocal cryptmethod=
-setlocal nocursorbind
-setlocal nocursorcolumn
-setlocal nocursorline
-setlocal define=
-setlocal dictionary=
-setlocal nodiff
-setlocal equalprg=
-setlocal errorformat=
-setlocal expandtab
-if &filetype != 'cpp'
-setlocal filetype=cpp
-endif
-setlocal fixendofline
-setlocal foldcolumn=0
-setlocal foldenable
-setlocal foldexpr=0
-setlocal foldignore=#
-setlocal foldlevel=0
-setlocal foldmarker={{{,}}}
-setlocal foldmethod=manual
-setlocal foldminlines=1
-setlocal foldnestmax=20
-set foldtext=SpaceVim#default#Customfoldtext()
-setlocal foldtext=SpaceVim#default#Customfoldtext()
-setlocal formatexpr=
-setlocal formatoptions=croql
-setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
-setlocal formatprg=
-setlocal grepprg=
-setlocal iminsert=0
-setlocal imsearch=-1
-setlocal include=
-setlocal includeexpr=
-setlocal indentexpr=
-setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
-setlocal noinfercase
-setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=
-set linebreak
-setlocal linebreak
-setlocal nolisp
-setlocal lispwords=
-setlocal nolist
-setlocal makeencoding=
-setlocal makeprg=
-setlocal matchpairs=(:),{:},[:]
-setlocal nomodeline
-setlocal modifiable
-setlocal nrformats=bin,hex
-set number
-setlocal number
-setlocal numberwidth=4
-setlocal omnifunc=ccomplete#Complete
-setlocal path=
-setlocal nopreserveindent
-setlocal nopreviewwindow
-setlocal quoteescape=\\
-setlocal noreadonly
-set relativenumber
-setlocal relativenumber
-setlocal norightleft
-setlocal rightleftcmd=search
-setlocal noscrollbind
-setlocal shiftwidth=2
-setlocal noshortname
-setlocal signcolumn=auto
-setlocal smartindent
-setlocal softtabstop=2
-setlocal nospell
-setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
-setlocal spellfile=
-setlocal spelllang=en
-setlocal statusline=%#SpaceVim_statusline_ia#%{SpaceVim#layers#core#statusline#mode(mode())}\ %{\ SpaceVim#layers#core#statusline#winnr(get(w:,\ \"winid\",\ winnr()))\ }\ %#SpaceVim_statusline_ia_SpaceVim_statusline_b#%#SpaceVim_statusline_b#%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 39\ ?\ \"\"\ :\ (\"\ 2.7k\ app_renderer.cpp\ \ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 47\ ?\ \"\"\ :\ (\"\ \ cpp\ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 61\ ?\ \"\"\ :\ (\"\ \ ❖\ ⓢ\ \ \ \")}%=%{\"\ \"\ .\ &ff\ .\ \"|\"\ .\ (&fenc!=\"\"?&fenc:&enc)\ .\ \"\ \"}\ %P\ 
-setlocal suffixesadd=
-setlocal noswapfile
-setlocal synmaxcol=3000
-if &syntax != 'cpp'
-setlocal syntax=cpp
-endif
-setlocal tabstop=2
-setlocal tagcase=
-setlocal tags=
-setlocal termwinkey=
-setlocal termwinscroll=10000
-setlocal termwinsize=
-setlocal textwidth=0
-setlocal thesaurus=
-setlocal undofile
-setlocal undolevels=-123456
-setlocal varsofttabstop=
-setlocal vartabstop=
-setlocal nowinfixheight
-setlocal nowinfixwidth
-set nowrap
-setlocal nowrap
-setlocal wrapmargin=0
-silent! normal! zE
-let s:l = 6 - ((5 * winheight(0) + 40) / 80)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-6
-normal! 0
-wincmd w
-argglobal
-if bufexists('srctree/src/app_renderer.hpp') | buffer srctree/src/app_renderer.hpp | else | edit srctree/src/app_renderer.hpp | endif
-let s:cpo_save=&cpo
-set cpo&vim
-imap <buffer> <S-BS> <Plug>delimitMateS-BS
-imap <buffer> <silent> g <Plug>delimitMateJumpMany
-imap <buffer> " <Plug>delimitMate"
-imap <buffer> ' <Plug>delimitMate'
-imap <buffer> ) <Plug>delimitMate)
-imap <buffer> [ <Plug>delimitMate[
-imap <buffer> ] <Plug>delimitMate]
-imap <buffer> ` <Plug>delimitMate`
-imap <buffer> { <Plug>delimitMate{
-imap <buffer> } <Plug>delimitMate}
-let &cpo=s:cpo_save
-unlet s:cpo_save
-setlocal keymap=
-setlocal noarabic
-setlocal autoindent
-setlocal backupcopy=
-setlocal balloonexpr=
-setlocal nobinary
-setlocal nobreakindent
-setlocal breakindentopt=
-setlocal bufhidden=
-setlocal buflisted
-setlocal buftype=
-setlocal cindent
-setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
-setlocal cinoptions=
-setlocal cinwords=if,else,while,do,for,switch
-setlocal colorcolumn=
-setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
-setlocal commentstring=/*%s*/
-setlocal complete=.,w,b,u,t
-setlocal concealcursor=niv
-setlocal conceallevel=2
-setlocal completefunc=
-setlocal nocopyindent
-setlocal cryptmethod=
-setlocal nocursorbind
-setlocal nocursorcolumn
-setlocal nocursorline
-setlocal define=
-setlocal dictionary=
-setlocal nodiff
-setlocal equalprg=
-setlocal errorformat=
-setlocal expandtab
-if &filetype != 'cpp'
-setlocal filetype=cpp
-endif
-setlocal fixendofline
-setlocal foldcolumn=0
-setlocal foldenable
-setlocal foldexpr=0
-setlocal foldignore=#
-setlocal foldlevel=0
-setlocal foldmarker={{{,}}}
-setlocal foldmethod=manual
-setlocal foldminlines=1
-setlocal foldnestmax=20
-set foldtext=SpaceVim#default#Customfoldtext()
-setlocal foldtext=SpaceVim#default#Customfoldtext()
-setlocal formatexpr=
-setlocal formatoptions=croql
-setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
-setlocal formatprg=
-setlocal grepprg=
-setlocal iminsert=0
-setlocal imsearch=-1
-setlocal include=
-setlocal includeexpr=
-setlocal indentexpr=
-setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
-setlocal noinfercase
-setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=
-set linebreak
-setlocal linebreak
-setlocal nolisp
-setlocal lispwords=
-setlocal nolist
-setlocal makeencoding=
-setlocal makeprg=
-setlocal matchpairs=(:),{:},[:]
-setlocal nomodeline
-setlocal modifiable
-setlocal nrformats=bin,hex
-set number
-setlocal number
-setlocal numberwidth=4
-setlocal omnifunc=ccomplete#Complete
-setlocal path=
-setlocal nopreserveindent
-setlocal nopreviewwindow
-setlocal quoteescape=\\
-setlocal noreadonly
-set relativenumber
-setlocal relativenumber
-setlocal norightleft
-setlocal rightleftcmd=search
-setlocal noscrollbind
-setlocal shiftwidth=2
-setlocal noshortname
-setlocal signcolumn=auto
-setlocal smartindent
-setlocal softtabstop=2
-setlocal nospell
-setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
-setlocal spellfile=
-setlocal spelllang=en
-setlocal statusline=%#SpaceVim_statusline_ia#%{SpaceVim#layers#core#statusline#mode(mode())}\ %{\ SpaceVim#layers#core#statusline#winnr(get(w:,\ \"winid\",\ winnr()))\ }\ %#SpaceVim_statusline_ia_SpaceVim_statusline_b#%#SpaceVim_statusline_b#%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 44\ ?\ \"\"\ :\ (\"\ 845\ bytes\ app_renderer.hpp\ \ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 52\ ?\ \"\"\ :\ (\"\ \ cpp\ \")}%{\ get(w:,\ \"winwidth\",\ 150)\ <\ 66\ ?\ \"\"\ :\ (\"\ \ ❖\ ⓢ\ \ \ \")}%=%{\"\ \"\ .\ &ff\ .\ \"|\"\ .\ (&fenc!=\"\"?&fenc:&enc)\ .\ \"\ \"}\ %P\ 
-setlocal suffixesadd=
-setlocal noswapfile
-setlocal synmaxcol=3000
-if &syntax != 'cpp'
-setlocal syntax=cpp
-endif
-setlocal tabstop=2
-setlocal tagcase=
-setlocal tags=
-setlocal termwinkey=
-setlocal termwinscroll=10000
-setlocal termwinsize=
-setlocal textwidth=0
-setlocal thesaurus=
-setlocal undofile
-setlocal undolevels=-123456
-setlocal varsofttabstop=
-setlocal vartabstop=
-setlocal nowinfixheight
-setlocal nowinfixwidth
-set nowrap
-setlocal nowrap
-setlocal wrapmargin=0
-silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 40) / 80)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-1
-normal! 0
-wincmd w
-exe 'vert 1resize ' . ((&columns * 112 + 144) / 288)
-exe 'vert 2resize ' . ((&columns * 175 + 144) / 288)
+exe '3resize ' . ((&lines * 28 + 41) / 83)
+exe 'vert 3resize ' . ((&columns * 143 + 144) / 288)
+exe '4resize ' . ((&lines * 10 + 41) / 83)
+exe 'vert 4resize ' . ((&columns * 143 + 144) / 288)
 tabnext 3
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf

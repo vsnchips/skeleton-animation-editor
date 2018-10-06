@@ -4,6 +4,9 @@
 #include "a3.hpp"
 #include "splineMath.hpp"
 #include "drawStyle.hpp"
+
+#include "boneCurve.hpp"
+
 // Keyframe window methods
 
 using namespace std;
@@ -30,6 +33,7 @@ void a3_Application::kfWindowFresh(){
    glClearColor(0.2,0.2,0.4, 1); // Clears the color to a dark blue
    glClearDepth(1); // Clears the depth buffer to it's maximum value
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  
     
     //draw some beziers.
     styleCurve();
@@ -65,6 +69,10 @@ void a3_Application::kfWindowPick(){
 
 drawList a3_Application::testDrawList(cgra::Mesh * ctlMesh ){
 
+  //Control Points
+
+  boneCurve testBoneCurve;
+
   static float ys[] = {0.5, 1, -1, -0.5};
   vector<vec2> testCats; testCats.clear();
   testCats.push_back(vec2(-2,0.));
@@ -75,6 +83,8 @@ drawList a3_Application::testDrawList(cgra::Mesh * ctlMesh ){
   testCats.push_back(vec2(3,-0.5));
   testCats.push_back(vec2(4,0.5));
   testCats.push_back(vec2(5,0.));
+
+  testBoneCurve.catreps =  testCats;
 
   vec2 sp = catSamp2D(testT, testCats);
 
@@ -89,15 +99,19 @@ drawList a3_Application::testDrawList(cgra::Mesh * ctlMesh ){
   float asp = m_kfWinSize.x/m_kfWinSize.y;
   float invasp = 1/asp;
   viewStyle.unfms.m4["projectionMat"] = ortho(-2.f, 2.f, -2.f, 2.f,-100.f, 100.f);
-  dList.push_back(viewStyle);
+//  dList.push_back(viewStyle);
+  
   //Bezier Line
 // Todo: get the line from the boneCurve
-// drawList lineStyle = nowCurve->getStyle();
+//
+  drawList lineStyle = testBoneCurve.getStyle();
 
-  drawStyle testPoint; testPoint.unfms.m4["modelMat"] = scale (translate( mat4(),
+  dList.insert(dList.end(), lineStyle.begin(), lineStyle.end());
+
+  drawStyle testPoint;
   
-        vec3( sp.x , sp.y , 0)),
-  
+  testPoint.unfms.m4["modelMat"] = scale (translate( mat4(),
+  vec3( sp.x , sp.y , 0)),
   vec3(0.5*invasp,0.2,0.1)) ;
 
   testPoint.m_mesh = ctlMesh;
@@ -108,7 +122,7 @@ drawList a3_Application::testDrawList(cgra::Mesh * ctlMesh ){
 //Controls
   const int degree = 5;
   float fstep =2./float(degree);
-  for (int i=0; i< 5; i++){
+  for (int i=0; i< 8; i++){
     float x = testCats[i].x;
     float y = testCats[i].y;
 

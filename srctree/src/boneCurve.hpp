@@ -11,9 +11,9 @@ class boneCurve{
     std::vector<drawStyle> getStyle();
     
     //gl stuff
-    GLuint vao;
-    GLuint vbo;
-    GLuint ibo;
+    GLuint vao = 0;
+    GLuint vbo = 0;
+    GLuint ibo = 0;
 
     void updateCurveLineParticles();
     std::vector<glm::vec2>curveLineParticles;

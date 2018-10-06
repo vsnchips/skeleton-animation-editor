@@ -21,7 +21,9 @@ class drawStyle{
   //this allows drawStyles with only uniform settings
   //to be included like optional lines
 public:
-  int mode=-1;
+  GLuint mode=-1;
+  GLuint vao;
+  int primCount;
   std::string tag;
   cgra::Program * prog = nullptr;
   uniforms unfms;

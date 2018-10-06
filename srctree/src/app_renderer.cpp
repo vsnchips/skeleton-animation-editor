@@ -76,6 +76,14 @@ void app_renderer::execute(std::vector<drawStyle> & target){
         if (d.mode > -1) d.m_mesh->draw(d.mode);
         else d.m_mesh->draw();
       }
+
+      if (d.tag == "lines"){
+      if (d.vao){
+       glBindVertexArray(d.vao);
+       glLineWidth(2.0f);
+       glDrawArrays(GL_LINE_STRIP, 0, d.primCount); 
+      }
+      }
     }
   }
 

@@ -182,7 +182,9 @@ void boneCurve::updateCurveLineParticles(){
 }
 
 
-void boneCurve::freshBuffs(){  glGenVertexArrays(1, &vao);
+void boneCurve::freshBuffs(){
+  
+  glGenVertexArrays(1, &vao);
   glBindVertexArray(vao) ;
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER,vbo);
@@ -205,14 +207,24 @@ vector<drawStyle> boneCurve::getStyle(){
 
   drawStyle lStyle;
   lStyle.mode = GL_LINE_STRIP;
-  GLuint pbuff;
-  glGenBuffers(1,&pbuff);
+  lStyle.tag = "lines";
+  lStyle.unfms.m4["modelMat"] = mat4(1);
+  lStyle.primCount = 50;//(catreps.size()-3)*10;
 //  gl
-  for(int i = 1; i<catreps.size()-1; i++){ //includes dummies
-     
-  
+//
+  std::vector<vec2> pbuff; pbuff.clear();
+  for(int i = 0; i<catreps.size()-3; i++){ //includes dummies
+    for ( int j = 0; j < 10; j++){
+            float t = i+float(j)/11.f;
+      pbuff.push_back( catSamp2D(  t , catreps ));
+    }
   }
 
+  glBindVertexArray(vao) ;
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vec2) * pbuff.size(), &pbuff[0], GL_DYNAMIC_DRAW );
+
+  lStyle.vao = vao;
+  cstyle.push_back(lStyle);
   return cstyle;
 
 }
