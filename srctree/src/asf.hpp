@@ -52,12 +52,15 @@ class asfApp {
     
     //Pose Management
     std::vector<pose> workPoses;
+    int focusIndex=0;
     pose * currentWorkPose;
     void setWorkPose(frame);
     void focusPose(int);
     void newWorkPose();
 
     void openPose();
+    void removePose();
+    void removePose(int);
     pose poseFromFile( char *); // Reads a pose file into a constructed pose.
     void poseToFile( char *, pose *);   // Saves a given pose to a file
     void workPoseToFile( char *);

@@ -108,12 +108,14 @@ struct bone {
 
 
 #include <map>
+
 typedef std::map<std::string, std::vector<float>> frame;
 
 class pose{
  public:
    frame my_frame;
    int index;
+   std::string filename = "Unsaved";
 
 };
 

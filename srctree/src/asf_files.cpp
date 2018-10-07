@@ -17,14 +17,15 @@ using namespace glm;
 //
 //
 
+#include <filesystem>
 void asfApp::workPoseToFile(char * filename){
-  printf("asfAp postToFile to be implemented\n");
 
+  currentWorkPose -> filename = filename;
   ofstream pfs(filename);
 
   if (!pfs.is_open()) { printf("Cant open %s for writing!", filename); return; }
 
-  pfs << currentWorkPose->index << "\n";
+  //pfs << currentWorkPose->index << "\n";
   for ( const auto x : currentWorkPose->my_frame ){
     pfs << x.first << " ";
     for (float f : x.second) pfs << f << " ";
@@ -40,15 +41,19 @@ void asfApp::workPoseToFile(char * filename){
 void asfApp::openPose(){
 
   nfdchar_t * fromFile;
-  NFD_SaveDialog(".pose,*",".",&fromFile); 
+  NFD_OpenDialog(".pos,*",".",&fromFile); 
 
   newWorkPose();
-  workPoses[workPoses.size()-1] = poseFromFile( fromFile );
+  currentWorkPose = &(workPoses[workPoses.size()-1]);
+  *currentWorkPose = poseFromFile( fromFile );
+  currentWorkPose->index = workPoses.size()-1;
+  showskel->applyPose(&(currentWorkPose->my_frame));
 }
 
 pose asfApp::poseFromFile( char * fromFile){
 
   pose toPose;
+  toPose.filename = string( fromFile );
   frame pf; pf.clear();
 
   ifstream pfilestream(fromFile);
@@ -66,7 +71,7 @@ pose asfApp::poseFromFile( char * fromFile){
       if (line.empty()|| line[0] == '#') //Comment Condition
         continue;
       else if (isdigit(line[0]))// Pose Index Condition 
-      { toPose.index = atoi(&line[0]); }
+      ; // { toPose.index = atoi(&line[0]); }
       else {
         //read the rotation in
         string thebone;

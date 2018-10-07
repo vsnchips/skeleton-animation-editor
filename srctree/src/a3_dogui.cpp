@@ -3,7 +3,11 @@
 #include "a3.hpp"
 
 #include "imgui.h"
+#include "skeleton.hpp"
 
+#include <filesystem>
+
+namespace fs = std::filesystem;
 using namespace std;
 
 void a3_Application::doGUI() {
@@ -73,10 +77,33 @@ void a3_Application::doGUI() {
 
     ImGui::End();
 
+    if (theAsfApp->skelload){
     ImGui::Begin("Keyframe Controls");
     ImGui::Checkbox("Toggle Keyframe Editor",&kf_window_see);
-    ImGui::SliderFloat("T",&testT,-0.f , 5.f, "%.5f", 1.0f);
+    for( int i= 0 ; i < theAsfApp -> workPoses.size(); i++){
+
+      pose * p; p = & theAsfApp -> workPoses[i];
+    
+      stringstream button;
+
+      button << p->index << " : " << fs::relative( p -> filename.c_str(), fs::current_path() ) << " " << (theAsfApp->currentWorkPose == p ? "<< current" : "");
+
+      //if(ImGui::RadioButton("%d : %s %s",p->index,p->filename.c_str(), theAsfApp->currentWorkPose == p ? "<< current" : "",
+      if(ImGui::RadioButton(button.str().c_str(),
+            theAsfApp->focusIndex == i)) 
+          {
+          theAsfApp -> focusIndex = i; 
+          theAsfApp -> focusPose(i);
+          }
+    } 
+     
+    ImGui::SliderFloat("Position",&testT,-0.f , 5.f, "%.5f", 1.0f);
+
+    if (ImGui::Button("next Pose")){ theAsfApp->nextPose();}
+    if (ImGui::Button("prev Pose")){ theAsfApp->prevPose();}
+    if (ImGui::Button("Remove Pose")){ theAsfApp->removePose();}
     ImGui::End();
+    }
 
     ImGui::Begin("Shader Controls");
     if(ImGui::Button("Toggle Picker Test")){
