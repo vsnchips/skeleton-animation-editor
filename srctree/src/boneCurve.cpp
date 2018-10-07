@@ -202,14 +202,15 @@ vector<drawStyle> boneCurve::getStyle(){
   if (vbo == 0 || ibo == 0 || vao == 0) { //Refresh buffers!
   glDelete();
   freshBuffs();
-
-    }
+  }
 
   drawStyle lStyle;
   lStyle.mode = GL_LINE_STRIP;
   lStyle.tag = "lines";
   lStyle.unfms.m4["modelMat"] = mat4(1);
-  lStyle.primCount = 50;//(catreps.size()-3)*10;
+  lStyle.primCount = 50;
+  
+//(catreps.size()-3)*10;
 //  gl
 //
   std::vector<vec2> pbuff; pbuff.clear();
@@ -234,9 +235,14 @@ void boneCurve::movePoint( int id, glm::vec2 dv){
 }
 
 
-void boneCurve::newKF (pose & newpose){
+void boneCurve::newKF(const vector<float> * xyz){
  //convert the euler angle to a quaternion  
 	const float DEGMUL = pi<float>()/180;
+  mat4 r = rotate(mat4(1), (*xyz) [0], vec3(1,0,0));;
+       r = rotate(mat4(1), (*xyz) [1], vec3(0,1,0)) * r;
+       r = rotate(mat4(1), (*xyz) [2], vec3(0,0,1)) * r;
+
+
   
 
 }

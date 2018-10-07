@@ -10,7 +10,6 @@
 #include "cgra/matrix.hpp"
 #include "cgra/wavefront.hpp"
 
-#include "asf.hpp"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -23,6 +22,7 @@
 #include <map>
 #include <string>
 
+#include "asf.hpp"
 
 using namespace std;
 
@@ -64,7 +64,9 @@ void asfApp::loadSkeleton(const char * skelFile){
 //     showskel->setProgram(m_program);
      showskel->m_bonemesh = &m_mesh;
      showskel->m_jointmesh = &m_jointMesh;
+
      skelload = true;
+     newWorkPose();
 
 
 
@@ -73,7 +75,6 @@ void asfApp::loadSkeleton(const char * skelFile){
 // TODO: put this in a lib or something. git it outa here!
 // Helper method for retreiving and trimming the next line in a file.
 // You should not need to modify this method.
-namespace {
 	string nextLineTrimmed(istream &file) {
 		// Pull out line from file
 		string line;
@@ -87,70 +88,7 @@ namespace {
 		}
 		return "";
 	}
-}
 
-
-void asfApp::loadAnimation(){
-
-     nfdchar_t * aniFile;
-
-     NFD_OpenDialog( "*", "", &aniFile);
-     printf("\nloading %s\n",aniFile);
-
-    ifstream amcStream(aniFile);
-    if (!amcStream.is_open()) {
-    	printf("Cant open amc!\n");
-    } else{
-
-	//construct a clip
-	theClip.clear();
-	int cfnum = 0;
-
-    while (amcStream.good()){
-        string line = nextLineTrimmed(amcStream);
-	if (line.empty() || line[0] == '#')
-		continue;
-	else if (line[0] == ':') {
-	  //something something fully specified
-	  //something something degrees
-	}
-   	else if (isdigit(line[0])){
-		cfnum = atoi(&line[0]);
-		if (theClip.size()<cfnum) {
-		frame newframe; newframe.clear();
-		theClip.push_back(newframe);
-		}
-	}
-	else{
-	//read the rotation in
-		string thebone;
-		istringstream lstream(line);
-		lstream >> thebone;
-		// float vec
-		vector<float> rots;
-		rots.clear();
-		string num = "";
-	 	while (lstream >> num){
-			rots.push_back(stof(num));
-			num="";
-		}//got vector now
-		theClip[cfnum-1][ thebone ] = rots; //copy the vector to the frame
-	//breakpoint here
-	printf("frame one:");
-
-	for (auto const& x : theClip[0])
-	{
-		std::cout << x.first  // string (key)
-			<< ':'
-		//	<< x.second // string's value
-			<< std::endl ;
-	}
-	}
-    }
-    }
-
-	m_play=true;
-}
 
 void asfApp::play(){
 	m_play = true;
@@ -225,8 +163,6 @@ void asfApp::init(const char * skelFile) {
     walkingPose["rhumerus"] = {-60,-30,-0};
     walkingPose["lradius"] = {50,45,45};
     walkingPose["rradius"] = {45,30,-45};
-
-
 
 }
 
@@ -313,19 +249,16 @@ cgra::Mesh asfApp::loadObj(char *filename) {
 }
 
 void asfApp::updateScene() {
-
 stylePack.clear();
-
 //updates
 if (skelload && m_play){
 	  m_play_pos += m_speed * 0.0004; showskel-> applyFromClip( theClip, m_play_pos);
     m_play_pos = glm::fract( m_play_pos );
 	}
 stylePack = *(showskel->renderSkeleton( & m_mesh , tether));
-
 }
 
-  float workRot[] = {0,0,0};
+float workRot[] = {0,0,0};
 void asfApp::doGUI() {
 //the bonemap definitely works.
   ImGui::SetNextWindowSize(ImVec2(300, 50), ImGuiSetCond_FirstUseEver);
@@ -383,48 +316,6 @@ void asfApp::doGUI() {
     ImGui::SetNextWindowSize(ImVec2(250, 250), ImGuiSetCond_FirstUseEver);
     ImGui::Begin("Shapes");
 
-   //Camera
-    ImGui::SliderFloat3("Translate",&m_translation[0],-20.0f,20.0f, "%.5f",1.5f);
-    if(ImGui::SliderFloat("Scale",&m_scale,0,100.0f, "%.5f", 5.f)){
-    	if (skelload) showskel->axisSize = 1/m_scale;
-    }
-
-     if(ImGui::SliderFloat3("Rotate",&polarrotation[0],-M_PI,M_PI, "%.5f", 1.0f)){
-        // User's spun the globe
-        // Find the resulting matrix!
-
-        //1. Transform the Z/north pole, X/west, and Y/celestial vectors via the input lat/long TODO: How do i get this into a mat3x3?
-     if ( polarrotation.x == 0 ){
-         zax = glm::vec3(0,0,1);
-         yax = glm::vec3(0,1,0);
-         xax = glm::vec3(1,0,0);
-     }
-     else {
-         //fix for negative latitudes:
-         float polx,poly;
-         if (polarrotation.x < 0){
-             polx =-polarrotation.x;
-             poly = polarrotation.y + M_PI;
-         } else {
-             polx = polarrotation.x;
-             poly = polarrotation.y;
-         }
-
-         zax = glm::rotate(
-                    (glm::rotate(glm::vec3(0.,0.,1.),polx,glm::vec3(0.,1.,0.))) // tilt it on Y over to X to latitude
-                    ,poly, glm::vec3(0.,0.,1.));  // spin it on true Zorth to longtitude
-
-        //2.Find the normal and angle between Zorth and the new Z, and apply the same rotation to Xwest and YCelestial
-        glm::vec3 tnorm = glm::cross(glm::vec3(0.,0.,1.),zax);
-        yax = glm::rotate(glm::vec3(0.,1.,0.),polx,tnorm);
-        xax = glm::rotate(glm::vec3(1.,0.,0.),polx,tnorm);
-      }
-        //3. Rotate X and Y around the tilted Z pole/
-        yax = glm::rotate(yax, polarrotation.z, zax);
-        xax = glm::rotate(xax, polarrotation.z, zax);
-
-    };
-
     /*
      ************************************************************
      *                                                          *
@@ -439,58 +330,14 @@ void asfApp::doGUI() {
 	    loadSkeleton();
     }
 
-
-    static bool wireframe;
-    if(ImGui::Checkbox("Draw Wireframe",&wireframe)) {
-        m_mesh.setDrawWireframe(wireframe);
-    }
-
-    // MESH LOADING:/
-
-    static char pole[] = "../srctree/res/models/zpole.obj";
-
-    static char path[256];
-
-    if (std::strlen(path)<1) std::strcpy(path,pole);
-
-    (ImGui::InputText("Load *.OBJ",path, 256));
-
-    if(ImGui::Button("Load File")){
-
-        FILE * file = fopen(path, "r");
-        if( file == NULL ){
-            printf("Impossible to open the file !\n");
-            //return false;
-        }else {
-            printf("Loading %s \n", path);
-
-            m_mesh = loadObj(path);
-
-     } //endif loading
-    }//endif textinput
-
-    if(ImGui::Button("Load Cube")) createCube();
-
-    //debugging stuff:
-
-    ImGui::Text("tricount :%d" , m_mesh.m_indices.size()/3);
-    ImGui::Text("vertcount : %d" , m_mesh.m_vertices.size());
-
     ImGui::End();
 }
 
 
 // Input Handlers
 
-void asfApp::onMouseButton(int button, int action, int) {
-    if (button >=0 && button < 3) {
-        // Set the 'down' state for the appropriate mouse button
-        m_mouseButtonDown[button] = action == GLFW_PRESS;
-    }
-}
-
 void asfApp::onCursorPos(double xpos, double ypos) {
-  }
+}
 
 void asfApp::onKey(int key, int scancode, int action, int mods) {
     // `(void)foo` suppresses unused variable warnings
@@ -529,16 +376,17 @@ if (showskel){
 
 }
 }
-void asfApp::poseToFile(pose & somePose){
- printf("asfAp postToFile to be implemented\n");
-}
+
 
 void asfApp::poseToBones(pose & somePose){
  printf("asfAp poseToBones to be tested\n");
  
    boneCurveMap.clear();
  for (const auto x : somePose.my_frame){
-  boneCurveMap[x.first].newKF(somePose);     // Passing the whole map being iterated into the thing it maps to. This is either messy, or convenient? 
+  // Passing the whole map being iterated into the thing it maps to. This is either messy, or convenient?
+  map<string,boneCurve>::iterator bc = boneCurveMap.find(x.first);
+  if (bc != boneCurveMap.end())
+  boneCurveMap[bc->first].newKF(&x.second); 
  
  }
 }
@@ -561,10 +409,11 @@ void asfApp::newWorkPose(){
    int att = getFrame(   &newpose.my_frame   );
    newpose.index = workPoses.size()+1;
    if (att>-1) workPoses.push_back(newpose);
+   currentWorkPose = &workPoses[workPoses.size()-1];
 }
 
-void asfApp::setWorkPose(int i, frame newframe){
-  workPoses[i].my_frame = newframe;
+void asfApp::setWorkPose(frame newframe){
+  currentWorkPose->my_frame = newframe;
 }
 
 

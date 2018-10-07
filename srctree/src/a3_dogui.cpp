@@ -10,6 +10,10 @@ void a3_Application::doGUI() {
 
     theAsfApp->doGUI();
 
+    ImGui::Begin("Working Pose Status");
+    if (theAsfApp && theAsfApp -> skelload) ImGui::Text("Pose Keyframe index # %d:" , theAsfApp -> currentWorkPose->index );
+    ImGui::End(); 
+
     ImGui::SetNextWindowSize(ImVec2(250, 250), ImGuiSetCond_FirstUseEver);
     ImGui::Begin("Shapes");
 
@@ -71,7 +75,7 @@ void a3_Application::doGUI() {
 
     ImGui::Begin("Keyframe Controls");
     ImGui::Checkbox("Toggle Keyframe Editor",&kf_window_see);
-    ImGui::SliderFloat("T",&testT,-0.f , 6.f, "%.5f", 1.0f);
+    ImGui::SliderFloat("T",&testT,-0.f , 5.f, "%.5f", 1.0f);
     ImGui::End();
 
     ImGui::Begin("Shader Controls");
@@ -86,26 +90,21 @@ void a3_Application::doGUI() {
     }
     ImGui::End();
 
-    ImGui::Begin("File Menu");
- 
-    if (ImGui::Button("Keyframe This Pose")) {
-      if (theAsfApp -> skelload){
-        theAsfApp->newWorkPose(); 
-      }else{
-        cout <<"Load a Skeleton first.\n";
-      }
-    }
-
-   if (ImGui::Button("Save This Pose")) {
-      if (theAsfApp -> skelload){
-      pose nowPose;
-      theAsfApp->getFrame(&nowPose.my_frame);
-      theAsfApp->poseToFile(nowPose);
+    ImGui::Begin("File Menu");;
+    if(ImGui::Button("Load a Pose")) {
         
-      }else{
-        cout <<"Load a Skeleton first.\n";
+        theAsfApp -> openPose();
       }
-    }
+
+    if(ImGui::Button("Save Pose (S Key)")) {
+        nfdchar_t * toFile;
+        NFD_SaveDialog(".pos","",&toFile);
+
+        theAsfApp -> workPoseToFile(toFile);
+      }
+      if(ImGui::Button("Push Pose As New Keyframe")) {
+        theAsfApp -> newWorkPose();
+      }
     ImGui::End();
 
     ImGui::Begin("meshes");

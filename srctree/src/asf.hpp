@@ -1,32 +1,87 @@
 #pragma once
 
+#include <algorithm>
+#include <cmath>
+#include <istream>
+#include <iostream>
+#include <stdexcept>
+#include <cstring>
 #include <string>
+
+#include "opengl.hpp"
+#include "imgui.h"
+
+#include "math.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/euler_angles.hpp"
+#include "glm/gtx/rotate_vector.hpp"
+
 #include <vector>
 #include <map>
+#include <fstream>
 
+#include "cgra/matrix.hpp"
+#include "cgra/wavefront.hpp"
 #include "cgra/mesh.hpp"
 #include "cgra/shader.hpp"
 #include "drawStyle.hpp"
-#include <glm/glm.hpp>
+
+#include "../include/nfd.h"
 
 #include <skeleton.hpp>
-
 #include "boneCurve.hpp"
 
 class asfApp {
-public:
 
-//declare poses
+  public:
+    
+    //General State
+    bool skelload =  false;
+
+     // actors in the play:
+    Skeleton * showskel;
+    cgra::Mesh m_mesh;
+    cgra::Mesh m_jointMesh;
+
+    //example poses
     frame sittingPose;
     frame guitarPose;
     frame walkingPose;
     frame currentFrame;
-    void switchPose(int dir);
+    
+    //Pose Management
+    std::vector<pose> workPoses;
+    pose * currentWorkPose;
+    void setWorkPose(frame);
+    void focusPose(int);
+    void newWorkPose();
+
+    void openPose();
+    pose poseFromFile( char *); // Reads a pose file into a constructed pose.
+    void poseToFile( char *, pose *);   // Saves a given pose to a file
+    void workPoseToFile( char *);
+   
+    //Animation:
+    void poseToBones( pose & somePose);
+    int getFrame(frame * dest);
+    std::map<std::string,boneCurve> boneCurveMap;
+    
+    //Demo Poses
     void prevPose();
     void nextPose();
-    void loadAnimation();
+    void switchPose(int dir);
+
+    //Editing Functionality
+    void focusBone( int i );
+    std::string currentJoint = "root";
+    int currentJointID;
+
     void loadSkeleton(const char *);
     void loadSkeleton();
+    
+    //AMC Player:
+    void loadAnimation();
     void play();
     void pause();
 
@@ -34,21 +89,7 @@ public:
     float m_play_pos;
     bool tether = true;
     float m_speed;
-
     std::vector<frame> theClip;
-
-    std::vector<pose> workPoses;
-    pose * currentWorkPose;
-
-    void focusBone( int i );
-    std::string currentJoint = "root";
-    int currentJointID;
-
- // actors in the play:
-    Skeleton * showskel;
-    bool skelload =  false;
-   cgra::Mesh m_mesh;
-   cgra::Mesh m_jointMesh;
 
 
 // glm view stuff:
@@ -99,26 +140,18 @@ public:
 
     std::vector<drawStyle> stylePack;
     void updateScene();
+    void calcJointsFromXYZ();
+    
+
+//Events
+    
     void doGUI();
-
     void onKey(int key, int scancode, int action, int mods);
-
     void onMouseButton(int button, int action, int mods);
-
     void onCursorPos(double xpos, double ypos);
-
     void onScroll(double xoffset, double yoffset);
 
-    int getFrame(frame * dest);
-
-    void setWorkPose(int, frame);
-
-    void newWorkPose();
-
-    std::map<std::string,boneCurve> boneCurveMap;
-
-    void poseToFile( pose & somePose);
-    void poseToBones( pose & somePose);
-
-    void calcJointsFromXYZ();
 };
+
+
+std::string nextLineTrimmed(std::istream &file);

@@ -42,6 +42,6 @@ class boneCurve{
     void setSamps(int s);
     void movePoint( int id, glm::vec2 dv);
 
-    void newKF( pose & newPose );
+    void newKF( const std::vector<float> * );
     
 };

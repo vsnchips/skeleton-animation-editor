@@ -8,9 +8,9 @@ SET(sources
   a3_kfwin.cpp
   asf.hpp
   asf.cpp
+  asf_files.cpp
   a3.hpp
   a3.cpp
-  a3-filesave.cpp
   a3_dogui.cpp
   a3_inevents.cpp
   drawStyle.hpp

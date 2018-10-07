@@ -33,7 +33,6 @@ class a3_Application {
 public:
     bool clickon;
     bool mouseDown = false;
-    int deformTechniqueId;
     bool sceneon = 1;
     
     int pickID;
@@ -137,14 +136,6 @@ void init(const char *);
 
     void onScroll(double xoffset, double yoffset);
 
-
-    //File saving methods
-
-    void a3_poseToFile(frame & somePose);
-
-    void a3_writeAMC();
-
-    void a3_saveKeyFrames();
 
     drawList testDrawList(cgra::Mesh * ctlMesh);
     // Keyframe window methods
