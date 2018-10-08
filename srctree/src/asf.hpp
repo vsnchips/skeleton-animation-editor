@@ -101,10 +101,13 @@ class asfApp {
     //AMC Player:
     void loadAnimation();
     void play();
+    void playKFSequence();
     void pause();
 
-    bool m_play = false;
-    float m_play_pos;
+    bool m_kf_play = false;
+    float m_kf_play_pos;
+    bool m_amc_play = false;
+    float m_amc_play_pos;
     bool tether = true;
     float m_speed;
     std::vector<frame> theClip;

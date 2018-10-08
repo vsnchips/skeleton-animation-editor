@@ -10,8 +10,8 @@ glm::quat testSpline( float t, quatSpline & spline){
   while( i>0){
     for (int j = 0; j < i; j++){
         spline[j] = slerp( spline[j], spline[j+1], t); 
-      }
-  } i--;
+      } i--;
+  } 
 return spline[0];
 } 
 
@@ -85,7 +85,14 @@ void boneCurve::integrate(){
   }
 } 
 
-quat boneCurve::getQuat( float t){
+quat boneCurve::getQuatAtDistance(float dist){
+  float h = integration[integration.size()-1];
+//  float ndist = dist/(qcats.size()-3);
+  float t = bSearchForT( dist );
+  return getSplineQuat(t);
+}
+
+quat boneCurve::getSplineQuat( float t){      //The raw t value.
 
   // t should always be < qcats.size-3;
   // the floor call means you can never reach the end.

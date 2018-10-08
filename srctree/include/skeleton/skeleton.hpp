@@ -143,6 +143,7 @@ private:
 public:
 	// Helper method
 	int findBone(std::string);
+	bone * getBone(std::string);
 	Skeleton(std::string);
 	cgra::Program * m_program;
   cgra::Mesh * m_jointmesh;

@@ -67,7 +67,7 @@ glm::quat bone::getQuat(){
      glm::rotate(DEGMUL*rotation.y,glm::vec3(0,1,0)) *
      glm::rotate(DEGMUL*rotation.x,glm::vec3(1,0,0)) * glm::mat4(1);
       
-     myQuat = glm::quat_cast(m); 
+     myQuat = glm::quat_cast(m);
      return myQuat;
   }  
 void bone::applyQuat(glm::quat q){
@@ -75,7 +75,6 @@ void bone::applyQuat(glm::quat q){
     //glm::vec3 rpy = glm::vec3(ypr.z,ypr.y,ypr.x);   // Swap the coordinates to roll, pitch, yaw.
     float piDeg = glm::pi<float>() / 180; 
     rotation = glm::vec3( ypr.x/piDeg, ypr.y/piDeg, ypr.z/piDeg );
-    //rotation = rpy;
   }
 Skeleton::Skeleton(string filename) {
   m_bones.clear();
@@ -262,6 +261,15 @@ namespace {
 //*** after reading in a skeleton, every bone will have a name
 //*** this function allows you to find which bone has a particular
 //*** name
+
+bone * Skeleton::getBone(string name) {
+	int ind = findBone(name);
+  if (ind == -1) { 
+    printf("dont have that bone!\n"); return nullptr; 
+  }
+  return &(m_bones[ind]);
+}
+
 int Skeleton::findBone(string name) {
 	for (size_t i = 0; i < m_bones.size(); i++)
 		if (m_bones[i].name == name)

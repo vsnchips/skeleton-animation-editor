@@ -36,8 +36,9 @@ class boneCurve{
     void integrate(int ); //includes a measure method
     void measure();
     void integrate(); //includes a measure method
-    float bSearchForT(float want);
-    glm::quat getQuat(float t);
+    float bSearchForT(float wantdist);
+    glm::quat getQuatAtDistance(float); 
+    glm::quat getSplineQuat(float chrono);
 
     void setSamps(int s);
     void movePoint( int id, glm::vec2 dv);

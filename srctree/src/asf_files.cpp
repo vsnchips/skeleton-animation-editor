@@ -29,9 +29,9 @@ void asfApp::saveWorkPose(){
 
 void asfApp::workPoseToFile(const char * filename){
 
-  currentWorkPose -> filename = filename;
+  currentWorkPose -> filename = string(filename);
 
-  workPoses[focusIndex].my_frame = showskel -> makeFrame();
+  //workPoses[focusIndex].my_frame = showskel -> makeFrame();
   ofstream pfs(filename);
 
   if (!pfs.is_open()) { printf("Cant open %s for writing!", filename); return; }
@@ -182,7 +182,7 @@ void asfApp::loadAnimation(){
     }
   }
 
-  m_play=true;
+  m_amc_play=true;
 }
 
 void asfApp::openSequenceFile(){
@@ -204,13 +204,16 @@ void asfApp::projectToFile(const char * filename){
 
   ofstream projFile(filename);
 
-  for(pose p : workPoses){
-  if (p.filename == "Unsaved"){ //Save the anon frames
-    currentWorkPose = &p;
+  for(int i = 0; i<workPoses.size(); i++){
+    pose  * p = &(workPoses[i]);
+   currentWorkPose = p;
+
+  if (p->filename == "Unsaved"){ //Save the anon frames
     saveWorkPose();
   }
-   projFile << p.filename << "\n";  
+   projFile << p->filename << "\n";  
   }
+
   projFile.close();
 }
 
@@ -220,7 +223,7 @@ void asfApp::loadProjectFile(const char * filename){
   while(projFile.good()){
     string path;
     getline(projFile,path);
-    openPose(path);  
+    if (path.length() > 1) openPose(path);  
   }
   projFile.close();
   

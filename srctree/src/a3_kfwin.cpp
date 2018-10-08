@@ -88,7 +88,7 @@ drawList a3_Application::testDrawList(cgra::Mesh * ctlMesh ){
 
   testBoneCurve.catreps =  testCats;
 
-  vec2 sp = catSamp2D(testT, testCats);
+  vec2 sp = catSamp2D(theAsfApp->m_kf_play_pos, testCats);
 
   mat4 proj(1);
   mat4 view(1);

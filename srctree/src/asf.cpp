@@ -148,12 +148,17 @@ string nextLineTrimmed(istream &file) {
   return "";
 }
 
-
+void asfApp::playKFSequence(){
+  m_amc_play=false;
+  m_kf_play=true;
+}
 void asfApp::play(){
-  m_play = true;
+  m_kf_play = false;
+  m_amc_play = true;
 }
 void asfApp::pause(){
-  m_play = false;
+  m_amc_play = false;
+  m_kf_play = false;
 }
 
 void asfApp::init(const char * skelFile) {
@@ -310,10 +315,24 @@ cgra::Mesh asfApp::loadObj(char *filename) {
 void asfApp::updateScene() {
   stylePack.clear();
   //updates
-  if (skelload && m_play){
-    m_play_pos += m_speed * 0.0004; showskel-> applyFromClip( theClip, m_play_pos);
-    m_play_pos = glm::fract( m_play_pos );
+  if (skelload){
+    if (m_amc_play){
+    m_amc_play_pos += m_speed * 0.0004; showskel-> applyFromClip( theClip, m_amc_play_pos);
+    m_amc_play_pos = glm::fract( m_amc_play_pos );
+    }
+    if(m_kf_play){
+    m_kf_play_pos += m_speed * 0.005; 
+    m_kf_play_pos = glm::mod( m_kf_play_pos, float( workPoses.size() ) );
+
+    // for all the bones, get the rotation at the current chrono, and apply them to the skeleton.
+    for(auto b: boneCurveMap){
+      //quat q = b.second.getQuat(m_kf_play_pos);
+      quat q = b.second.getSplineQuat(m_kf_play_pos);
+      showskel->getBone(b.first)->applyQuat(q);
+    }
+    }
   }
+  //Update the render Style
   stylePack = *(showskel->renderSkeleton( & m_mesh , tether));
 }
 
@@ -322,7 +341,7 @@ float workRot[] = {0,0,0};
 
 void asfApp::doGUI() {
   //the bonemap definitely works.
-  ImGui::SetNextWindowSize(ImVec2(300, 50), ImGuiSetCond_FirstUseEver);
+  ImGui::SetNextWindowSize(ImVec2(300, 80), ImGuiSetCond_FirstUseEver);
   ImGui::Begin(string("Joint Controls : ").append(currentJoint).c_str());
 
   //bone * boneptr = showskel->bonemap[currentJoint];//the bonemap works for bones above id 15.
@@ -350,58 +369,72 @@ void asfApp::doGUI() {
   ImGui::End();
 
   // --- Clip Controls
-  ImGui::SetNextWindowSize(ImVec2(500, 50), ImGuiSetCond_FirstUseEver);
-  ImGui::Begin("Shapes");
+  ImGui::SetNextWindowSize(ImVec2(250,300), ImGuiSetCond_FirstUseEver);
+ 
+  ImGui::Begin("Player");
+  ImGui::SliderFloat("Speed",&m_speed, -5.f,5.f,"%.5f",1.0f);
+
   
-  if(ImGui::SliderFloat("Position", &m_play_pos, 0.f, 1.f, "%.5f", 1.0f)){
-    showskel->applyFromClip(theClip,m_play_pos);
+  if(ImGui::Button("Play Keyframe Sequence ")){
+    playKFSequence();
   }
 
-  if(ImGui::Button("Load A Clip")){
-    loadAnimation();
-  }
+  ImGui::SliderFloat("KF Sequence Position",&m_kf_play_pos,-0.f , workPoses.size(), "%.5f", 1.0f);
+  
 
-  if(ImGui::Button("Play ")){
+  if(ImGui::Button("Play AMC")){
     play();
   }
 
+  if(ImGui::SliderFloat("AMC Position", &m_amc_play_pos, 0.f, 1.f, "%.5f", 1.0f)){
+    showskel->applyFromClip(theClip,m_amc_play_pos);
+  }
+  
   if(ImGui::Button("Pause")){
     pause();
   }
 
   if(ImGui::Button("Rewind")){
-    m_play_pos=0;
+    m_amc_play_pos=0;
+    m_kf_play_pos=0;
   }
-  if(ImGui::Button(" Next Pose ")){
-    switchPose(1) ;
-  }
-
-
-  ImGui::Checkbox("Tethered Root",&tether);
-
-  ImGui::SliderFloat("Speed",&m_speed, -5.f,5.f,"%.5f",1.0f);
 
   ImGui::End();
-  // ---
 
-  // --- Camera Controls
-  ImGui::SetNextWindowSize(ImVec2(250, 250), ImGuiSetCond_FirstUseEver);
-  ImGui::Begin("Shapes");
+ // KeyFrame Interpolation 
+  ImGui::Begin("KeyFrame Interpolation");
 
-  /*
-   ************************************************************
-   *                                                          *
-   * 5. Add a checkbox for rendering the object in wireframe  *
-   *  mode.                                                   *
-   *************************************************:516
-   ***********/
+  if(ImGui::Button("Refresh Curves")){
 
-  // Mesh / Geometry / Skeleton / Character / Assets
-  // controls
-  if(ImGui::Button("Load A Skeleton")){
-    loadSkeleton();
-  }
+    boneCurveMap.clear();
+   
+     if (workPoses.size()>0){
 
+        //Base dummy handles
+        showskel -> applyPose( &(workPoses[0].my_frame) );
+        for (bone b : showskel -> m_bones){
+        boneCurve *c = &(boneCurveMap[b.name]);
+        c->qcats.push_back( b.getQuat());
+        }
+        
+      for (pose p : workPoses){
+        showskel -> applyPose( &(p.my_frame) );
+        for (bone b : showskel -> m_bones){
+        boneCurve *c = &(boneCurveMap[b.name]);
+        c->qcats.push_back( b.getQuat());
+        }
+      }
+        
+        //End dummy handles
+        showskel -> applyPose( &(workPoses[workPoses.size()-1].my_frame) );
+        for (bone b : showskel -> m_bones){
+        boneCurve *c = &(boneCurveMap[b.name]);
+        c->qcats.push_back( b.getQuat());
+        }
+        
+     } 
+    }
+    
   ImGui::End();
 }
 
@@ -449,7 +482,7 @@ void asfApp::focusBone(int i){
   }
 }
 
-
+//Deprecated
 void asfApp::poseToBones(pose & somePose){
   printf("asfAp poseToBones to be tested\n");
 

@@ -187,9 +187,10 @@ void a3_Application::onKey(int key, int scancode, int action, int mods) {
     {
     }
 
-    if(key == GLFW_KEY_A && action == GLFW_PRESS) //cycle axes
+    if(key == GLFW_KEY_A && action == GLFW_PRESS) // play/pause
     {
-      theAsfApp->m_play = !theAsfApp->m_play;
+      if (theAsfApp->m_amc_play || theAsfApp -> m_kf_play) theAsfApp->pause();
+      else theAsfApp->playKFSequence();
     }
 
      if(key == GLFW_KEY_N && action == GLFW_PRESS) //cycle axes

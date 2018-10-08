@@ -79,7 +79,7 @@ void a3_Application::doGUI() {
     ImGui::End();
 
     if (theAsfApp->skelload){
-    ImGui::Begin("Keyframe Controls");
+    ImGui::Begin("Keyframe Poses");
     ImGui::Checkbox("Toggle Keyframe Editor",&kf_window_see);
     for( int i= 0 ; i < theAsfApp -> workPoses.size(); i++){
 
@@ -89,7 +89,6 @@ void a3_Application::doGUI() {
 
       button << p->index << " : " << fs::relative( p -> filename.c_str(), fs::current_path() ) << " " << (theAsfApp->currentWorkPose == p ? "<< current" : "");
 
-      //if(ImGui::RadioButton("%d : %s %s",p->index,p->filename.c_str(), theAsfApp->currentWorkPose == p ? "<< current" : "",
       if(ImGui::RadioButton(button.str().c_str(),
             theAsfApp->focusIndex == i)) 
           {
@@ -97,9 +96,13 @@ void a3_Application::doGUI() {
           theAsfApp -> focusPose(i);
           }
     } 
+    ImGui::End();
+    
+    ImGui::Begin("Keyframe Operations");
      
-    ImGui::SliderFloat("Position",&testT,-0.f , 5.f, "%.5f", 1.0f);
-
+    if(ImGui::Button("Push Pose As New Keyframe")) {
+      theAsfApp -> newWorkPose();
+    }
     if (ImGui::Button("next Pose")){ theAsfApp->nextPose();}
     if (ImGui::Button("prev Pose")){ theAsfApp->prevPose();}
     if (ImGui::Button("Remove Pose")){ theAsfApp->removePose();}
@@ -128,10 +131,7 @@ void a3_Application::doGUI() {
     if(ImGui::Button("Save Pose (S Key)")){
       theAsfApp -> saveWorkPose();
     }
-    if(ImGui::Button("Push Pose As New Keyframe")) {
-      theAsfApp -> newWorkPose();
-    }
-    ImGui::End();
+       ImGui::End();
 
     ImGui::Begin("meshes");
     static bool wireframe;
