@@ -81,12 +81,10 @@ void a3_Application::doGUI() {
     if (theAsfApp->skelload){
     ImGui::Begin("Keyframe Poses");
     ImGui::Checkbox("Toggle Keyframe Editor",&kf_window_see);
-    for( int i= 0 ; i < theAsfApp -> workPoses.size(); i++){
+    for( int i= 0 ; i < theAsfApp -> workPoses.size(); i++)   {      //one radio button for each pose
 
-      pose * p; p = & theAsfApp -> workPoses[i];
-    
+      pose * p; p = & (theAsfApp -> workPoses[i]);
       stringstream button;
-
       button << p->index << " : " << fs::relative( p -> filename.c_str(), fs::current_path() ) << " " << (theAsfApp->currentWorkPose == p ? "<< current" : "");
 
       if(ImGui::RadioButton(button.str().c_str(),
@@ -124,6 +122,7 @@ void a3_Application::doGUI() {
     ImGui::Begin("File Menu");
     if (ImGui::Button("Load a Keframe Sequence")){ theAsfApp -> openSequenceFile();}
     if (ImGui::Button("Save this Keyframe Sequence")){ theAsfApp -> saveSequenceFile();}
+    if (ImGui::Button("Load an AMC")){ theAsfApp -> loadAnimation();}
     if(ImGui::Button("Load a Pose")) {
         theAsfApp -> openPose();
       }

@@ -25,10 +25,7 @@
 #include "asf.hpp"
 
 using namespace std;
-using namespace glm;
 
-
-//Pose Management Functions
 void asfApp::nextPose(){ switchPose(1);}
 void asfApp::prevPose(){ switchPose(-1);}
 
@@ -42,7 +39,7 @@ void asfApp::removePose(int focus){
   workPoses.erase(workPoses.begin()+focus);
 
 }
-void asfApp::switchPose(int dir){    //Focuses a pose and sets the skeleton to match it.
+void asfApp::switchPose(int dir){
 
   if (skelload){
     static vector<frame> poses; poses.clear();
@@ -54,62 +51,12 @@ void asfApp::switchPose(int dir){    //Focuses a pose and sets the skeleton to m
     f += dir;
     int POSE_COUNT = workPoses.size();
     f = float(glm::mod(float(f), float(POSE_COUNT)));
-    if (POSE_COUNT > 0){
-      focusPose(f);
-    	
-      //
-      
-    }
+    if (POSE_COUNT > 0)	showskel -> applyPose( &(workPoses[f].my_frame) );
     else printf("No Poses in the work list!\n");
   }
   else{printf("no skeleton!a\n");}
 }
 
-// Pose Timeline Functions
-void asfApp::freshIndices(){
-  int i=0;
-  for (pose p : workPoses){
-    p.index = i;
-    i++;
-  }
-}
-
-void asfApp::freshIntegrations(){
- for (auto x: boneCurveMap){
-  x.second.measure(100); 
-  x.second.integrate(); 
- } 
-}
-
-void asfApp::rawTimings(){
- for (auto x: boneCurveMap){
-   int t = 0;
-   x.second.timings.clear();
-  for (pose p : workPoses) {
-    x.second.timings.push_back(t);
-    t++;
-  }
- }
-}
-
-void asfApp::evenTimings(){
- freshIntegrations();
- for (auto x: boneCurveMap){
-   float segCount = x.second.integration.size() - 1;
-   float end = x.second.integration[segCount];
-   rawTimings();
-   float last = x.second.timings.size()-1;
-   if (last > 0){
-     for (float c :  x.second.timings) {
-   float want = last * c/segCount;
-   float thisT = x.second.bSearchForT(want);
-   c = thisT;
-   }
-  }
- }
-}
-
-//Skeleton Initialisation
 
 void asfApp::loadSkeleton(){
 
@@ -148,17 +95,12 @@ string nextLineTrimmed(istream &file) {
   return "";
 }
 
-void asfApp::playKFSequence(){
-  m_amc_play=false;
-  m_kf_play=true;
-}
+
 void asfApp::play(){
-  m_kf_play = false;
-  m_amc_play = true;
+  m_play = true;
 }
 void asfApp::pause(){
-  m_amc_play = false;
-  m_kf_play = false;
+  m_play = false;
 }
 
 void asfApp::init(const char * skelFile) {
@@ -315,134 +257,85 @@ cgra::Mesh asfApp::loadObj(char *filename) {
 void asfApp::updateScene() {
   stylePack.clear();
   //updates
-  if (skelload){
-    if (m_amc_play){
-    m_amc_play_pos += m_speed * 0.0004; showskel-> applyFromClip( theClip, m_amc_play_pos);
-    m_amc_play_pos = glm::fract( m_amc_play_pos );
-    }
-    if(m_kf_play){
-    m_kf_play_pos += m_speed * 0.005; 
-    m_kf_play_pos = glm::mod( m_kf_play_pos, float( workPoses.size()-1 ) );
-
-    // for all the bones, get the rotation at the current chrono, and apply them to the skeleton.
-    for(auto b: boneCurveMap){
-      //quat q = b.second.getQuat(m_kf_play_pos);
-      quat q = b.second.getSplineQuat(m_kf_play_pos);
-      showskel->getBone(b.first)->applyQuat(q);
-    }
-    }
+  if (skelload && m_play){
+    m_play_pos += m_speed * 0.0004; showskel-> applyFromClip( theClip, m_play_pos);
+    m_play_pos = glm::fract( m_play_pos );
   }
-  //Update the render Style
   stylePack = *(showskel->renderSkeleton( & m_mesh , tether));
 }
 
 float workRot[] = {0,0,0};
-
-
 void asfApp::doGUI() {
   //the bonemap definitely works.
-  ImGui::SetNextWindowSize(ImVec2(300, 80), ImGuiSetCond_FirstUseEver);
+  ImGui::SetNextWindowSize(ImVec2(300, 50), ImGuiSetCond_FirstUseEver);
   ImGui::Begin(string("Joint Controls : ").append(currentJoint).c_str());
 
   //bone * boneptr = showskel->bonemap[currentJoint];//the bonemap works for bones above id 15.
   bone * boneptr = &(showskel->m_bones[showskel->findBone(currentJoint)]);
 
 
-  if (boneptr){
-    if (ImGui::SliderFloat3("Bone Rotation", &boneptr->rotation[0], -180 , 180 , "%.3f", 1.0f )){
+  if (boneptr && 
+      ImGui::SliderFloat3("Bone Rotation", &boneptr->rotation[0], -180 , 180 , "%.3f", 1.0f )){
     printf("moving bone %d\n", boneptr->boneID);
+
     //TODO:: update the entries in the curves?
   }
-    if (ImGui::Button("Apply Quat")){
-//      printf("bang!\n");
-      quat asq = boneptr->getQuat();
-      stringstream msg;
-      msg << "rpy vector as quat:"<<asq.x<<" "<<asq.y<<" "<<asq.z<<" "<<asq.w<< "\n";
-      printf("%s",msg.str().c_str());
 
-      boneptr->applyQuat(asq);
-
-    } 
-  
-  }
 
   ImGui::End();
 
   // --- Clip Controls
-  ImGui::SetNextWindowSize(ImVec2(250,300), ImGuiSetCond_FirstUseEver);
- 
-  ImGui::Begin("Player");
-  ImGui::SliderFloat("Speed",&m_speed, -5.f,5.f,"%.5f",1.0f);
-
-  
-  if(ImGui::Button("Play Keyframe Sequence ")){
-    playKFSequence();
+  ImGui::SetNextWindowSize(ImVec2(500, 50), ImGuiSetCond_FirstUseEver);
+  ImGui::Begin("Shapes");
+  if(ImGui::SliderFloat("Position", &m_play_pos, 0.f, 1.f, "%.5f", 1.0f)){
+    showskel->applyFromClip(theClip,m_play_pos);
   }
 
-  ImGui::SliderFloat("KF Sequence Position",&m_kf_play_pos,-0.f , workPoses.size()-1, "%.5f", 1.0f);
-  
+  if(ImGui::Button("Load A Clip")){
+    loadAnimation();
+  }
 
-  if(ImGui::Button("Play AMC")){
+  if(ImGui::Button("Play ")){
     play();
   }
 
-  if(ImGui::SliderFloat("AMC Position", &m_amc_play_pos, 0.f, 1.f, "%.5f", 1.0f)){
-    showskel->applyFromClip(theClip,m_amc_play_pos);
-  }
-  
   if(ImGui::Button("Pause")){
     pause();
   }
 
   if(ImGui::Button("Rewind")){
-    m_amc_play_pos=0;
-    m_kf_play_pos=0;
+    m_play_pos=0;
+  }
+  if(ImGui::Button(" Next Pose ")){
+    switchPose(1) ;
   }
 
+
+  ImGui::Checkbox("Tethered Root",&tether);
+
+  ImGui::SliderFloat("Speed",&m_speed, -5.f,5.f,"%.5f",1.0f);
+
   ImGui::End();
+  // ---
 
- // KeyFrame Interpolation 
-  ImGui::Begin("KeyFrame Interpolation");
+  // --- Camera Controls
+  ImGui::SetNextWindowSize(ImVec2(250, 250), ImGuiSetCond_FirstUseEver);
+  ImGui::Begin("Shapes");
 
-  if(ImGui::Button("Refresh Curves")){
+  /*
+   ************************************************************
+   *                                                          *
+   * 5. Add a checkbox for rendering the object in wireframe  *
+   *  mode.                                                   *
+   *************************************************:516
+   ***********/
 
-    boneCurveMap.clear();
-   
-     if (workPoses.size()>0){
+  // Mesh / Geometry / Skeleton / Character / Assets
+  // controls
+  if(ImGui::Button("Load A Skeleton")){
+    loadSkeleton();
+  }
 
-       //TODO: Sort out handling the root
-
-        //Base dummy handles
-        showskel -> applyPose( &(workPoses[0].my_frame) );
-        for (bone b : showskel -> m_bones){
-          if (b.name!="root"){
-        boneCurve *c = &(boneCurveMap[b.name]);
-        c->qcats.push_back( b.getQuat());
-          }
-        }
-        
-      for (pose p : workPoses){
-        showskel -> applyPose( &(p.my_frame) );
-        for (bone b : showskel -> m_bones){
-          if (b.name!="root"){
-        boneCurve *c = &(boneCurveMap[b.name]);
-        c->qcats.push_back( b.getQuat());
-          }
-        }
-      }
-        
-        //End dummy handles
-        showskel -> applyPose( &(workPoses[workPoses.size()-1].my_frame) );
-        for (bone b : showskel -> m_bones){
-          if (b.name!="root"){
-        boneCurve *c = &(boneCurveMap[b.name]);
-        c->qcats.push_back( b.getQuat());
-          }
-        }
-        
-     } 
-    }
-    
   ImGui::End();
 }
 
@@ -490,7 +383,7 @@ void asfApp::focusBone(int i){
   }
 }
 
-//Deprecated
+
 void asfApp::poseToBones(pose & somePose){
   printf("asfAp poseToBones to be tested\n");
 
@@ -517,23 +410,13 @@ int asfApp::getFrame(frame * dest){
   return 0;
 }
 
-void asfApp::focusPose(int f){
-  focusIndex = f;
-  if ( f > workPoses.size() ) return;
-  currentWorkPose = &(workPoses[f]);
-  showskel -> applyPose( &(workPoses[f].my_frame) );
-
-}
-
-
 void asfApp::newWorkPose(){
   pose newpose;
   int att = getFrame(   &newpose.my_frame   );
   newpose.index = workPoses.size();
-  if (att>-1){ workPoses.push_back(newpose);
+  if (att>-1) workPoses.push_back(newpose);
   currentWorkPose = &(workPoses[workPoses.size()-1]);
   focusIndex = workPoses.size()-1;
-  }
 }
 
 void asfApp::setWorkPose(frame newframe){

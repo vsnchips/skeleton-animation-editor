@@ -27,15 +27,18 @@ quat getQuatBetween( quat p, quat q){
 vector<quat> boneCurve::qBezFromCats( quat ca, quat a, quat b, quat cb){
   
   quat seg = getQuatBetween(a,b);
-    float l = seg.x;
+  vec3 segVec = vec3(seg.x,seg.y,seg.z);
+  float l = atan2( length(segVec), seg.w);
 
   quat ta = getQuatBetween(ca, b);
-  ta.x = l/2;
-  ta = ta*a;
+  //ta = ta*a*conjugate(ta);
+  ta = conjugate(ta)*a*ta;
+  ta = slerp(a,ta,l*0.5f);
 
   quat tb = getQuatBetween(cb, a);
-  tb.x = l/2;
-  tb = tb*b;
+  // tb = tb*b*conjugate(tb);
+  tb = conjugate(tb)*b*tb;
+  tb = slerp(b,tb,l*0.5f);
 
   vector<quat> q4bez; q4bez.clear();
   q4bez.push_back(a);
@@ -54,7 +57,7 @@ void boneCurve::measure(int i){
 void boneCurve::measure(){
 
   dds.clear();
-  for (int j =1; j <= qcats.size()-3; j++){
+  for (int j = 1; j <= qcats.size()-3; j++){
     
     float sd = 1/(samples+1);
 
@@ -97,11 +100,11 @@ quat boneCurve::getSplineQuat( float t){      //The raw t value.
   // t should always be < qcats.size-3;
   // the floor call means you can never reach the end.
     int s = floor( t );
-    float segt = s+fract(t);
+    float segt = fract(t);
 
     if (s >= qcats.size()-3){ segt=1; s= qcats.size()-3;}
 
-    vector<quat> qs=qBezFromCats(qcats[s], qcats[s+1], qcats[+2], qcats[s+3]);
+    vector<quat> qs=qBezFromCats(qcats[s], qcats[s+1], qcats[s+2], qcats[s+3]);
     //return testSpline( segt, qs[0], qs[1], qs[2], qs[3]);
     return testSpline( segt, qs);
 
