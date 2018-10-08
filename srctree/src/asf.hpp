@@ -57,13 +57,28 @@ class asfApp {
     void setWorkPose(frame);
     void focusPose(int);
     void newWorkPose();
-
+    void freshIndices();
+    void freshCats();    //Refresh the catmull rom points of the curves
+    void freshIntegrations();
+    void rawTimings();
+    void evenTimings();
+   
+    //Sequence File Storage;
+    void openSequenceFile();
+    void saveSequenceFile();
+    void loadProjectFile(const char *);
+    void projectToFile(const char *);
+    //Pose File Storage
     void openPose();
+    void openPose(const char *);
+    void openPose( char *);
+    void openPose( std::string );
+    void saveWorkPose();
     void removePose();
     void removePose(int);
-    pose poseFromFile( char *); // Reads a pose file into a constructed pose.
-    void poseToFile( char *, pose *);   // Saves a given pose to a file
-    void workPoseToFile( char *);
+    pose poseFromFile( const char *); // Reads a pose file into a constructed pose.
+    void poseToFile( const char *, pose *);   // Saves a given pose to a file
+    void workPoseToFile( const char *);
    
     //Animation:
     void poseToBones( pose & somePose);

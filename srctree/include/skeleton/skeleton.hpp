@@ -109,25 +109,6 @@ class bone {
   glm::quat getQuat();
   void applyQuat(glm::quat q);
 
-  glm::quat getQuat(){
-	const float DEGMUL = glm::pi<float>()/180;
-  //Make a rotation matrix from the current rpy rotation using a standard basis.
-  glm::mat4 m = 
-     glm::rotate(DEGMUL*rotation.z,glm::vec3(0,0,1)) *
-     glm::rotate(DEGMUL*rotation.y,glm::vec3(0,1,0)) *
-     glm::rotate(DEGMUL*rotation.x,glm::vec3(1,0,0)) * glm::mat4(1);
-      
-     myQuat = glm::quat_cast(m); 
-     return myQuat;
-  }  
-  void applyQuat(glm::quat q){
-#define GLM_FORCE_RADIANS
-    glm::vec3 ypr = glm::eulerAngles(q);
-    //glm::vec3 rpy = glm::vec3(ypr.z,ypr.y,ypr.x);   // Swap the coordinates to roll, pitch, yaw.
-    float piDeg = glm::pi<float>() / 180; 
-    rotation = glm::vec3( ypr.x/piDeg, ypr.y/piDeg, ypr.z/piDeg );
-    //rotation = rpy;
-  }
 
 };
 

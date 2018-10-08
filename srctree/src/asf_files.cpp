@@ -18,7 +18,16 @@ using namespace glm;
 //
 
 #include <filesystem>
-void asfApp::workPoseToFile(char * filename){
+
+
+void asfApp::saveWorkPose(){
+    nfdchar_t * toFile;
+    NFD_SaveDialog(".pos","",&toFile);
+    workPoseToFile(toFile);
+  }
+
+
+void asfApp::workPoseToFile(const char * filename){
 
   currentWorkPose -> filename = filename;
 
@@ -39,20 +48,31 @@ void asfApp::workPoseToFile(char * filename){
 
 
 }
-
 void asfApp::openPose(){
 
   nfdchar_t * fromFile;
   NFD_OpenDialog(".pos,*",".",&fromFile); 
+  const char * f = fromFile;
+  openPose(f);
+}
+
+void asfApp::openPose(string file){
+  const char * f = file.c_str();
+  openPose(f);
+}
+
+void asfApp::openPose(  const char * fromFile ){
+
 
   newWorkPose();
   currentWorkPose = &(workPoses[workPoses.size()-1]);
-  *currentWorkPose = poseFromFile( fromFile );
+  pose newp = poseFromFile( fromFile );
+  (*currentWorkPose) = newp;
   currentWorkPose->index = workPoses.size()-1;
   showskel->applyPose(&(currentWorkPose->my_frame));
 }
 
-pose asfApp::poseFromFile( char * fromFile){
+pose asfApp::poseFromFile( const char * fromFile){
 
   pose toPose;
   toPose.filename = string( fromFile );
@@ -165,3 +185,43 @@ void asfApp::loadAnimation(){
   m_play=true;
 }
 
+void asfApp::openSequenceFile(){
+
+  nfdchar_t * fromFile;
+  NFD_OpenDialog(".pos,*",".",&fromFile); 
+  loadProjectFile(fromFile);
+}
+
+void asfApp::saveSequenceFile(){
+
+  nfdchar_t * toFile;
+  NFD_SaveDialog(".pos,*",".",&toFile); 
+  projectToFile(toFile);
+
+}
+
+void asfApp::projectToFile(const char * filename){
+
+  ofstream projFile(filename);
+
+  for(pose p : workPoses){
+  if (p.filename == "Unsaved"){ //Save the anon frames
+    currentWorkPose = &p;
+    saveWorkPose();
+  }
+   projFile << p.filename << "\n";  
+  }
+  projFile.close();
+}
+
+void asfApp::loadProjectFile(const char * filename){
+
+  ifstream projFile(filename);
+  while(projFile.good()){
+    string path;
+    getline(projFile,path);
+    openPose(path);  
+  }
+  projFile.close();
+  
+}

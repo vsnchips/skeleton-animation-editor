@@ -8,6 +8,7 @@
 #include <filesystem>
 
 namespace fs = std::filesystem;
+
 using namespace std;
 
 void a3_Application::doGUI() {
@@ -117,21 +118,19 @@ void a3_Application::doGUI() {
     }
     ImGui::End();
 
-    ImGui::Begin("File Menu");;
+    ImGui::Begin("File Menu");
+    if (ImGui::Button("Load a Keframe Sequence")){ theAsfApp -> openSequenceFile();}
+    if (ImGui::Button("Save this Keyframe Sequence")){ theAsfApp -> saveSequenceFile();}
     if(ImGui::Button("Load a Pose")) {
-        
         theAsfApp -> openPose();
       }
 
-    if(ImGui::Button("Save Pose (S Key)")) {
-        nfdchar_t * toFile;
-        NFD_SaveDialog(".pos","",&toFile);
-
-        theAsfApp -> workPoseToFile(toFile);
-      }
-      if(ImGui::Button("Push Pose As New Keyframe")) {
-        theAsfApp -> newWorkPose();
-      }
+    if(ImGui::Button("Save Pose (S Key)")){
+      theAsfApp -> saveWorkPose();
+    }
+    if(ImGui::Button("Push Pose As New Keyframe")) {
+      theAsfApp -> newWorkPose();
+    }
     ImGui::End();
 
     ImGui::Begin("meshes");

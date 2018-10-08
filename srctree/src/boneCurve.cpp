@@ -20,12 +20,6 @@ void boneCurve::setSamps(int i){
   samples = i;
 }
 
-void boneCurve::measure(int i){
-  setSamps(i);
-  measure();
-}
-
-
 quat getQuatBetween( quat p, quat q){
   return (q * glm::conjugate(p));
 }
@@ -50,6 +44,11 @@ vector<quat> boneCurve::qBezFromCats( quat ca, quat a, quat b, quat cb){
   q4bez.push_back(b);
 
   return q4bez;
+}
+
+void boneCurve::measure(int i){
+  setSamps(i);
+  measure();
 }
 
 void boneCurve::measure(){

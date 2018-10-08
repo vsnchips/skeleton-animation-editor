@@ -27,6 +27,8 @@
 using namespace std;
 using namespace glm;
 
+
+//Pose Management Functions
 void asfApp::nextPose(){ switchPose(1);}
 void asfApp::prevPose(){ switchPose(-1);}
 
@@ -63,6 +65,51 @@ void asfApp::switchPose(int dir){    //Focuses a pose and sets the skeleton to m
   else{printf("no skeleton!a\n");}
 }
 
+// Pose Timeline Functions
+void asfApp::freshIndices(){
+  int i=0;
+  for (pose p : workPoses){
+    p.index = i;
+    i++;
+  }
+}
+
+void asfApp::freshIntegrations(){
+ for (auto x: boneCurveMap){
+  x.second.measure(100); 
+  x.second.integrate(); 
+ } 
+}
+
+void asfApp::rawTimings(){
+ for (auto x: boneCurveMap){
+   int t = 0;
+   x.second.timings.clear();
+  for (pose p : workPoses) {
+    x.second.timings.push_back(t);
+    t++;
+  }
+ }
+}
+
+void asfApp::evenTimings(){
+ freshIntegrations();
+ for (auto x: boneCurveMap){
+   float segCount = x.second.integration.size() - 1;
+   float end = x.second.integration[segCount];
+   rawTimings();
+   float last = x.second.timings.size()-1;
+   if (last > 0){
+     for (float c :  x.second.timings) {
+   float want = last * c/segCount;
+   float thisT = x.second.bSearchForT(want);
+   c = thisT;
+   }
+  }
+ }
+}
+
+//Skeleton Initialisation
 
 void asfApp::loadSkeleton(){
 
@@ -305,6 +352,7 @@ void asfApp::doGUI() {
   // --- Clip Controls
   ImGui::SetNextWindowSize(ImVec2(500, 50), ImGuiSetCond_FirstUseEver);
   ImGui::Begin("Shapes");
+  
   if(ImGui::SliderFloat("Position", &m_play_pos, 0.f, 1.f, "%.5f", 1.0f)){
     showskel->applyFromClip(theClip,m_play_pos);
   }

@@ -59,7 +59,7 @@ using namespace std;
 using namespace glm;
 
 #define GLM_FORCE_RADIANS
-bone::glm::quat getQuat(){
+glm::quat bone::getQuat(){
 	const float DEGMUL = glm::pi<float>()/180;
   //Make a rotation matrix from the current rpy rotation using a standard basis.
   glm::mat4 m = 
@@ -70,7 +70,7 @@ bone::glm::quat getQuat(){
      myQuat = glm::quat_cast(m); 
      return myQuat;
   }  
-bone::void applyQuat(glm::quat q){
+void bone::applyQuat(glm::quat q){
     glm::vec3 ypr = glm::eulerAngles(q);
     //glm::vec3 rpy = glm::vec3(ypr.z,ypr.y,ypr.x);   // Swap the coordinates to roll, pitch, yaw.
     float piDeg = glm::pi<float>() / 180; 
