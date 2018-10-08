@@ -15,6 +15,8 @@ using namespace glm;
 void a3_Application::styleCurve(){
    drawList controls = testDrawList(&theAsfApp->m_jointMesh);
 
+   kf_Renderer.highLight = theAsfApp-> focusIndex+1; 
+
    kf_Renderer.c_prog = &m_program;
    kf_Renderer.execute( controls );
 }
@@ -74,7 +76,7 @@ drawList a3_Application::testDrawList(cgra::Mesh * ctlMesh ){
   boneCurve testBoneCurve;
 
   static float ys[] = {0.5, 1, -1, -0.5};
-  vector<vec2> testCats; testCats.clear();
+          vector<vec2> testCats; testCats.clear();
   testCats.push_back(vec2(-2,0.));
   testCats.push_back(vec2(-1,-0.5));
   testCats.push_back(vec2(0,0.5));

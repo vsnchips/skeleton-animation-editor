@@ -25,6 +25,7 @@
 #include "asf.hpp"
 
 using namespace std;
+using namespace glm;
 
 void asfApp::nextPose(){ switchPose(1);}
 void asfApp::prevPose(){ switchPose(-1);}
@@ -270,6 +271,8 @@ void asfApp::updateScene() {
 }
 
 float workRot[] = {0,0,0};
+
+
 void asfApp::doGUI() {
   //the bonemap definitely works.
   ImGui::SetNextWindowSize(ImVec2(300, 50), ImGuiSetCond_FirstUseEver);
@@ -279,13 +282,23 @@ void asfApp::doGUI() {
   bone * boneptr = &(showskel->m_bones[showskel->findBone(currentJoint)]);
 
 
-  if (boneptr && 
-      ImGui::SliderFloat3("Bone Rotation", &boneptr->rotation[0], -180 , 180 , "%.3f", 1.0f )){
+  if (boneptr){
+    if (ImGui::SliderFloat3("Bone Rotation", &boneptr->rotation[0], -180 , 180 , "%.3f", 1.0f )){
     printf("moving bone %d\n", boneptr->boneID);
-
     //TODO:: update the entries in the curves?
   }
+    if (ImGui::Button("Apply Quat")){
+//      printf("bang!\n");
+      quat asq = boneptr->getQuat();
+      stringstream msg;
+      msg << "rpy vector as quat:"<<asq.x<<" "<<asq.y<<" "<<asq.z<<" "<<asq.w<< "\n";
+      printf("%s",msg.str().c_str());
 
+      boneptr->applyQuat(asq);
+
+    } 
+  
+  }
 
   ImGui::End();
 

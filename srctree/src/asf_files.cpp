@@ -21,6 +21,8 @@ using namespace glm;
 void asfApp::workPoseToFile(char * filename){
 
   currentWorkPose -> filename = filename;
+
+  workPoses[focusIndex].my_frame = showskel -> makeFrame();
   ofstream pfs(filename);
 
   if (!pfs.is_open()) { printf("Cant open %s for writing!", filename); return; }
