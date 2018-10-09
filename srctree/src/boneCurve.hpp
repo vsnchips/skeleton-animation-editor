@@ -21,7 +21,8 @@ class boneCurve{
     void glDelete();    //GL DELETE
     void freshBuffs();
 
-    int samples = 10;
+#define DEFAULT_SAMPLES 20
+    int samples = DEFAULT_SAMPLES;
     std::vector<glm::vec3> cats;  //always includes dummies
     std::vector<glm::quat> qcats;  //always includes dummies
     std::vector<glm::vec2> catreps;

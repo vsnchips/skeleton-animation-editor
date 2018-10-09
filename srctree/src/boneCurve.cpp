@@ -20,8 +20,25 @@ void boneCurve::setSamps(int i){
   samples = i;
 }
 
+dquat getQuatBetween_Double( dquat p, dquat q){
+  return (q * glm::conjugate(p));
+}
 quat getQuatBetween( quat p, quat q){
   return (q * glm::conjugate(p));
+}
+
+quat boneCurve::getSplineQuat( float t){      //The raw t value.
+
+  // t should always be < qcats.size-3;
+  // the floor call means you can never reach the end.
+    int s = floor( t );
+    float segt = fract(t);
+
+    if (s >= qcats.size()-3){ segt=1; s = qcats.size()-3;}
+
+    vector<quat> qs=qBezFromCats(qcats[s], qcats[s+1], qcats[s+2], qcats[s+3]);
+    return testSpline( segt, qs);
+
 }
 
 vector<quat> boneCurve::qBezFromCats( quat ca, quat a, quat b, quat cb){
@@ -30,15 +47,16 @@ vector<quat> boneCurve::qBezFromCats( quat ca, quat a, quat b, quat cb){
   vec3 segVec = vec3(seg.x,seg.y,seg.z);
   float l = atan2( length(segVec), seg.w);
 
+#define CATROM_CURVE_COEFF 0.5f
   quat ta = getQuatBetween(ca, b);
   //ta = ta*a*conjugate(ta);
   ta = conjugate(ta)*a*ta;
-  ta = slerp(a,ta,l*0.5f);
+  ta = slerp(a,ta,l*CATROM_CURVE_COEFF);
 
   quat tb = getQuatBetween(cb, a);
   // tb = tb*b*conjugate(tb);
   tb = conjugate(tb)*b*tb;
-  tb = slerp(b,tb,l*0.5f);
+  tb = slerp(b,tb,l*CATROM_CURVE_COEFF);
 
   vector<quat> q4bez; q4bez.clear();
   q4bez.push_back(a);
@@ -57,18 +75,22 @@ void boneCurve::measure(int i){
 void boneCurve::measure(){
 
   dds.clear();
-  for (int j = 1; j <= qcats.size()-3; j++){
+  for (int j = 0; j < qcats.size()-3; j++){
     
-    float sd = 1/(samples+1);
+    float sd = 1.f/float(samples+1);
 
     vector<quat> qb;
-    qb = qBezFromCats( qcats[j-1], qcats[j], qcats[j+1], qcats[j+2] );
-
+    qb = qBezFromCats( qcats[j], qcats[j+1], qcats[j+2], qcats[j+3] );
     for (float t = 0 ; t < 1; t+=sd){
-      dds.push_back(
-          getQuatBetween(
-            testSpline(t,qb), testSpline(t+sd,qb)
-            ). x);
+    
+      dquat dq = getQuatBetween_Double(
+            dquat(testSpline(t,qb)), 
+            dquat(testSpline(t+sd,qb))
+            );
+      vec3 segVec = vec3(dq.x,dq.y,dq.z);
+      float d = abs(2.f*atan2(length(segVec), dq.w));
+      if (d>0.1) printf(" dQ magnitude: %5f \n", d);
+      dds.push_back(d);
     }
   }
 } 
@@ -89,28 +111,20 @@ void boneCurve::integrate(){
 } 
 
 quat boneCurve::getQuatAtDistance(float dist){
-  float h = integration[integration.size()-1];
+  if ((dds.size() == 0)) 
+  {
+    //printf("Unintegrated BoneCurve \n");
+    measure(); 
+    integrate();
+    printf("Integrated BoneCurve: %d Samples\n", dds.size());
+  }
+
 //  float ndist = dist/(qcats.size()-3);
   float t = bSearchForT( dist );
   return getSplineQuat(t);
 }
 
-quat boneCurve::getSplineQuat( float t){      //The raw t value.
-
-  // t should always be < qcats.size-3;
-  // the floor call means you can never reach the end.
-    int s = floor( t );
-    float segt = fract(t);
-
-    if (s >= qcats.size()-3){ segt=1; s= qcats.size()-3;}
-
-    vector<quat> qs=qBezFromCats(qcats[s], qcats[s+1], qcats[s+2], qcats[s+3]);
-    //return testSpline( segt, qs[0], qs[1], qs[2], qs[3]);
-    return testSpline( segt, qs);
-
-}
-
-float boneCurve::bSearchForT(float want){
+float boneCurve::bSearchForT(float want_relative){
 
   //bsearch which function?
   // 
@@ -118,19 +132,31 @@ float boneCurve::bSearchForT(float want){
   float tl = integration[l];
   float th = integration[h];
 
-  if (want < tl || want > th) return -1;
+  //map tl:th to 0:segments
+  int segs = qcats.size()-3;
+  float want = th*want_relative/segs; // want to get a distance along the path
 
-  while(h-l>0){
-    int m=l + (h-l)/2;
-    if (integration[m] > want) l++;
-    else h--;
+  //if (want < 0 || want > th) return -1;
+
+  while((h-l)>1){
+    int m = l + (h-l)/2;
+    if (integration[m] > want) h = m;
+    else l = m;
   }
 
+  //want is between a and b
   float a = integration[l];
   float b = integration[h];
-  float t = (b-a)/(want-a);
+  if (b-a == 0){
+    cout << "zero integral" << "\n";
+    return 0 ;   // bandage
+  }
+  float t = (want-a)/(b-a);
+  //Interpolate the integration function indices
+  float t_integrationScale = (1.f-t)*float(l) + t*float(h);
 
-  return (1-t)*l + t*h;
+  float t_segScale = segs * t_integrationScale / (integration.size()-1);
+  return t_segScale; 
 
 } 
 

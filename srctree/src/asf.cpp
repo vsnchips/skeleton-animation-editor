@@ -326,8 +326,14 @@ void asfApp::updateScene() {
 
     // for all the bones, get the rotation at the current chrono, and apply them to the skeleton.
     for(auto b: boneCurveMap){
-      //quat q = b.second.getQuat(m_kf_play_pos);
-      quat q = b.second.getSplineQuat(m_kf_play_pos);
+      quat q;
+      if(!arcLengthSmooth) q = b.second.getSplineQuat(m_kf_play_pos);
+      else{                                                   //TODO: Debug from here
+      printf ("animating bone : %s\n", b.first.c_str());
+      printf ( "%d SAMPLES\n", b.second.dds.size());
+      q = b.second.getQuatAtDistance(m_kf_play_pos);
+      printf ( "%d SAMPLES\n", b.second.dds.size());
+      }
       showskel->getBone(b.first)->applyQuat(q);
     }
     }
@@ -399,6 +405,8 @@ void asfApp::doGUI() {
     m_kf_play_pos=0;
   }
 
+  ImGui::Checkbox("Arc-Length Parameterisation", &(arcLengthSmooth));
+
   ImGui::End();
 
  // KeyFrame Interpolation 
@@ -415,16 +423,19 @@ void asfApp::doGUI() {
         //Base dummy handles
         showskel -> applyPose( &(workPoses[0].my_frame) );
         for (bone b : showskel -> m_bones){
-          if (b.name!="root"){
+          //if (b.name!="root")
+          {
         boneCurve *c = &(boneCurveMap[b.name]);
         c->qcats.push_back( b.getQuat());
           }
         }
         
-      for (pose p : workPoses){
+     //Quaternions along the path
+     for (pose p : workPoses){
         showskel -> applyPose( &(p.my_frame) );
         for (bone b : showskel -> m_bones){
-          if (b.name!="root"){
+         // if (b.name!="root")
+          {
         boneCurve *c = &(boneCurveMap[b.name]);
         c->qcats.push_back( b.getQuat());
           }
@@ -434,12 +445,17 @@ void asfApp::doGUI() {
         //End dummy handles
         showskel -> applyPose( &(workPoses[workPoses.size()-1].my_frame) );
         for (bone b : showskel -> m_bones){
-          if (b.name!="root"){
+         // if (b.name!="root")
+          {
         boneCurve *c = &(boneCurveMap[b.name]);
         c->qcats.push_back( b.getQuat());
           }
         }
-        
+     
+        for (auto bc : boneCurveMap){
+          bc.second.measure();
+          bc.second.integrate();
+        }
      } 
     }
     
@@ -490,19 +506,6 @@ void asfApp::focusBone(int i){
   }
 }
 
-//Deprecated
-void asfApp::poseToBones(pose & somePose){
-  printf("asfAp poseToBones to be tested\n");
-
-  boneCurveMap.clear();
-  for (const auto x : somePose.my_frame){
-    // Passing the whole map being iterated into the thing it maps to. This is either messy, or convenient?
-    map<string,boneCurve>::iterator bc = boneCurveMap.find(x.first);
-    if (bc != boneCurveMap.end())
-      boneCurveMap[bc->first].newKF(&x.second); 
-
-  }
-}
 
 int asfApp::getFrame(frame * dest){
 

@@ -84,7 +84,8 @@ class asfApp {
     void poseToBones( pose & somePose);
     int getFrame(frame * dest);
     std::map<std::string,boneCurve> boneCurveMap;
-    
+    bool arcLengthSmooth=false; 
+
     //Demo Poses
     void prevPose();
     void nextPose();
