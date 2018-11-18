@@ -10,3 +10,6 @@ so new keyframe poses may be extracted during .amc playback.
 It loads and saves sets of keyframes to text files (I havnt decided on an extension yet).
 
 TODO: implement the export to .amc
+
+
+![](journal/screenshot1.png)
