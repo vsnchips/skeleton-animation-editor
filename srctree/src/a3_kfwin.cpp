@@ -47,9 +47,21 @@ void a3_Application::kfWindowFresh(){
 
 void a3_Application::kfWindowPick(){
 
+<<<<<<< HEAD
    // Create the draw region
    glViewport(25, 25, m_kfWinSize.x, m_kfWinSize.y);
    glScissor(25, 25, m_kfWinSize.x, m_kfWinSize.y);
+=======
+    if (button == 0){
+      if (action == GLFW_PRESS && currentViewCurve) {
+        pickKF = a3_kf_renderer->pickTest( currentViewCurve->getStyle() , m_kfMousePos);
+        clickon = pickKF > 0;
+        printf("clickon kf %s\n" , clickon ? "true" : "false");
+    }
+      else {
+      clickon = false;
+      printf("unclick kf\n");
+>>>>>>> 9a577229aa718f179264d1981593f53a65ac11fb
 
    glEnable(GL_SCISSOR_TEST);
    glClearColor(1.,1.,1., 1); // Clears to white
@@ -105,6 +117,7 @@ drawList a3_Application::testDrawList(cgra::Mesh * ctlMesh ){
   
   //Bezier Line
 // Todo: get the line from the boneCurve
+<<<<<<< HEAD
 //
   drawList lineStyle = testBoneCurve.getStyle();
 
@@ -127,6 +140,15 @@ drawList a3_Application::testDrawList(cgra::Mesh * ctlMesh ){
   for (int i=0; i< 8; i++){
     float x = testCats[i].x;
     float y = testCats[i].y;
+=======
+
+  //Controls
+  const int degree = 5;
+  float fstep = 2./float(degree);
+  for (int i=0; i< 5; i++){
+    float x = i*fstep-1;
+    float y = ys[i];
+>>>>>>> 9a577229aa718f179264d1981593f53a65ac11fb
 
     drawStyle thisPt;
 
@@ -147,5 +169,27 @@ drawList a3_Application::testDrawList(cgra::Mesh * ctlMesh ){
 }
 
 void a3_Application::makeCurve(){}
+<<<<<<< HEAD
+=======
+void a3_Application::styleCurve(){
+
+ // if (currentViewCurve){
+//    vector<drawStyle> cs = currentViewCurve->getStyle();
+//
+   m_program_sliders.use();
+   //drawList controls = testDrawList(&m_spheremesh);
+   drawList controls = testDrawList(&theAsfApp->m_jointMesh);
+   
+   a3_kf_renderer->c_prog = &m_program_sliders;
+
+   //theAsfApp->m_jointMesh.draw();
+   a3_kf_renderer->execute( controls );
+   m_spheremesh.draw(GL_TRIANGLES);
+ 
+  //}
+
+}
+
+>>>>>>> 9a577229aa718f179264d1981593f53a65ac11fb
 
 

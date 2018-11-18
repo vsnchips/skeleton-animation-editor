@@ -7,6 +7,7 @@
 #include "asf.hpp"
 #include "app_renderer.hpp"
 #include "boneCurve.hpp"
+#include <thread>
 
 //src includes 
 #include <algorithm>
@@ -50,13 +51,21 @@ public:
 
     asfApp * theAsfApp;
 
+<<<<<<< HEAD
     GLFWwindow * dummy;
     app_renderer a3Renderer = app_renderer(dummy);
     app_renderer kf_Renderer = app_renderer(dummy);
+=======
+    app_renderer * a3Renderer;
+>>>>>>> 9a577229aa718f179264d1981593f53a65ac11fb
     glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;
 
     bool kf_window_see = true;
+<<<<<<< HEAD
+=======
+    app_renderer * a3_kf_renderer;
+>>>>>>> 9a577229aa718f179264d1981593f53a65ac11fb
 
     /////////////////////////////////////////// Part 1 Vars
     // The window object managed by GLFW
@@ -93,6 +102,16 @@ public:
     // Whether or not the left, middle or right buttons are down.
     bool m_mouseButtonDown[3];
 
+    a3_Application()
+      :
+          m_viewportSize(1, 1), m_mousePosition(0, 0),
+          m_translation(0), m_scale(1), m_rotationMatrix(1) {
+        m_mouseButtonDown[0] = false;
+        m_mouseButtonDown[1] = false;
+        m_mouseButtonDown[2] = false;
+    }
+
+
     a3_Application(GLFWwindow *win)
         : m_window(win),
           m_viewportSize(1, 1), m_mousePosition(0, 0),
@@ -105,10 +124,19 @@ public:
         kf_Renderer = app_renderer(m_window);
     }
 
-    void setWindowSize(int width, int height) {
+  int initWindow(GLFWwindow * win, int x, int y, const char * name, GLFWwindow * link);
+
+  void editor_thread(const char * skfile);
+  void curve_thread();
+
+  void setWindowSize(int width, int height) {
         m_viewportSize.x = float(width);
         m_viewportSize.y = float(height);
 
+<<<<<<< HEAD
+=======
+        a3Renderer->m_viewportSize = m_viewportSize;
+>>>>>>> 9a577229aa718f179264d1981593f53a65ac11fb
 
     }
 
@@ -136,6 +164,16 @@ void init(const char *);
 
     void onScroll(double xoffset, double yoffset);
 
+<<<<<<< HEAD
+=======
+    //File saving methods
+
+    void a3_poseToFile(frame & somePose);
+
+    void a3_writeAMC();
+
+    void a3_saveKeyFrames();
+>>>>>>> 9a577229aa718f179264d1981593f53a65ac11fb
 
     drawList testDrawList(cgra::Mesh * ctlMesh);
     // Keyframe window methods
@@ -146,6 +184,7 @@ void init(const char *);
     void a3_pose2bones();
    
     typedef const std::vector<glm::vec3> a3curve;
+    void launch(const char * skfile);
     void makeCurve();
     void styleCurve();
     void kfwin_oncursor(double xpos, double ypos);
