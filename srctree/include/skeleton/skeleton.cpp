@@ -58,6 +58,24 @@
 using namespace std;
 using namespace glm;
 
+#define GLM_FORCE_RADIANS
+glm::quat bone::getQuat(){
+	const float DEGMUL = glm::pi<float>()/180;
+  //Make a rotation matrix from the current rpy rotation using a standard basis.
+  glm::mat4 m = 
+     glm::rotate(DEGMUL*rotation.z,glm::vec3(0,0,1)) *
+     glm::rotate(DEGMUL*rotation.y,glm::vec3(0,1,0)) *
+     glm::rotate(DEGMUL*rotation.x,glm::vec3(1,0,0)) * glm::mat4(1);
+      
+     myQuat = glm::quat_cast(m);
+     return myQuat;
+  }  
+void bone::applyQuat(glm::quat q){
+    glm::vec3 ypr = glm::eulerAngles(q);
+    //glm::vec3 rpy = glm::vec3(ypr.z,ypr.y,ypr.x);   // Swap the coordinates to roll, pitch, yaw.
+    float piDeg = glm::pi<float>() / 180; 
+    rotation = glm::vec3( ypr.x/piDeg, ypr.y/piDeg, ypr.z/piDeg );
+  }
 Skeleton::Skeleton(string filename) {
   m_bones.clear();
 	bone b = bone();
@@ -140,15 +158,12 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 	rotate(DEGMUL*b->rotation.y,ty3) *     //y second
 	rotate(DEGMUL*b->rotation.x,tx3) * mat4(1);      //x first
 
-	//mat4 myR = accumR * tweak;
 	mat4 myR = tweak;
-	//mat4 eulerBasis = accumR * precalcthis;
 	mat4 eulerBasis = precalcthis;
 	eulerBasis = tweak * eulerBasis;
 
 	vec3 cpos = b->length*b->boneDir;
 	mat4 nextOrigin = accumT * myR * translate(mat4(1.0), cpos);
-	//mat4 nextOrigin = accumT * translate(mat4(1.0), cpos);  //test without articulation
 
 	mat4 meshPoleRot(1.0);
 	float latr=acos(b->boneDir.y);
@@ -158,7 +173,6 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 	 mat4 tip = rotate(latr, vec3(1,0,0));
 	 mat4 spin = rotate(lonr, vec3(0,1,0));
 
-   //meshPoleRot = myR * spin*tip * scale(mat4(),vec3(0.1,b->length,0.1));
    meshPoleRot = myR * spin*tip ;
    mat4 scaleBone = scale(mat4(),vec3(0.1,b->length,0.1));
 
@@ -172,7 +186,7 @@ void Skeleton::renderBone(mat4 & accumT, mat4 & accumR, bone *b,cgra::Mesh * pla
 stylePack.push_back(boneRep);
  boneRep.putModelMat(accumT*meshPoleRot * scale(mat4(),vec3(0.03,0.03,0.03)));
  boneRep.m_mesh = m_jointmesh;
- boneRep.tag = "joint";
+ boneRep.tag = "pickable";
  boneRep.unfms.i1["id"]=b->boneID;
 stylePack.push_back(boneRep);
 
@@ -196,11 +210,6 @@ stylePack.push_back(boneRep);
 stylePack.push_back(zb);
 //////////////////////////////////////////////////////////////
 
-//	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
-//				0 , 1, 0);
-//	m_program->setModelMatrix(myBasis);
-	//placeholderbone->draw();
-
 //////////////////////DRAW STYLE//////////////////////////////
  drawStyle yb;
  yb.putModelMat(myBasis);
@@ -210,11 +219,7 @@ stylePack.push_back(zb);
 stylePack.push_back(yb);
 //////////////////////////////////////////////////////////////
 
-//	glUniform3f(glGetUniformLocation(m_program->m_program,"ucol"),
-//				1 , 0, 0);
 	mat4 xBasis=myBasis*rotate(0.5f* pi<float>() , vec3(0,0,1)) ;
-//	m_program->setModelMatrix(xBasis);
-	//placeholderbone->draw();
 
 //////////////////////DRAW STYLE//////////////////////////////
  drawStyle xb;
@@ -256,6 +261,15 @@ namespace {
 //*** after reading in a skeleton, every bone will have a name
 //*** this function allows you to find which bone has a particular
 //*** name
+
+bone * Skeleton::getBone(string name) {
+	int ind = findBone(name);
+  if (ind == -1) { 
+    printf("dont have that bone!\n"); return nullptr; 
+  }
+  return &(m_bones[ind]);
+}
+
 int Skeleton::findBone(string name) {
 	for (size_t i = 0; i < m_bones.size(); i++)
 		if (m_bones[i].name == name)

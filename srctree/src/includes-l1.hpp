@@ -18,4 +18,5 @@
 #include "imgui.h"
 #include "cgra/imgui_impl_glfw_gl3.h"
   
+#include "../include/nfd.h"
 #include "opengl.hpp"

@@ -1,20 +1,10 @@
-#include <algorithm>
-#include <cmath>
-#include <iostream>
-#include <stdexcept>
-#include <cstring>
-
-#include "includes-l1.hpp"
-#include "opengl.hpp"
-#include "imgui.h"
-
-#include "cgra/matrix.hpp"
-#include "cgra/wavefront.hpp"
-
 #include "a3.hpp"
+<<<<<<< HEAD
+=======
 #include "callbacks.hpp"
 
 #include "math.h"
+>>>>>>> 9a577229aa718f179264d1981593f53a65ac11fb
 
 void a3_Application::init(const char * skelfile) {
 
@@ -54,7 +44,11 @@ void a3_Application::init(const char * skelfile) {
     idColor[1] = 255;
     idColor[2] = 255;
 
+<<<<<<< HEAD
+    //    idColor[3] = 1.0;
+=======
 //    idColor[3] = 1.0;
+>>>>>>> 9a577229aa718f179264d1981593f53a65ac11fb
  //GLuint loc = glGetUniformLocation(
 //    m_program.m_program, "ucol");
  //   glUniform3fv(loc, 1, idColor);
@@ -77,6 +71,7 @@ void a3_Application::createCube() {
 
 }
 
+     //* 2. Create a Mesh                                         *
 void a3_Application::loadObj(const char *filename,cgra::Mesh &targetMesh) {
     cgra::Wavefront obj;
     // Wrap the loading in a try..catch block
@@ -87,14 +82,6 @@ void a3_Application::loadObj(const char *filename,cgra::Mesh &targetMesh) {
         return;
     }
 
-    /************************************************************
-     * 2. Create a Mesh                                         *
-     *                                                          *
-     * Use the data in `obj` to create appropriately-sized      *
-     * vertex and index matrices and fill them with data.       *
-     *                                                          *
-     * Assume that all the faces in the file are triangles.     *
-     ************************************************************/
 
     // Replace these with appropriate values
     int numVertices  = obj.m_positions.size();
@@ -122,12 +109,12 @@ void a3_Application::loadObj(const char *filename,cgra::Mesh &targetMesh) {
     targetMesh.maxdist = obj.range;
     targetMesh.setData(vertices, triangles);
 
-
-
 }
 
-void a3_Application::drawScene() {
 
+<<<<<<< HEAD
+void a3_Application::freshEditBuff(){
+=======
     // Keyframe Curve Window
     //
     if (glfwGetWindowAttrib(keyframe_window,GLFW_VISIBLE)){
@@ -150,8 +137,8 @@ void a3_Application::drawScene() {
 
     
     glfwMakeContextCurrent(m_window);
+>>>>>>> 9a577229aa718f179264d1981593f53a65ac11fb
 
-      ImGui_ImplGlfwGL3_NewFrame();
       int width, height;
       glfwGetFramebufferSize(m_window, &width, &height);
       glViewport(0, 0, width, height);
@@ -160,38 +147,40 @@ void a3_Application::drawScene() {
       glClearDepth(1); // Clears the depth buffer to it's maximum value
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      // Create the GUI.
-      // Note: this does not draw the GUI
-      doGUI();
 
+}
 
-    // Calculate the aspect ratio of the viewport;
-    // width / height
+void a3_Application::drawScene() {
+    
+    glfwMakeContextCurrent(m_window);
+    freshEditBuff();
+
+    //Projection Setup
     float aspectRatio = m_viewportSize.x / m_viewportSize.y;
     // Calculate the projection matrix with a field-of-view of 45 degrees
     projectionMatrix = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
 
-
+    // View Transforms
     m_modelTransform = glm::mat4(1.0f);
-
-    /************************************************************
-     * 3. Manual Transforms                                     *
-     *                                                          *
-     * Use `m_translation`, `m_scale`, and `m_rotationMatrix`   *
-     * to create the  `modelTransform` matrix.                  *
-     * The following glm functions will be useful:              *
-     *    `glm::translate`                                      *
-     *    `glm::scale`                                          *
-     ************************************************************/
-
     viewMatrix = glm::mat4(1);
     viewMatrix[3] = glm::vec4(0, 0, -1, 1);
-
 
     viewMatrix *= glm::translate(glm::mat4(),m_translation);
     viewMatrix *= glm::scale(m_modelTransform,glm::vec3(m_scale));
     m_rotationMatrix = glm::mat4(glm::vec4(xax,0),glm::vec4(yax,0),glm::vec4(zax,0),glm::vec4(0.f,0.f,0.f,1.f));
     viewMatrix *= m_rotationMatrix;
+<<<<<<< HEAD
+
+    // Draw the skel
+    m_program.use();
+    
+    a3Renderer.pickProg.setProjectionMatrix(projectionMatrix);
+    a3Renderer.pickProg.setViewMatrix(viewMatrix);
+
+    kf_Renderer.pickProg.setProjectionMatrix(projectionMatrix);
+    kf_Renderer.pickProg.setViewMatrix(viewMatrix);
+    
+=======
  
     // Draw the skel
     m_program.use();
@@ -199,15 +188,24 @@ void a3_Application::drawScene() {
     a3Renderer->pickProg.setViewMatrix(viewMatrix);
     a3Renderer->pickProg.setProjectionMatrix(projectionMatrix);
     //a3Renderer->pickProg.setModelMatrix(m_modelTransform);
+>>>>>>> 9a577229aa718f179264d1981593f53a65ac11fb
     m_program.setProjectionMatrix(projectionMatrix);
     m_program.setViewMatrix(viewMatrix);
-    m_program.setModelMatrix(m_modelTransform);
 
   //Draw the skeleton
 
   theAsfApp -> showskel -> setProgram( m_program );
   theAsfApp -> updateScene();//  Draw The Skeleton
   
+<<<<<<< HEAD
+   a3Renderer.execute(theAsfApp->stylePack);
+   
+ 
+    // Keyframe Curve Window
+    //
+    if(kf_window_see){
+      kfWindowFresh();
+=======
   if (!glfwGetWindowAttrib(keyframe_window,GLFW_VISIBLE))
    a3Renderer->execute(theAsfApp->stylePack);
    
@@ -486,25 +484,20 @@ void a3_Application::onKey(int key, int scancode, int action, int mods) {
      if(key == GLFW_KEY_N && action == GLFW_PRESS) //cycle axes
     {
       theAsfApp->nextPose();
+>>>>>>> 9a577229aa718f179264d1981593f53a65ac11fb
     }
+               
+  // Note: this does not draw the GUI
+  ImGui_ImplGlfwGL3_NewFrame();
+  doGUI();
+  ImGui::Render();
 
-     if(key == GLFW_KEY_P && action == GLFW_PRESS) //cycle axes
-    {
-      theAsfApp->prevPose();
-    }
+//  if (!mouseDown)
+    glfwSwapBuffers(m_window);
 
-    (void)key;
-    (void)scancode;
-    (void)action;
-    (void)mods;
+  freshEditBuff();// reset the Viewport transform;
+
 }
-
-void a3_Application::onScroll(double xoffset, double yoffset) {
-    // `(void)foo` suppresses unused variable warnings
-    (void)xoffset;
-    (void)yoffset;
-}
-
 
 // void frameToPose(){
 //  pose newPose(asfApp.getPose());

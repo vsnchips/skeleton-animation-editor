@@ -2,13 +2,17 @@
 
 #include "includes-l1.hpp"
 #include "drawStyle.hpp"
+#include "opengl.hpp"
 // app renderer
 
 class app_renderer{
 
   public:
   
-    app_renderer();
+  GLFWwindow * renderTarget;
+  app_renderer(GLFWwindow * t) : renderTarget(t){
+  loadPickShader();
+  }
 
   cgra::Program * c_prog; //current program
 
@@ -20,7 +24,14 @@ class app_renderer{
   // window stuff
   glm::vec2 m_viewportSize;
 
+  int rtWid, rtHei;
+ 
+  void checkSize(){
+    glfwGetWindowSize(renderTarget, &rtWid, &rtHei);
+  }
+
   //rendering options
+  int highLight = -1;
   bool previewPick = false;
 
   void execute(std::vector<drawStyle> & target);
@@ -32,10 +43,5 @@ class app_renderer{
 
   void pickDraw(std::vector<drawStyle> & t);
   int pickTest( std::vector<drawStyle> target, glm::vec2 & m_mousePosition);
-
-
-
-
-
 
 };

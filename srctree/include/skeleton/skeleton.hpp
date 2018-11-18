@@ -80,7 +80,8 @@ enum dof {
 //*** to operate on them.
 
 // Type to represent a bone
-struct bone {
+class bone {
+  public:
   int boneID = -1;
 	cgra::Mesh * boneMesh;
   cgra::Mesh * jointMesh;
@@ -100,20 +101,28 @@ struct bone {
 	glm::vec3 rotation_max;      // Maximum value for rotation for this joint (degrees)
 	glm::vec3 rotation_min;      // Minimum value for rotation for this joint (degrees)
 
-  glm::mat4 precalcthis;
-  glm::mat4 tweak;
+  glm::mat4 precalcthis;  // This is the basis transformation.
+  glm::quat myQuat;       // Quaternion of the rotation, in the basis space
+  
+  glm::mat4 tweak;        // Mat4 of the animation's rotation, in world space. Used for rendering only.
+
+  glm::quat getQuat();
+  void applyQuat(glm::quat q);
+
 
 };
 
 
 
 #include <map>
+
 typedef std::map<std::string, std::vector<float>> frame;
 
 class pose{
  public:
    frame my_frame;
    int index;
+   std::string filename = "Unsaved";
 
 };
 
@@ -134,6 +143,7 @@ private:
 public:
 	// Helper method
 	int findBone(std::string);
+	bone * getBone(std::string);
 	Skeleton(std::string);
 	cgra::Program * m_program;
   cgra::Mesh * m_jointmesh;

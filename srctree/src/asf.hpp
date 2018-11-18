@@ -1,54 +1,117 @@
 #pragma once
 
+#include <algorithm>
+#include <cmath>
+#include <istream>
+#include <iostream>
+#include <stdexcept>
+#include <cstring>
 #include <string>
+
+#include "opengl.hpp"
+#include "imgui.h"
+
+#include "math.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/euler_angles.hpp"
+#include "glm/gtx/rotate_vector.hpp"
+
 #include <vector>
 #include <map>
+#include <fstream>
 
+#include "cgra/matrix.hpp"
+#include "cgra/wavefront.hpp"
 #include "cgra/mesh.hpp"
 #include "cgra/shader.hpp"
 #include "drawStyle.hpp"
-#include <glm/glm.hpp>
+
+#include "../include/nfd.h"
 
 #include <skeleton.hpp>
-
 #include "boneCurve.hpp"
 
 class asfApp {
-public:
 
-//declare poses
+  public:
+    
+    //General State
+    bool skelload =  false;
+
+     // actors in the play:
+    Skeleton * showskel;
+    cgra::Mesh m_mesh;
+    cgra::Mesh m_jointMesh;
+
+    //example poses
     frame sittingPose;
     frame guitarPose;
     frame walkingPose;
     frame currentFrame;
-    void switchPose(int dir);
+    
+    //Pose Management
+    std::vector<pose> workPoses;
+    int focusIndex=0;
+    pose * currentWorkPose;
+    void setWorkPose(frame);
+    void focusPose(int);
+    void newWorkPose();
+    void freshIndices();
+    void freshCats();    //Refresh the catmull rom points of the curves
+    void freshIntegrations();
+    void rawTimings();
+    void evenTimings();
+   
+    //Sequence File Storage;
+    void openSequenceFile();
+    void saveSequenceFile();
+    void loadProjectFile(const char *);
+    void projectToFile(const char *);
+    //Pose File Storage
+    void openPose();
+    void openPose(const char *);
+    void openPose( char *);
+    void openPose( std::string );
+    void saveWorkPose();
+    void removePose();
+    void removePose(int);
+    pose poseFromFile( const char *); // Reads a pose file into a constructed pose.
+    void poseToFile( const char *, pose *);   // Saves a given pose to a file
+    void workPoseToFile( const char *);
+   
+    //Animation:
+    void poseToBones( pose & somePose);
+    int getFrame(frame * dest);
+    std::map<std::string,boneCurve> boneCurveMap;
+    bool arcLengthSmooth=false; 
+
+    //Demo Poses
     void prevPose();
     void nextPose();
-    void loadAnimation();
-    void loadSkeleton(const char *);
-    void loadSkeleton();
-    void play();
-    void pause();
+    void switchPose(int dir);
 
-    bool m_play = false;
-    float m_play_pos;
-    bool tether = true;
-    float m_speed;
-
-    std::vector<frame> theClip;
-
-    std::vector<pose> workPoses;
-    pose * currentWorkPose;
-
+    //Editing Functionality
     void focusBone( int i );
     std::string currentJoint = "root";
     int currentJointID;
 
- // actors in the play:
-    Skeleton * showskel;
-    bool skelload =  false;
-   cgra::Mesh m_mesh;
-   cgra::Mesh m_jointMesh;
+    void loadSkeleton(const char *);
+    void loadSkeleton();
+    
+    //AMC Player:
+    void loadAnimation();
+    void play();
+    void playKFSequence();
+    void pause();
+
+    bool m_kf_play = false;
+    float m_kf_play_pos;
+    bool m_amc_play = false;
+    float m_amc_play_pos;
+    bool tether = true;
+    float m_speed;
+    std::vector<frame> theClip;
 
 
 // glm view stuff:
@@ -99,26 +162,18 @@ public:
 
     std::vector<drawStyle> stylePack;
     void updateScene();
+    void calcJointsFromXYZ();
+    
+
+//Events
+    
     void doGUI();
-
     void onKey(int key, int scancode, int action, int mods);
-
     void onMouseButton(int button, int action, int mods);
-
     void onCursorPos(double xpos, double ypos);
-
     void onScroll(double xoffset, double yoffset);
 
-    int getFrame(frame * dest);
-
-    void setWorkPose(int, frame);
-
-    void newWorkPose();
-
-    std::map<std::string,boneCurve> boneCurveMap;
-
-    void poseToFile( pose & somePose);
-    void poseToBones( pose & somePose);
-
-    void calcJointsFromXYZ();
 };
+
+
+std::string nextLineTrimmed(std::istream &file);

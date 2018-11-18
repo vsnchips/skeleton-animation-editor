@@ -11,9 +11,9 @@ class boneCurve{
     std::vector<drawStyle> getStyle();
     
     //gl stuff
-    GLuint vao;
-    GLuint vbo;
-    GLuint ibo;
+    GLuint vao = 0;
+    GLuint vbo = 0;
+    GLuint ibo = 0;
 
     void updateCurveLineParticles();
     std::vector<glm::vec2>curveLineParticles;
@@ -21,7 +21,8 @@ class boneCurve{
     void glDelete();    //GL DELETE
     void freshBuffs();
 
-    int samples = 10;
+#define DEFAULT_SAMPLES 20
+    int samples = DEFAULT_SAMPLES;
     std::vector<glm::vec3> cats;  //always includes dummies
     std::vector<glm::quat> qcats;  //always includes dummies
     std::vector<glm::vec2> catreps;
@@ -36,12 +37,13 @@ class boneCurve{
     void integrate(int ); //includes a measure method
     void measure();
     void integrate(); //includes a measure method
-    float bSearchForT(float want);
-    glm::quat getQuat(float t);
+    float bSearchForT(float wantdist);
+    glm::quat getQuatAtDistance(float); 
+    glm::quat getSplineQuat(float chrono);
 
     void setSamps(int s);
     void movePoint( int id, glm::vec2 dv);
 
-    void newKF( pose & newPose );
+    void newKF( const std::vector<float> * );
     
 };

@@ -3,12 +3,21 @@
 #include "a3.hpp"
 
 #include "imgui.h"
+#include "skeleton.hpp"
+
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 using namespace std;
 
 void a3_Application::doGUI() {
 
     theAsfApp->doGUI();
+
+    ImGui::Begin("Working Pose Status");
+    if (theAsfApp && theAsfApp -> skelload) ImGui::Text("Pose Keyframe index # %d:" , theAsfApp -> currentWorkPose->index );
+    ImGui::End(); 
 
     ImGui::SetNextWindowSize(ImVec2(250, 250), ImGuiSetCond_FirstUseEver);
     ImGui::Begin("Shapes");
@@ -69,21 +78,43 @@ void a3_Application::doGUI() {
 
     ImGui::End();
 
-    ImGui::Begin("Keyframe Controls");
-    if(ImGui::Button("Toggle Keyframe Editor")){
+    if (theAsfApp->skelload){
+    ImGui::Begin("Keyframe Poses");
+    ImGui::Checkbox("Toggle Keyframe Editor",&kf_window_see);
+    for( int i= 0 ; i < theAsfApp -> workPoses.size(); i++)   {      //one radio button for each pose
 
-      if (glfwGetWindowAttrib(keyframe_window,GLFW_VISIBLE)){
-      glfwHideWindow(keyframe_window);
-      }
-      else{
-      glfwShowWindow(keyframe_window);
-      }
-    }
+      pose * p; p = & (theAsfApp -> workPoses[i]);
+      stringstream button;
+      button << p->index << " : " << fs::relative( p -> filename.c_str(), fs::current_path() ) << " " << (theAsfApp->currentWorkPose == p ? "<< current" : "");
+
+      if(ImGui::RadioButton(button.str().c_str(),
+            theAsfApp->focusIndex == i)) 
+          {
+          theAsfApp -> focusIndex = i; 
+          theAsfApp -> focusPose(i);
+          }
+    } 
     ImGui::End();
+    
+    ImGui::Begin("Keyframe Operations");
+     
+    if(ImGui::Button("Push Pose As New Keyframe")) {
+      theAsfApp -> newWorkPose();
+    }
+    if (ImGui::Button("next Pose")){ theAsfApp->nextPose();}
+    if (ImGui::Button("prev Pose")){ theAsfApp->prevPose();}
+    if (ImGui::Button("Remove Pose")){ theAsfApp->removePose();}
+    ImGui::End();
+    }
 
     ImGui::Begin("Shader Controls");
     if(ImGui::Button("Toggle Picker Test")){
+<<<<<<< HEAD
+      a3Renderer.previewPick = !a3Renderer.previewPick;
+    //  a3_kf_renderer.previewPick = !a3_kf_renderer.previewPick;
+=======
       a3Renderer->previewPick = !a3Renderer->previewPick;
+>>>>>>> 9a577229aa718f179264d1981593f53a65ac11fb
     }
 
     if (ImGui::Button("Reload Shader")){ 
@@ -93,45 +124,25 @@ void a3_Application::doGUI() {
     ImGui::End();
 
     ImGui::Begin("File Menu");
- 
-    if (ImGui::Button("Keyframe This Pose")) {
-      if (theAsfApp -> skelload){
-        theAsfApp->newWorkPose(); 
-      }else{
-        cout <<"Load a Skeleton first.\n";
+    if (ImGui::Button("Load a Keframe Sequence")){ theAsfApp -> openSequenceFile();}
+    if (ImGui::Button("Save this Keyframe Sequence")){ theAsfApp -> saveSequenceFile();}
+    if (ImGui::Button("Load an AMC")){ theAsfApp -> loadAnimation();}
+    if(ImGui::Button("Load a Pose")) {
+        theAsfApp -> openPose();
       }
+
+    if(ImGui::Button("Save Pose (S Key)")){
+      theAsfApp -> saveWorkPose();
     }
+       ImGui::End();
 
-   if (ImGui::Button("Save This Pose")) {
-      if (theAsfApp -> skelload){
-      pose nowPose;
-      theAsfApp->getFrame(&nowPose.my_frame);
-      theAsfApp->poseToFile(nowPose);
-        
-      }else{
-        cout <<"Load a Skeleton first.\n";
-      }
-    }
-    ImGui::End();
-
-
-
-    /*
-     ************************************************************
-     *                                                          *
-     * 5. Add a checkbox for rendering the object in wireframe  *
-     *  mode.                                                   *
-     ************************************************************/
     ImGui::Begin("meshes");
-
-
     static bool wireframe;
     if(ImGui::Checkbox("Draw Wireframe",&wireframe)) {
         m_mesh.setDrawWireframe(wireframe);
     }
 
     //debugging stuff:
-
     ImGui::Text("tricount :%d" , m_mesh.m_indices.size()/3);
     ImGui::Text("vertcount : %d" , m_mesh.m_vertices.size());
 

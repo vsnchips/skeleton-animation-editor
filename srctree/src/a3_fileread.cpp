@@ -8,14 +8,15 @@ using namespace stf;
 using namespace glm;
 
 //These funcs return poses without indices, read from raw frame files.
-pose * a3_Application::openPose(){
+pose * asfApp::openPose(){
 
   nfdchar_t * fromFile;
   NFD_SaveDialog(".pose,*",".",&fromFile); 
 
-  return a3_poseFromFile( fromFile )
+  return poseFromFile( fromFile )
 }
-void a3_Application::a3_poseFromFile( char * fromFile, pose * toPose){
+
+void asfApp::poseFromFile( char * fromFile, pose * toPose){
 
   ifstream pfilestream(fromFile);
 //   TODO: copy the right bits from the amc loader into here 

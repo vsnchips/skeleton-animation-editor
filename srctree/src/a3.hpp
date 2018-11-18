@@ -9,6 +9,22 @@
 #include "boneCurve.hpp"
 #include <thread>
 
+//src includes 
+#include <algorithm>
+#include <cmath>
+#include <iostream>
+#include <stdexcept>
+#include <cstring>
+
+#include "includes-l1.hpp"
+#include "opengl.hpp"
+#include "imgui.h"
+
+#include "cgra/matrix.hpp"
+#include "cgra/wavefront.hpp"
+#include "math.h"
+
+
 typedef struct shareGlobals{
 //fill this later
 
@@ -17,12 +33,14 @@ typedef struct shareGlobals{
 class a3_Application {
 public:
     bool clickon;
-    int deformTechniqueId;
+    bool mouseDown = false;
     bool sceneon = 1;
     
     int pickID;
-    int pickNode;
-    
+   
+   //todo remove
+   float testT = 0;
+
     int pickKF;
 
     int lx = 2,ly = 2,lz = 2;
@@ -33,12 +51,21 @@ public:
 
     asfApp * theAsfApp;
 
+<<<<<<< HEAD
+    GLFWwindow * dummy;
+    app_renderer a3Renderer = app_renderer(dummy);
+    app_renderer kf_Renderer = app_renderer(dummy);
+=======
     app_renderer * a3Renderer;
+>>>>>>> 9a577229aa718f179264d1981593f53a65ac11fb
     glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;
 
     bool kf_window_see = true;
+<<<<<<< HEAD
+=======
     app_renderer * a3_kf_renderer;
+>>>>>>> 9a577229aa718f179264d1981593f53a65ac11fb
 
     /////////////////////////////////////////// Part 1 Vars
     // The window object managed by GLFW
@@ -55,6 +82,7 @@ public:
 
     // The current size of the viewport
     glm::vec2 m_viewportSize;
+    glm::vec2 m_kfWinSize;
     // The current mouse position
     glm::vec2 m_mousePosition;
 
@@ -91,6 +119,9 @@ public:
         m_mouseButtonDown[0] = false;
         m_mouseButtonDown[1] = false;
         m_mouseButtonDown[2] = false;
+
+        a3Renderer = app_renderer(m_window);
+        kf_Renderer = app_renderer(m_window);
     }
 
   int initWindow(GLFWwindow * win, int x, int y, const char * name, GLFWwindow * link);
@@ -102,19 +133,26 @@ public:
         m_viewportSize.x = float(width);
         m_viewportSize.y = float(height);
 
+<<<<<<< HEAD
+=======
         a3Renderer->m_viewportSize = m_viewportSize;
+>>>>>>> 9a577229aa718f179264d1981593f53a65ac11fb
 
     }
 
-    void init(const char *);
+    
+void init(const char *);
     void reloadShader();
 
     void createCube();
     void loadObj(const char *filename,cgra::Mesh &);
 
-    void drawScene();
+    void freshEditBuff();
+    void poseWindowPick();
 
-    void pickDraw();
+    void kfWindowFresh();
+    void kfWindowPick();
+    void drawScene();
 
     void doGUI();
 
@@ -126,6 +164,8 @@ public:
 
     void onScroll(double xoffset, double yoffset);
 
+<<<<<<< HEAD
+=======
     //File saving methods
 
     void a3_poseToFile(frame & somePose);
@@ -133,6 +173,7 @@ public:
     void a3_writeAMC();
 
     void a3_saveKeyFrames();
+>>>>>>> 9a577229aa718f179264d1981593f53a65ac11fb
 
     drawList testDrawList(cgra::Mesh * ctlMesh);
     // Keyframe window methods
